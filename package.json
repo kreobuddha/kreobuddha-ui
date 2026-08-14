@@ -1,6 +1,6 @@
 {
   "name": "@kreobuddha/ui",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "private": true,
   "description": "Accessible, themeable React component library for developer tools and data-dense interfaces.",
   "license": "MIT",
@@ -22,6 +22,7 @@
   },
   "scripts": {
     "build": "vite build && node scripts/bundle-fonts.mjs && tsc -p tsconfig.build.json",
+    "prepare": "npm run build",
     "check:contrast": "node scripts/check-contrast.mjs",
     "check:package": "npm run build && publint && attw --pack --profile esm-only --exclude-entrypoints styles.css",
     "typecheck": "tsc -p tsconfig.json",
