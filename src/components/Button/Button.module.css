@@ -94,10 +94,12 @@
   border-color: var(--kreo-accent-700);
 }
 
+/* Secondary carries the accent in its label and border. That makes the hierarchy readable at a
+   glance — accent fill, accent outline, neutral text — instead of relying on weight alone. */
 .outlined {
   background-color: transparent;
-  border-color: var(--kreo-border-control);
-  color: var(--kreo-text-primary);
+  border-color: var(--kreo-accent-500);
+  color: var(--kreo-text-accent);
 }
 
 .outlined:not(.inactive):hover {

@@ -1,0 +1,121 @@
+/* Candidate status sets, all shown under the chosen berry accent. Neutrals come from
+   `palettes.module.css` and the accent from `accents.module.css`, so the statuses are the only
+   variable. Every value was measured; nothing here ships. */
+
+.frame {
+  background: var(--kreo-surface-page);
+  border: 1px solid var(--kreo-border-default);
+  border-radius: 8px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  flex: 1 1 320px;
+  min-width: 320px;
+}
+
+.row {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.lines {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.line {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+}
+
+.dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+  background: currentcolor;
+  flex: none;
+}
+
+.success {
+  color: var(--demo-success);
+}
+
+.warning {
+  color: var(--demo-warning);
+}
+
+.danger {
+  color: var(--kreo-text-danger);
+}
+
+.info {
+  color: var(--demo-info);
+}
+
+.caption {
+  font-size: 12px;
+  color: var(--kreo-text-subtle);
+}
+
+/* ---- Set A: standard ---- */
+
+.setA {
+  --kreo-danger-500: #c2352b;
+  --kreo-danger-600: #a52c24;
+  --kreo-text-danger: #c2352b;
+  --kreo-border-danger: #c2352b;
+  --demo-success: #1f7a4d;
+  --demo-warning: #96630f;
+  --demo-info: #1d64ba;
+}
+
+.setA[data-kreo-theme='dark'] {
+  --kreo-text-danger: #ef8a80;
+  --demo-success: #5fc48f;
+  --demo-warning: #dfae54;
+  --demo-info: #7fb0ee;
+}
+
+/* ---- Set B: shifted warm, to sit further from the accent ---- */
+
+.setB {
+  --kreo-danger-500: #c0442a;
+  --kreo-danger-600: #a63a24;
+  --kreo-text-danger: #c0442a;
+  --kreo-border-danger: #c0442a;
+  --demo-success: #177a45;
+  --demo-warning: #8a5a12;
+  --demo-info: #1b5fae;
+}
+
+.setB[data-kreo-theme='dark'] {
+  --kreo-text-danger: #f0937f;
+  --demo-success: #57c288;
+  --demo-warning: #d9a648;
+  --demo-info: #79abe9;
+}
+
+/* ---- Set C: muted, to match the editorial direction ---- */
+
+.setC {
+  --kreo-danger-500: #a83f36;
+  --kreo-danger-600: #8f362e;
+  --kreo-text-danger: #a83f36;
+  --kreo-border-danger: #a83f36;
+  --demo-success: #3d7a5c;
+  --demo-warning: #8a6a2f;
+  --demo-info: #3f6795;
+}
+
+.setC[data-kreo-theme='dark'] {
+  --kreo-text-danger: #e0918a;
+  --demo-success: #79bb9d;
+  --demo-warning: #cbab72;
+  --demo-info: #9db9dc;
+}
