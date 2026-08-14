@@ -23,5 +23,5 @@
   },
   // TypeScript skips dot-directories when expanding a bare directory name, so `.storybook`
   // has to be matched explicitly or its files are silently left unchecked.
-  "include": ["src", ".storybook/**/*.ts", "vite.config.ts"]
+  "include": ["src", "tests", ".storybook/**/*.ts", ".storybook/**/*.tsx", "vite.config.ts"]
 }

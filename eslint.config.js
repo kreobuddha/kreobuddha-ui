@@ -7,7 +7,7 @@ export default tseslint.config(
   },
   js.configs.recommended,
   {
-    files: ['src/**/*.{ts,tsx}', '.storybook/**/*.ts', 'vite.config.ts'],
+    files: ['src/**/*.{ts,tsx}', 'tests/**/*.ts', '.storybook/**/*.{ts,tsx}', 'vite.config.ts'],
     extends: [...tseslint.configs.recommendedTypeChecked],
     languageOptions: {
       parserOptions: {
@@ -15,9 +15,15 @@ export default tseslint.config(
         tsconfigRootDir: import.meta.dirname,
       },
     },
+    rules: {
+      // House style: no `function` declarations, and an explicit return type on anything the
+      // module exposes, so a contract is readable at the definition site.
+      'func-style': ['error', 'expression', { allowArrowFunctions: true }],
+      '@typescript-eslint/explicit-module-boundary-types': 'error',
+    },
   },
   {
     files: ['**/*.js'],
     extends: [tseslint.configs.disableTypeChecked],
-  },
+  }
 );

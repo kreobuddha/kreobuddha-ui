@@ -121,8 +121,10 @@ Cascade layers may separate tokens and components if the browser support decisio
 
 ## Token model
 
-Start with the smallest token system required by the first component. Do not build a token compiler
-or exhaustive scale during initialization.
+The token values come from the design source named in ADR-0001 and are ported as authored, so the
+reference ramps and semantic aliases arrive together rather than growing component by component.
+What is still deliberately withheld is machinery: no token compiler, no generated scale, and no
+component tokens beyond the ones a shipped component actually needs.
 
 The conceptual layers are:
 
@@ -134,15 +136,19 @@ The conceptual layers are:
 Components consume semantic or justified component tokens, not raw color values. Documented
 semantic CSS custom properties are public API and follow SemVer.
 
-Theme state belongs to the host application. The intended DOM contract is an attribute such as:
+Theme state belongs to the host application. The DOM contract is:
 
 ```html
-<html data-kui-theme="dark">
+<html data-kreo-theme="dark">
 ```
 
 The library must not store theme preference or read system preference at module load. Light is the
-default; dark values override semantic tokens. The exact attribute and CSS prefix require an
-accepted ADR before public release.
+default and needs no attribute; dark values remap the same semantic token names.
+
+The public CSS custom property prefix is `--kreo-`. Both the prefix and the theme attribute are
+settled in [ADR-0001](adr/0001-token-prefix-theme-attribute-and-styling-model.md), which also
+records that token values are adopted from the separate Claude Design project rather than invented
+here.
 
 Density is handled by tokens rather than per-component branches. It is introduced only after the
 first component validates both comfortable and compact modes.

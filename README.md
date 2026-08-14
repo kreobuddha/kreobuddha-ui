@@ -3,27 +3,96 @@
 An accessible, themeable React component library for developer tools, technical products, and
 data-dense frontend applications.
 
-## Status: Phase 0 — package foundation only
+## Status: early, unpublished
 
-**This library ships no components yet, and it is not published to npm.** The package is marked
-`private`, and the only export is a build probe used to verify the toolchain.
+**One component ships today: `Button`.** The package is marked `private` and is not published to
+npm. Everything else in [docs/ROADMAP.md](docs/ROADMAP.md) is a plan, not an available feature.
 
-What currently exists and is verified:
-
-- ESM library build with an extracted stylesheet and external React;
-- TypeScript declarations generated from the public entry point;
-- strict type checking, lint, and format checks;
-- component tests through Testing Library;
-- Storybook as the component workbench;
-- an inspectable package tarball proven to install in a separate consumer application.
-
-What does not exist yet: design tokens, themes, density, and every component in the roadmap. See
-[docs/ROADMAP.md](docs/ROADMAP.md).
+What exists and is verified: an ESM library build with an extracted stylesheet and external React,
+TypeScript declarations, a semantic token layer with light and dark themes, strict type checking,
+lint and format checks, component and accessibility tests, Storybook as the workbench, and a
+package tarball proven to install in a separate consumer application.
 
 ## Requirements
 
 - Node.js `^20.19.0 || >=22.12.0`
 - React `^19.0.0` as a peer dependency
+
+## Usage
+
+```tsx
+import { Button } from '@kreobuddha/ui';
+import '@kreobuddha/ui/styles.css';
+
+<Button variant="filled" onClick={save}>
+  Finish setup
+</Button>;
+```
+
+### `Button`
+
+| Prop        | Type                                | Default    |
+| ----------- | ----------------------------------- | ---------- |
+| `variant`   | `'filled' \| 'outlined' \| 'ghost'` | `'filled'` |
+| `size`      | `'sm' \| 'md' \| 'lg'`              | `'md'`     |
+| `danger`    | `boolean`                           | `false`    |
+| `loading`   | `boolean`                           | `false`    |
+| `fullWidth` | `boolean`                           | `false`    |
+| `icon`      | `ReactNode`                         | —          |
+| `iconEnd`   | `ReactNode`                         | —          |
+| `type`      | `'button' \| 'submit' \| 'reset'`   | `'button'` |
+
+It renders a native `<button>` and forwards `ref`, `className`, `style`, and every other native
+button prop to it. Use one `filled` button per view for the primary action, `outlined` for
+secondary, and `ghost` for tertiary or inline actions.
+
+`type` defaults to `button` rather than the platform default of `submit`, so placing a button in a
+form never submits it unintentionally.
+
+A `loading` button keeps its label, stays in the tab order, reports `aria-busy`, and refuses
+activation — including form submission. It is deliberately not natively `disabled`, because that
+would drop it out of the tab order and take focus away from a keyboard user mid-action. Use
+`disabled` when the action is genuinely unavailable rather than in flight.
+
+Icons are `ReactNode` and are hidden from assistive technology, so the label remains the accessible
+name. The library bundles no icon set.
+
+## Theming
+
+Dark mode is an attribute on any ancestor, normally `<html>`:
+
+```html
+<html data-kreo-theme="dark"></html>
+```
+
+Light is the default and needs no attribute. The library never stores a theme preference and never
+reads the system preference — that state belongs to the application.
+
+Customisation happens through the semantic tokens, not through component classes. Every
+`--kreo-*` custom property in the published stylesheet is public API under SemVer; CSS Module class
+names are private implementation details.
+
+## Fonts
+
+**The library loads no fonts.** The type tokens ask for Public Sans and IBM Plex Mono and fall back
+to platform families, so nothing breaks if they are absent — but the intended typographic character
+only appears once the application loads them itself. Bundling them into the package is planned; see
+[ADR-0002](docs/adr/0002-no-external-font-or-icon-requests.md).
+
+## Package boundary
+
+| Export         | Contents                                      |
+| -------------- | --------------------------------------------- |
+| `.`            | named React components and their public types |
+| `./styles.css` | the complete supported stylesheet             |
+
+The package is **ESM-only**. CommonJS consumers must use a dynamic `import()`, and Node 10 style
+resolution is not supported.
+
+Importing `@kreobuddha/ui/styles.css` from TypeScript requires that your project already declares
+types for CSS side-effect imports — in a Vite project, `"types": ["vite/client"]` in `tsconfig.json`.
+Without it, TypeScript 6 reports `TS2882` for the stylesheet import. This is a property of your
+build setup, not of this package.
 
 ## Development
 
@@ -34,33 +103,9 @@ npm run lint
 npm run format:check
 npm test
 npm run build
+npm run check:package
 npm run storybook
 ```
-
-## Package boundary
-
-The intended public surface is deliberately small:
-
-| Export         | Contents                                      |
-| -------------- | --------------------------------------------- |
-| `.`            | named React components and their public types |
-| `./styles.css` | the complete supported stylesheet             |
-
-Internal source paths and CSS Module class names are not public API.
-
-The package is **ESM-only**. CommonJS consumers must use a dynamic `import()`, and Node 10 style
-resolution is not supported.
-
-Importing `@kreobuddha/ui/styles.css` from TypeScript requires that your project already declares
-types for CSS side-effect imports — in a Vite project, `"types": ["vite/client"]` in `tsconfig.json`.
-Without it, TypeScript 6 reports `TS2882` for the stylesheet import. This is a property of your
-build setup, not of this package.
-
-## The build probe
-
-`BuildProbe` is **not** a component of this library. It is a throwaway export that proves JSX
-compilation, CSS Modules, CSS extraction, declaration emit, package exports, and consumer
-installation all work. It is removed in Phase 1, when the first real component (`Button`) lands.
 
 ## License
 

@@ -1,4 +1,9 @@
 // Relative imports carry the `.js` extension so the emitted declarations resolve under Node16
 // module resolution, not only under bundler resolution.
-export { BuildProbe } from './internal/BuildProbe/BuildProbe.js';
-export type { BuildProbeProps } from './internal/BuildProbe/BuildProbe.js';
+//
+// Note that this entry deliberately does not import `styles.css`. TypeScript keeps side-effect
+// imports in the declarations it emits, and a stylesheet is not a module it can resolve there, so
+// such an import would make the published types unresolvable. The stylesheet is a separate build
+// entry instead, and consumers link `@kreobuddha/ui/styles.css` themselves.
+export { Button } from './components/Button/Button.js';
+export type { ButtonProps, ButtonSize, ButtonVariant } from './components/Button/Button.js';

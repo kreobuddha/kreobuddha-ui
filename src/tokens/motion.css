@@ -1,0 +1,21 @@
+/* Motion — minimal. Colour transitions and fades only; nothing slides, springs or scales. */
+:root {
+  --kreo-duration-instant: 80ms;
+  --kreo-duration-fast: 120ms;
+  --kreo-duration-base: 160ms;
+  --kreo-ease: cubic-bezier(0.2, 0, 0, 1);
+  --kreo-transition-color:
+    color var(--kreo-duration-fast) var(--kreo-ease),
+    background-color var(--kreo-duration-fast) var(--kreo-ease),
+    border-color var(--kreo-duration-fast) var(--kreo-ease),
+    box-shadow var(--kreo-duration-fast) var(--kreo-ease);
+  --kreo-transition-fade: opacity var(--kreo-duration-base) var(--kreo-ease);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --kreo-duration-instant: 0ms;
+    --kreo-duration-fast: 0ms;
+    --kreo-duration-base: 0ms;
+  }
+}

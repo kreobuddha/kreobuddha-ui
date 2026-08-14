@@ -1,0 +1,50 @@
+/* Type — Public Sans for everything readable, IBM Plex Mono for labels, data and buttons.
+   The library loads no fonts; the value lists end in platform fallbacks. See ADR-0002. */
+:root {
+  --kreo-font-sans:
+    'Public Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, sans-serif;
+  --kreo-font-mono: 'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+
+  --kreo-text-11: 0.6875rem; /* 11px — mono captions */
+  --kreo-text-12: 0.75rem;
+  --kreo-text-13: 0.8125rem;
+  --kreo-text-14: 0.875rem; /* body default */
+  --kreo-text-16: 1rem;
+  --kreo-text-18: 1.125rem;
+  --kreo-text-20: 1.25rem;
+  --kreo-text-24: 1.5rem;
+  --kreo-text-30: 1.875rem;
+  --kreo-text-36: 2.25rem;
+  --kreo-text-48: 3rem;
+
+  --kreo-weight-light: 300;
+  --kreo-weight-regular: 400;
+  --kreo-weight-medium: 500;
+  --kreo-weight-semibold: 600;
+  --kreo-weight-bold: 700;
+
+  --kreo-leading-tight: 1.15;
+  --kreo-leading-snug: 1.3;
+  --kreo-leading-normal: 1.5;
+  --kreo-leading-relaxed: 1.65;
+
+  --kreo-tracking-tight: -0.015em;
+  --kreo-tracking-normal: 0;
+  --kreo-tracking-wide: 0.02em;
+  --kreo-tracking-label: 0.08em; /* mono field labels, eyebrows */
+
+  /* Composite roles */
+  --kreo-type-display: var(--kreo-weight-semibold) var(--kreo-text-36) / var(--kreo-leading-tight)
+    var(--kreo-font-sans);
+  --kreo-type-title: var(--kreo-weight-semibold) var(--kreo-text-24) / var(--kreo-leading-snug)
+    var(--kreo-font-sans);
+  --kreo-type-heading: var(--kreo-weight-semibold) var(--kreo-text-18) / var(--kreo-leading-snug)
+    var(--kreo-font-sans);
+  --kreo-type-body: var(--kreo-weight-regular) var(--kreo-text-14) / var(--kreo-leading-relaxed)
+    var(--kreo-font-sans);
+  --kreo-type-body-lg: var(--kreo-weight-regular) var(--kreo-text-16) / var(--kreo-leading-relaxed)
+    var(--kreo-font-sans);
+  --kreo-type-label: var(--kreo-weight-medium) var(--kreo-text-11) / 1.2 var(--kreo-font-mono);
+  --kreo-type-button: var(--kreo-weight-medium) var(--kreo-text-13) / 1 var(--kreo-font-mono);
+  --kreo-type-data: var(--kreo-weight-regular) var(--kreo-text-14) / 1.4 var(--kreo-font-mono);
+}

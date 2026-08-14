@@ -1,0 +1,160 @@
+/* Component styles depend on the token layer, and declaring that dependency in CSS rather than
+   from TypeScript keeps the stylesheet out of the emitted declarations, where a `.css` specifier
+   is not resolvable. Vite inlines this into the single published `styles.css`. */
+@import '../../styles.css';
+
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--kreo-space-2);
+  border-style: solid;
+  border-width: var(--kreo-border-w);
+  border-radius: var(--kreo-radius-md);
+  font: var(--kreo-type-button);
+  letter-spacing: var(--kreo-tracking-wide);
+  white-space: nowrap;
+  cursor: pointer;
+  transition: var(--kreo-transition-color);
+}
+
+/* Focus doubles the border inside the box, so gaining focus never reflows the layout. */
+.button:focus-visible {
+  outline: none;
+  box-shadow: var(--kreo-focus-ring);
+}
+
+/*
+ * The shared focus ring is drawn in the accent colour, which is also the filled button's own
+ * background — an inset ring there would be invisible. Filled buttons therefore draw the ring in
+ * the colour already guaranteed to contrast with that background: their own label colour.
+ */
+.filled:focus-visible {
+  box-shadow: inset 0 0 0 var(--kreo-border-w-focus) var(--kreo-text-on-accent);
+}
+
+/* Sizes come after .button so their font-size wins over the `font` shorthand. */
+.sm {
+  height: var(--kreo-control-h-sm);
+  padding-inline: var(--kreo-control-px-sm);
+  font-size: var(--kreo-text-12);
+  /* Off the 4px scale on purpose: the design source specifies a tighter gap at this size. */
+  gap: 6px;
+}
+
+.md {
+  height: var(--kreo-control-h-md);
+  padding-inline: var(--kreo-control-px-md);
+  font-size: var(--kreo-text-13);
+}
+
+.lg {
+  height: var(--kreo-control-h-lg);
+  padding-inline: var(--kreo-control-px-lg);
+  font-size: var(--kreo-text-14);
+}
+
+.filled {
+  background-color: var(--kreo-accent-500);
+  border-color: var(--kreo-accent-500);
+  color: var(--kreo-text-on-accent);
+}
+
+.filled:not(.inactive):hover {
+  background-color: var(--kreo-accent-600);
+  border-color: var(--kreo-accent-600);
+}
+
+.filled:not(.inactive):active {
+  background-color: var(--kreo-accent-700);
+  border-color: var(--kreo-accent-700);
+}
+
+.outlined {
+  background-color: transparent;
+  border-color: var(--kreo-border-strong);
+  color: var(--kreo-text-primary);
+}
+
+.outlined:not(.inactive):hover {
+  background-color: var(--kreo-surface-hover);
+}
+
+.outlined:not(.inactive):active {
+  background-color: var(--kreo-surface-active);
+}
+
+.ghost {
+  background-color: transparent;
+  border-color: transparent;
+  color: var(--kreo-text-primary);
+}
+
+.ghost:not(.inactive):hover {
+  background-color: var(--kreo-surface-hover);
+}
+
+.ghost:not(.inactive):active {
+  background-color: var(--kreo-surface-active);
+}
+
+/* Danger rules follow the variants so they override at equal specificity. */
+.danger.filled {
+  background-color: var(--kreo-danger-500);
+  border-color: var(--kreo-danger-500);
+}
+
+.danger.filled:not(.inactive):hover,
+.danger.filled:not(.inactive):active {
+  background-color: var(--kreo-danger-600);
+  border-color: var(--kreo-danger-600);
+}
+
+.danger.outlined {
+  border-color: var(--kreo-border-danger);
+  color: var(--kreo-text-danger);
+}
+
+.danger.ghost {
+  color: var(--kreo-text-danger);
+}
+
+.inactive {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.fullWidth {
+  display: flex;
+  width: 100%;
+}
+
+.icon {
+  display: inline-flex;
+  align-items: center;
+  flex: none;
+}
+
+.indicator {
+  font-family: var(--kreo-font-mono);
+  flex: none;
+}
+
+/* In forced-colors mode box-shadow is not painted, so focus falls back to a real outline,
+   and the system's own disabled colour replaces the opacity treatment. */
+@media (forced-colors: active) {
+  .button {
+    border-color: ButtonText;
+  }
+
+  .button:focus-visible {
+    outline: var(--kreo-border-w-focus) solid CanvasText;
+    outline-offset: 1px;
+  }
+
+  .inactive {
+    opacity: 1;
+    color: GrayText;
+    border-color: GrayText;
+  }
+}

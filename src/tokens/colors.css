@@ -1,0 +1,117 @@
+/* Color — warm neutral paper ramp + a single evergreen accent.
+   Numeric ramps are the base layer; components reference only the semantic aliases. */
+:root {
+  /* Warm neutrals (paper) */
+  --kreo-neutral-0: #ffffff;
+  --kreo-neutral-25: #fcfbf8;
+  --kreo-neutral-50: #f7f5f0;
+  --kreo-neutral-100: #efece5;
+  --kreo-neutral-200: #e2ded4;
+  --kreo-neutral-300: #cdc8bb;
+  --kreo-neutral-400: #a9a499;
+  --kreo-neutral-500: #86817a;
+  --kreo-neutral-600: #676259;
+  --kreo-neutral-700: #4a463f;
+  --kreo-neutral-800: #302d28;
+  --kreo-neutral-900: #1f1d1a;
+  --kreo-neutral-950: #1a1917;
+
+  /* Accent — evergreen */
+  --kreo-accent-50: #eaf4f0;
+  --kreo-accent-100: #d0e7de;
+  --kreo-accent-200: #a4cfbf;
+  --kreo-accent-300: #6fb29b;
+  --kreo-accent-400: #3e937a;
+  --kreo-accent-500: #1f7a5c;
+  --kreo-accent-600: #19654c;
+  --kreo-accent-700: #14503d;
+  --kreo-accent-800: #0f3c2e;
+  --kreo-accent-900: #0a281f;
+
+  /* Semantic hues — same lightness family as the accent */
+  --kreo-danger-50: #fbeeea;
+  --kreo-danger-100: #f4d8cf;
+  --kreo-danger-500: #b4472c;
+  --kreo-danger-600: #973824;
+  --kreo-warning-50: #f9f1e2;
+  --kreo-warning-100: #f0e0bf;
+  --kreo-warning-500: #a9761b;
+  --kreo-warning-600: #8c6015;
+  --kreo-info-50: #eaf1f6;
+  --kreo-info-100: #cddfeb;
+  --kreo-info-500: #2a6f97;
+  --kreo-info-600: #225a7c;
+  --kreo-success-500: var(--kreo-accent-500);
+  --kreo-success-50: var(--kreo-accent-50);
+  --kreo-success-100: var(--kreo-accent-100);
+
+  /* ---- Semantic aliases: surfaces ---- */
+  --kreo-surface-page: var(--kreo-neutral-25);
+  --kreo-surface-card: var(--kreo-neutral-0);
+  --kreo-surface-sunken: var(--kreo-neutral-50);
+  --kreo-surface-raised: var(--kreo-neutral-0);
+  --kreo-surface-inverse: var(--kreo-neutral-900);
+  --kreo-surface-accent-soft: var(--kreo-accent-50);
+  --kreo-surface-hover: var(--kreo-neutral-50);
+  --kreo-surface-active: var(--kreo-neutral-100);
+  --kreo-surface-disabled: var(--kreo-neutral-50);
+
+  /* ---- Semantic aliases: text ---- */
+  --kreo-text-primary: var(--kreo-neutral-900);
+  --kreo-text-body: var(--kreo-neutral-800);
+  --kreo-text-muted: var(--kreo-neutral-600);
+  --kreo-text-subtle: var(--kreo-neutral-500);
+  --kreo-text-disabled: var(--kreo-neutral-400);
+  --kreo-text-inverse: var(--kreo-neutral-25);
+  --kreo-text-accent: var(--kreo-accent-600);
+  --kreo-text-on-accent: #ffffff;
+  --kreo-text-danger: var(--kreo-danger-600);
+  --kreo-text-link: var(--kreo-accent-600);
+  --kreo-text-link-hover: var(--kreo-accent-700);
+
+  /* ---- Semantic aliases: borders ---- */
+  --kreo-border-subtle: var(--kreo-neutral-100);
+  --kreo-border-default: var(--kreo-neutral-200);
+  --kreo-border-strong: var(--kreo-neutral-300);
+  --kreo-border-input: var(--kreo-neutral-300);
+  --kreo-border-focus: var(--kreo-accent-500);
+  --kreo-border-danger: var(--kreo-danger-500);
+  --kreo-border-inverse: var(--kreo-neutral-700);
+}
+
+/* Dark theme — warm charcoal, not black. Same token names, remapped. */
+[data-kreo-theme='dark'] {
+  --kreo-surface-page: #1a1917;
+  --kreo-surface-card: #211f1d;
+  --kreo-surface-sunken: #171614;
+  --kreo-surface-raised: #292724;
+  --kreo-surface-inverse: var(--kreo-neutral-50);
+  --kreo-surface-accent-soft: #16302a;
+  --kreo-surface-hover: #292724;
+  --kreo-surface-active: #322f2b;
+  --kreo-surface-disabled: #211f1d;
+
+  --kreo-text-primary: #f4f1ea;
+  --kreo-text-body: #e4e0d7;
+  --kreo-text-muted: #a9a499;
+  --kreo-text-subtle: #8b867e;
+  --kreo-text-disabled: #625d56;
+  --kreo-text-inverse: var(--kreo-neutral-900);
+  --kreo-text-accent: var(--kreo-accent-300);
+  --kreo-text-on-accent: #08201a;
+  --kreo-text-danger: #e08a70;
+  --kreo-text-link: var(--kreo-accent-300);
+  --kreo-text-link-hover: var(--kreo-accent-200);
+
+  --kreo-border-subtle: #2a2825;
+  --kreo-border-default: #37342f;
+  --kreo-border-strong: #4a463f;
+  --kreo-border-input: #4a463f;
+  --kreo-border-focus: var(--kreo-accent-300);
+  --kreo-border-danger: #c7593c;
+  --kreo-border-inverse: var(--kreo-neutral-300);
+
+  --kreo-accent-500: #3e937a;
+  --kreo-accent-600: #4aa387;
+  --kreo-accent-700: #57b394;
+}

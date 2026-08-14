@@ -1,0 +1,17 @@
+/* Shape — radii, border widths, and the focus ring.
+   Separation is carried by borders, not elevation: there is no shadow on cards or controls.
+   The overlay shadow arrives with the first component that floats over the page. */
+:root {
+  --kreo-radius-xs: 3px;
+  --kreo-radius-sm: 4px;
+  --kreo-radius-md: 6px; /* base: buttons, inputs */
+  --kreo-radius-lg: 10px; /* cards, panels */
+  --kreo-radius-xl: 14px; /* modals, sheets */
+  --kreo-radius-full: 999px;
+
+  --kreo-border-w: 1px;
+  --kreo-border-w-focus: 2px;
+
+  /* Focus is a 2px accent border drawn inside the box so nothing reflows. */
+  --kreo-focus-ring: inset 0 0 0 var(--kreo-border-w-focus) var(--kreo-border-focus);
+}

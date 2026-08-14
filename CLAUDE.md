@@ -46,7 +46,8 @@ Use this precedence when instructions conflict:
 2. This `CLAUDE.md`.
 3. Accepted ADRs in `docs/adr/`.
 4. `docs/ARCHITECTURE.md` and `docs/COMPONENT_STANDARD.md`.
-5. `docs/PROJECT_BRIEF.md`, `docs/QUALITY.md`, `docs/RELEASES.md`, and `docs/ROADMAP.md`.
+5. `docs/PROJECT_BRIEF.md`, `docs/QUALITY.md`, `docs/RELEASES.md`, `docs/ROADMAP.md`, and
+   `docs/CODE_STYLE.md`.
 6. Existing implementation and tests.
 
 Roadmap items are plans, not permission to implement every phase. A proposed ADR is not an accepted

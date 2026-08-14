@@ -1,0 +1,27 @@
+/* Spacing — 4px base, plus the control geometry components share.
+   Page layout tokens (gutter, page width, rail width) belong to the application, not to this
+   library, so they are deliberately not published here. */
+:root {
+  --kreo-space-0: 0;
+  --kreo-space-1: 4px;
+  --kreo-space-2: 8px;
+  --kreo-space-3: 12px;
+  --kreo-space-4: 16px;
+  --kreo-space-5: 20px;
+  --kreo-space-6: 24px;
+  --kreo-space-7: 28px;
+  --kreo-space-8: 32px;
+  --kreo-space-10: 40px;
+  --kreo-space-12: 48px;
+  --kreo-space-16: 64px;
+  --kreo-space-20: 80px;
+  --kreo-space-24: 96px;
+
+  /* Control geometry */
+  --kreo-control-h-sm: 32px;
+  --kreo-control-h-md: 40px;
+  --kreo-control-h-lg: 48px;
+  --kreo-control-px-sm: 12px;
+  --kreo-control-px-md: 16px;
+  --kreo-control-px-lg: 20px;
+}
