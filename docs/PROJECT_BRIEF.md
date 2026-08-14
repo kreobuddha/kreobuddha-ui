@@ -11,7 +11,7 @@
 - Working conversation language: Russian
 - Backend: none by design
 - License: MIT
-- Typefaces: IBM Plex Sans and IBM Plex Mono, bundled with the package (ADR-0003)
+- Typeface: Inter, bundled with the package; no monospace family (ADR-0005)
 - Shipped components: `Button`
 
 ## Product summary
@@ -82,14 +82,19 @@ Senior frontend engineers, engineering managers, and recruiters evaluating:
 
 ## Visual direction
 
-The working direction is **industrial clarity**:
+The direction is **calm and editorial**, settled in ADR-0005 after the first attempt at industrial
+clarity was rejected in use:
 
-- restrained and functional rather than decorative;
-- suitable for developer tools and technical products;
-- clear hierarchy in compact, information-rich layouts;
-- neutral surfaces with purposeful semantic color;
+- restrained surfaces with no temperature, so the accent sits on them cleanly;
+- hierarchy carried by typography and spacing before colour;
+- one accent, berry, used sparingly — primary actions, links, focus, selection;
+- one typeface, Inter, with tabular figures instead of a second monospace family;
+- near-rectangular controls at a 4px radius;
 - unmistakable interaction and focus states;
 - original styling that does not imitate an employer-owned or another existing library.
+
+Colour decisions are made by measurement, not by eye: `npm run check:contrast` is the arbiter, and
+every value in the palette was solved for a contrast target before being written down.
 
 This direction is a constraint, not a finished brand system. Visual details must be validated in
 real component slices and consumer screens.

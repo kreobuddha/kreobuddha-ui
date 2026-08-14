@@ -1,14 +1,17 @@
 Kreobuddha UI bundles third-party font software.
 
-IBM Plex Sans and IBM Plex Mono
-  Copyright 2019 IBM Corp. All rights reserved.
+Inter
+  Copyright 2016 The Inter Project Authors (https://github.com/rsms/inter).
   Licensed under the SIL Open Font License, Version 1.1.
 
   The font files are published in this package under `dist/assets/fonts`, together with the full
-  licence text: `LICENSE-ibm-plex-sans.txt` and `LICENSE-ibm-plex-mono.txt`.
+  licence text: `LICENSE-inter.txt`.
 
-  Only the four faces this library's type roles use are included — sans 400 and 600, mono 400 and
-  500 — each split into a Latin and a Cyrillic subset. The files are taken unmodified from the
-  @fontsource distribution of IBM Plex.
+  Only the two weights this library's type roles use are included — 400 and 600 — each split into
+  a Latin and a Cyrillic subset. The files are taken unmodified from the @fontsource distribution
+  of Inter.
+
+  No monospace family is bundled. Inter carries tabular figures, which is what aligned numerals
+  actually require.
 
 Everything else in this package is covered by the MIT licence in LICENSE.

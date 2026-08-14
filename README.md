@@ -81,24 +81,40 @@ Customisation happens through the semantic tokens, not through component classes
 `--kreo-*` custom property in the published stylesheet is public API under SemVer; CSS Module class
 names are private implementation details.
 
+Two conventions are worth knowing before overriding anything:
+
+- **A status has two colours, not one.** `--kreo-text-success` and its siblings are readable text
+  at 4.5:1; `--kreo-icon-success` and its siblings are brighter marks for dots, icons and borders,
+  which need only 3:1. Using one value for both is what turns an amber into a brown.
+- **The dark theme runs at lower saturation than the light one.** At equal contrast a colour reads
+  louder on a dark surface.
+
 If you override the palette, keep the pairs contrastable: `npm run check:contrast` measures every
 pairing the components put on screen, in both themes, and fails below the WCAG 2.2 target — 4.5:1
-for text, 3:1 for control borders and the focus ring.
+for text, 3:1 for control borders, marks and the focus ring.
 
 ## Fonts
 
-**The fonts are bundled and no external request is made.** Importing `styles.css` is enough: IBM
-Plex Sans and IBM Plex Mono ship inside the package, so the library renders as intended with no
-host setup, no CDN, and no network dependency.
+**The font is bundled and no external request is made.** Importing `styles.css` is enough: Inter
+ships inside the package, so the library renders as intended with no host setup, no CDN, and no
+network dependency.
 
-Only the four faces the type roles use are included — sans 400 and 600, mono 400 and 500 — each
-split into a Latin and a Cyrillic file behind a `unicode-range`, so a Latin-only page never
-downloads the Cyrillic subsets. Both families cover Cyrillic. That is about 123 KB of font data in
-total, none of it on the JavaScript path.
+Only the two weights the type roles use are included — 400 and 600 — each split into a Latin and a
+Cyrillic file behind a `unicode-range`, so a Latin-only page never downloads the Cyrillic subset.
+About 64 KB in total, none of it on the JavaScript path.
 
-The fonts are licensed under the SIL Open Font License 1.1; see [NOTICE](NOTICE) and the licence
-files published beside them. The reasoning is in
-[ADR-0003](docs/adr/0003-bundle-ibm-plex-and-replace-public-sans.md).
+**No monospace family is bundled.** Numerals that must line up in columns use
+`--kreo-numeric-tabular`, which switches Inter to its tabular figures — the actual requirement
+behind reaching for a mono. Apply it alongside a type role, since `font-variant-numeric` is a
+separate property from the `font` shorthand:
+
+```css
+font: var(--kreo-type-data);
+font-variant-numeric: var(--kreo-numeric-tabular);
+```
+
+Inter is licensed under the SIL Open Font License 1.1; see [NOTICE](NOTICE) and the licence file
+published beside it. The reasoning is in [ADR-0005](docs/adr/0005-visual-language.md).
 
 ## Package boundary
 
