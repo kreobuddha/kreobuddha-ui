@@ -12,6 +12,29 @@ What is not: ownership of the `@kreobuddha` npm scope has never been verified, a
 any publish attempt. Tagging, releasing, or publishing remains an external action requiring
 Rustam's explicit approval for the exact action.
 
+## Consumption before publication
+
+Until the npm scope is verified and a publish is approved, consumers install straight from GitHub:
+
+```jsonc
+// consumer package.json
+"@kreobuddha/ui": "github:kreobuddha/kreobuddha-ui#v0.2.0"
+```
+
+This works only because `prepare` runs `npm run build`: npm executes that script when a dependency
+is installed from a git remote, and `dist/` is not committed. Pin a tag rather than a branch, so a
+consumer's install is reproducible.
+
+Two costs, both accepted as temporary:
+
+- npm installs the library's full devDependencies in the consumer's tree, because the build needs
+  them. Installing from GitHub is therefore much slower and heavier than installing from npm.
+- The tag, not the branch, is the contract. Moving a tag silently changes what consumers get, so
+  cut a new version instead.
+
+This is a stopgap, not the release model. It does not satisfy the prerelease gates below, and it
+does not make the package published.
+
 ## Release principles
 
 - Releases are generated from a clean, verified protected branch.
