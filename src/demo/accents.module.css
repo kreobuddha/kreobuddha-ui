@@ -1,0 +1,207 @@
+/* Second round of accent candidates. Neutrals and statuses come from `palettes.module.css`, which
+   the story applies alongside these, so once again the accent is the only variable.
+   Every value was measured before being written down; nothing here ships. */
+
+.frame {
+  background: var(--kreo-surface-page);
+  border: 1px solid var(--kreo-border-default);
+  border-radius: 8px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  flex: 1 1 300px;
+  min-width: 300px;
+}
+
+.row {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.link {
+  color: var(--kreo-text-accent);
+  font-size: 14px;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.swatch {
+  width: 100%;
+  height: 28px;
+  border-radius: 4px;
+  background: var(--kreo-accent-500);
+}
+
+.caption {
+  font-size: 12px;
+  color: var(--kreo-text-subtle);
+}
+
+/* ---- Around A: blues ---- */
+
+.classicBlue {
+  --kreo-accent-500: #2563eb;
+  --kreo-accent-600: #1d4ed8;
+  --kreo-accent-700: #1e40af;
+  --kreo-text-on-accent: #fff;
+  --kreo-text-accent: #1d4ed8;
+  --kreo-border-focus: #2563eb;
+}
+
+.classicBlue[data-kreo-theme='dark'] {
+  --kreo-accent-500: #7aa2f7;
+  --kreo-accent-600: #8fb3f9;
+  --kreo-accent-700: #a3c2fb;
+  --kreo-text-on-accent: #0b1220;
+  --kreo-text-accent: #7aa2f7;
+  --kreo-border-focus: #7aa2f7;
+}
+
+.azure {
+  --kreo-accent-500: #0369a1;
+  --kreo-accent-600: #025b8c;
+  --kreo-accent-700: #024b74;
+  --kreo-text-on-accent: #fff;
+  --kreo-text-accent: #025b8c;
+  --kreo-border-focus: #0369a1;
+}
+
+.azure[data-kreo-theme='dark'] {
+  --kreo-accent-500: #5cb3e0;
+  --kreo-accent-600: #74c0e7;
+  --kreo-accent-700: #8dcdee;
+  --kreo-text-on-accent: #04202c;
+  --kreo-text-accent: #5cb3e0;
+  --kreo-border-focus: #5cb3e0;
+}
+
+.steel {
+  --kreo-accent-500: #3f6795;
+  --kreo-accent-600: #365a83;
+  --kreo-accent-700: #2d4c6f;
+  --kreo-text-on-accent: #fff;
+  --kreo-text-accent: #365a83;
+  --kreo-border-focus: #3f6795;
+}
+
+.steel[data-kreo-theme='dark'] {
+  --kreo-accent-500: #8fb0d8;
+  --kreo-accent-600: #a0bde0;
+  --kreo-accent-700: #b1cae7;
+  --kreo-text-on-accent: #0d1620;
+  --kreo-text-accent: #8fb0d8;
+  --kreo-border-focus: #8fb0d8;
+}
+
+.cobalt {
+  --kreo-accent-500: #1e4fd8;
+  --kreo-accent-600: #1a45bd;
+  --kreo-accent-700: #163aa2;
+  --kreo-text-on-accent: #fff;
+  --kreo-text-accent: #1a45bd;
+  --kreo-border-focus: #1e4fd8;
+}
+
+.cobalt[data-kreo-theme='dark'] {
+  --kreo-accent-500: #8aa8fb;
+  --kreo-accent-600: #9bb5fc;
+  --kreo-accent-700: #adc3fd;
+  --kreo-text-on-accent: #0a0f24;
+  --kreo-text-accent: #8aa8fb;
+  --kreo-border-focus: #8aa8fb;
+}
+
+/* ---- Different hues ---- */
+
+.emerald {
+  --kreo-accent-500: #047857;
+  --kreo-accent-600: #03674a;
+  --kreo-accent-700: #02563e;
+  --kreo-text-on-accent: #fff;
+  --kreo-text-accent: #03674a;
+  --kreo-border-focus: #047857;
+}
+
+.emerald[data-kreo-theme='dark'] {
+  --kreo-accent-500: #4fc39a;
+  --kreo-accent-600: #66cca8;
+  --kreo-accent-700: #7dd5b6;
+  --kreo-text-on-accent: #04211a;
+  --kreo-text-accent: #4fc39a;
+  --kreo-border-focus: #4fc39a;
+}
+
+.teal {
+  --kreo-accent-500: #0f766e;
+  --kreo-accent-600: #0d665f;
+  --kreo-accent-700: #0a5651;
+  --kreo-text-on-accent: #fff;
+  --kreo-text-accent: #0d665f;
+  --kreo-border-focus: #0f766e;
+}
+
+.teal[data-kreo-theme='dark'] {
+  --kreo-accent-500: #4fc4bb;
+  --kreo-accent-600: #66ccc5;
+  --kreo-accent-700: #7dd5cf;
+  --kreo-text-on-accent: #032220;
+  --kreo-text-accent: #4fc4bb;
+  --kreo-border-focus: #4fc4bb;
+}
+
+.sand {
+  --kreo-accent-500: #8a5a12;
+  --kreo-accent-600: #784e0f;
+  --kreo-accent-700: #66420d;
+  --kreo-text-on-accent: #fff;
+  --kreo-text-accent: #784e0f;
+  --kreo-border-focus: #8a5a12;
+}
+
+.sand[data-kreo-theme='dark'] {
+  --kreo-accent-500: #dda94f;
+  --kreo-accent-600: #e3b566;
+  --kreo-accent-700: #e9c17d;
+  --kreo-text-on-accent: #241703;
+  --kreo-text-accent: #dda94f;
+  --kreo-border-focus: #dda94f;
+}
+
+.plum {
+  --kreo-accent-500: #7e3f8f;
+  --kreo-accent-600: #6e377d;
+  --kreo-accent-700: #5e2f6b;
+  --kreo-text-on-accent: #fff;
+  --kreo-text-accent: #6e377d;
+  --kreo-border-focus: #7e3f8f;
+}
+
+.plum[data-kreo-theme='dark'] {
+  --kreo-accent-500: #cb96d8;
+  --kreo-accent-600: #d4a7df;
+  --kreo-accent-700: #ddb8e6;
+  --kreo-text-on-accent: #22102a;
+  --kreo-text-accent: #cb96d8;
+  --kreo-border-focus: #cb96d8;
+}
+
+.terracotta {
+  --kreo-accent-500: #a8492c;
+  --kreo-accent-600: #934027;
+  --kreo-accent-700: #7e3721;
+  --kreo-text-on-accent: #fff;
+  --kreo-text-accent: #934027;
+  --kreo-border-focus: #a8492c;
+}
+
+.terracotta[data-kreo-theme='dark'] {
+  --kreo-accent-500: #e59578;
+  --kreo-accent-600: #eaa68d;
+  --kreo-accent-700: #efb7a2;
+  --kreo-text-on-accent: #2a1008;
+  --kreo-text-accent: #e59578;
+  --kreo-border-focus: #e59578;
+}
