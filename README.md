@@ -58,8 +58,10 @@ a disabled button is, which is what tells "in flight" apart from "unavailable". 
 the action is genuinely unavailable.
 
 A label longer than the available width is truncated with an ellipsis; the full text stays in the
-DOM, so the accessible name is unaffected. Set `textWrap` to let it run onto several lines and grow
-the button instead.
+DOM, so the accessible name is unaffected, and it is offered as the browser's native tooltip while
+the label is clipped. Note that a native tooltip is not reachable by keyboard or touch — a properly
+accessible `Tooltip` component is a later phase. Set `textWrap` to let the label run onto several
+lines and grow the button instead, in which case nothing is hidden and no tooltip appears.
 
 Icons are `ReactNode` and are hidden from assistive technology, so the label remains the accessible
 name. The library bundles no icon set.

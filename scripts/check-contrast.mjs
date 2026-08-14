@@ -28,6 +28,8 @@ const PAIRS = [
   ['danger label on card', '--kreo-surface-card', '--kreo-text-danger', TEXT],
   ['body text', '--kreo-surface-page', '--kreo-text-body', TEXT],
   ['muted text', '--kreo-surface-page', '--kreo-text-muted', TEXT],
+  ['subtle text', '--kreo-surface-page', '--kreo-text-subtle', TEXT],
+  ['subtle text on card', '--kreo-surface-card', '--kreo-text-subtle', TEXT],
   ['control border', '--kreo-surface-page', '--kreo-border-control', NON_TEXT],
   ['control border on card', '--kreo-surface-card', '--kreo-border-control', NON_TEXT],
   ['danger border', '--kreo-surface-page', '--kreo-border-danger', NON_TEXT],

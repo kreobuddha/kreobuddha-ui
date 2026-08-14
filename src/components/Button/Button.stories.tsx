@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import type { CSSProperties, ReactElement } from 'react';
-import { expect, fn, userEvent, within } from 'storybook/test';
+import { expect, fn, userEvent, waitFor, within } from 'storybook/test';
 
 import { Button } from './Button.js';
 
@@ -159,7 +159,8 @@ export const FullWidth: Story = {
 
 /**
  * A label too long for its container is clipped with an ellipsis rather than pushing the button
- * past the container edge. The full text stays in the DOM, so the accessible name is unaffected.
+ * past the container edge. The full text stays in the DOM, so the accessible name is unaffected,
+ * and it is also offered as the browser's own tooltip while the label is clipped.
  */
 export const LongLabel: Story = {
   args: { children: 'Continue to workspace configuration' },
@@ -168,6 +169,13 @@ export const LongLabel: Story = {
       <Button {...args} />
     </div>
   ),
+  play: async ({ canvasElement }) => {
+    const button = within(canvasElement).getByRole('button');
+
+    await waitFor(() =>
+      expect(button).toHaveAttribute('title', 'Continue to workspace configuration')
+    );
+  },
 };
 
 /** `textWrap` lets the label run onto several lines and the button grow to fit. */
@@ -178,6 +186,12 @@ export const TextWrap: Story = {
       <Button {...args} />
     </div>
   ),
+  play: async ({ canvasElement }) => {
+    const button = within(canvasElement).getByRole('button');
+
+    // Nothing is hidden when the label wraps, so there is nothing to explain in a tooltip.
+    await waitFor(() => expect(button).not.toHaveAttribute('title'));
+  },
 };
 
 /** Tab reaches the button, Enter and Space activate it — all native behaviour, unmodified. */

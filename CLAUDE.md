@@ -53,21 +53,26 @@ Use this precedence when instructions conflict:
 Roadmap items are plans, not permission to implement every phase. A proposed ADR is not an accepted
 decision. If documentation and code disagree, report the conflict instead of silently choosing one.
 
-## The design source
+## The design source is disconnected
 
-The visual foundation was authored separately in a Claude Design project. Its token values were
-ported into `src/tokens/` and are recorded in ADR-0001. **That project is an archive of the original
-intent and carries no authority.** This repository is the single source of truth, and Rustam gives
-instructions here.
+The visual foundation was originally authored in a separate Claude Design project. Its values were
+ported into `src/tokens/`, recorded in ADR-0001, and **that project is no longer consulted.** Do not
+read from it, sync to it, or cite it when justifying a change. Where older ADRs mention it, they are
+recording history, not pointing at a live dependency.
 
-Practically: Rustam describes the change he wants in plain language; translate it into token or
-component changes, measure the result rather than judging it by eye, and show it in Storybook —
-`Overview → Kit` renders everything the library ships. Anything that changes a public token, a
-public prop, or a documented visual contract needs an ADR.
+This repository is self-contained and is the single source of truth. Rustam gives instructions here,
+in plain language, and the loop is:
 
-Where the design source and this repository already disagree — the sans family, the focus ring on
-filled buttons, the border palette, density — this repository is correct and the divergence is
-recorded in the relevant ADR. Do not "restore" a design-source value to close a gap.
+1. He describes what he wants changed about how something looks or behaves.
+2. Translate it into token or component changes — **measure the result rather than judging it by
+   eye**, using `npm run check:contrast` and the story tests.
+3. Show it in Storybook. `Overview → Kit` renders everything the library ships, in either theme.
+4. Anything that changes a public token, a public prop, or a documented visual contract gets an ADR.
+
+Several values now deliberately differ from what that project specified — the sans family, the focus
+ring on filled buttons, the control border, the danger palette, density. Each divergence exists
+because measurement or verification demanded it, and each is recorded in an ADR. Never "restore" one
+of those values to close a perceived gap.
 
 ## Scope
 

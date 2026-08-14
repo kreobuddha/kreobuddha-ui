@@ -44,6 +44,8 @@ const preview: Preview = {
   },
   parameters: {
     controls: { expanded: true },
+    // Every story is scanned by axe when the story tests run, and a violation fails the build.
+    a11y: { test: 'error' },
   },
 };
 

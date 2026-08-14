@@ -32,6 +32,10 @@ jobs:
 
       - run: npm ci
 
+      # The story tests run in a real browser, which is the only place axe can judge contrast
+      # and focus. Only Chromium is installed; the suite does not run cross-browser.
+      - run: npx playwright install --with-deps chromium
+
       - run: npm run format:check
       - run: npm run lint
       - run: npm run lint:css

@@ -1,4 +1,4 @@
-import { defineConfig } from 'vitest/config';
+import { defineConfig } from 'vite';
 
 export default defineConfig({
   build: {
@@ -21,10 +21,5 @@ export default defineConfig({
         entryFileNames: '[name].js',
       },
     },
-  },
-  test: {
-    environment: 'jsdom',
-    include: ['src/**/*.test.{ts,tsx}', 'tests/**/*.test.{ts,tsx}'],
-    setupFiles: ['./tests/setup.ts'],
   },
 });

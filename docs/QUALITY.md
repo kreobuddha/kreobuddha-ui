@@ -51,8 +51,13 @@ that merely repeat implementation details.
 Storybook stories are canonical component fixtures. Interaction tests should cover representative
 keyboard and pointer flows, not every cosmetic permutation.
 
-When current Storybook/Vite compatibility is verified, its Vitest integration may turn stories into
-browser-based component tests. Do not add parallel test stacks without a distinct responsibility.
+`vitest.config.ts` defines two projects: `unit` runs the focused tests in jsdom, and `storybook`
+runs every story in headless Chromium through `@storybook/addon-vitest`. A story's `play` function
+becomes its test, so a story is documentation and a test without being written twice.
+
+Use a `play` function for anything that needs real layout — measuring whether a label actually
+overflows, or that a focus ring is painted. Those assertions are meaningless in jsdom, which has no
+layout at all.
 
 ### 4. Automated accessibility
 
@@ -68,12 +73,14 @@ failures. Any temporary exception must include:
 Automated scanning is only a first line of defense. It cannot prove correct focus movement,
 meaningful announcements, complete keyboard behavior, or usable forced-colors presentation.
 
-Two things about how this currently runs:
+This runs at two levels:
 
-- axe executes inside jsdom, which neither lays out nor paints, so its `color-contrast` rule is
-  disabled there. It is not skipped — contrast is measured separately, below.
-- Storybook's accessibility panel scans a story on demand in the browser. Running those scans in CI
-  needs the Storybook Vitest addon and a real browser, which is not set up yet.
+- The focused test in `Button.test.tsx` executes axe inside jsdom, which neither lays out nor
+  paints, so its `color-contrast` rule is disabled there.
+- **Every story is scanned in a real browser** by the Storybook Vitest addon, with
+  `a11y: { test: 'error' }` in `.storybook/preview.tsx` — a violation fails the build. Because this
+  layer has real layout and painting, its contrast findings are real. It caught a token that had
+  been shipping below the threshold and that the token-level check below did not cover.
 
 ### 4a. Contrast
 
@@ -81,8 +88,10 @@ Two things about how this currently runs:
 pair a shipped component puts on screen in both themes, and exits non-zero below its WCAG 2.2
 target — 4.5:1 for text, 3:1 for control borders and the focus ring. It runs in CI.
 
-This is the only reason contrast may be described as verified. Every new pairing a component
-introduces must be added to the script's list, or it goes unmeasured.
+Every new pairing a component introduces must be added to the script's list, or it goes unmeasured
+here. The two layers are complementary and neither replaces the other: the script covers documented
+token pairings the components may not currently render, while the browser scan covers whatever a
+story actually puts on screen, including combinations nobody thought to declare.
 
 ### 5. Manual accessibility
 
@@ -165,14 +174,17 @@ format:check                          running
 lint                                  running
 typecheck                             running
 unit/component tests                  running
+story tests in Chromium               running — play functions and axe
 contrast check                        running
 package build                         running
 Storybook build                       running
 package artifact checks               running
-Storybook interaction tests           not set up — needs a browser runner
 consumer smoke build                  local only — no committed fixture yet
 visual regression for protected states not started
 ```
+
+The story tests need a browser, so CI installs Chromium via Playwright. Only Chromium: the suite
+is not cross-browser, and claiming otherwise would be unsupported.
 
 Do not create empty or permanently skipped CI jobs merely to match this list. A check becomes
 required when the feature it validates is real.

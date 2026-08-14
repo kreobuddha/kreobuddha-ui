@@ -1,3 +1,4 @@
+import { useEffect, useRef, useState } from 'react';
 import type { ComponentPropsWithRef, MouseEvent, ReactElement, ReactNode } from 'react';
 
 import styles from './Button.module.css';
@@ -21,7 +22,8 @@ export interface ButtonProps extends Omit<ComponentPropsWithRef<'button'>, 'type
   fullWidth?: boolean;
   /**
    * Lets a long label wrap onto several lines and the button grow past its minimum height.
-   * By default the label stays on one line and truncates with an ellipsis.
+   * By default the label stays on one line, truncates with an ellipsis, and exposes the full
+   * text as the browser's own tooltip.
    */
   textWrap?: boolean;
   /** Decorative element before the label. */
@@ -49,8 +51,42 @@ export const Button = ({
   className,
   children,
   onClick,
+  title,
   ...rest
 }: ButtonProps): ReactElement => {
+  const labelRef = useRef<HTMLSpanElement>(null);
+  const [overflowTitle, setOverflowTitle] = useState<string | undefined>(undefined);
+
+  // A truncated label hides text from sighted users, so the full string is offered as the
+  // browser's own tooltip — but only while it is actually clipped, otherwise every button would
+  // sprout a redundant one.
+  useEffect(() => {
+    const node = labelRef.current;
+
+    if (!node || textWrap) {
+      setOverflowTitle(undefined);
+      return;
+    }
+
+    const measure = (): void => {
+      const clipped = node.scrollWidth > node.clientWidth;
+      setOverflowTitle(clipped ? (node.textContent ?? undefined) : undefined);
+    };
+
+    measure();
+
+    if (typeof ResizeObserver === 'undefined') {
+      return;
+    }
+
+    const observer = new ResizeObserver(measure);
+    observer.observe(node);
+
+    return () => {
+      observer.disconnect();
+    };
+  }, [textWrap, children]);
+
   const handleClick = (event: MouseEvent<HTMLButtonElement>): void => {
     // A loading button stays in the tab order, so it has to refuse activation itself —
     // including the form submission a click would otherwise trigger.
@@ -68,6 +104,7 @@ export const Button = ({
       {...rest}
       type={type}
       disabled={disabled}
+      title={title ?? overflowTitle}
       aria-disabled={loading || undefined}
       aria-busy={loading || undefined}
       onClick={handleClick}
@@ -90,7 +127,9 @@ export const Button = ({
             {icon}
           </span>
         ) : null}
-        <span className={styles.label}>{children}</span>
+        <span className={styles.label} ref={labelRef}>
+          {children}
+        </span>
         {iconEnd ? (
           <span className={styles.icon} aria-hidden="true">
             {iconEnd}
