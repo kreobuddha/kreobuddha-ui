@@ -100,18 +100,64 @@ export const Kit: Story = {
         <p style={{ font: 'var(--kreo-type-body)', color: 'var(--kreo-text-body)', margin: 0 }}>
           Body copy sits at 14px with generous leading. Invitations go out when you finish setup.
         </p>
-        <div style={{ font: 'var(--kreo-type-data)', color: 'var(--kreo-text-muted)' }}>
-          3 sent · Step 2 / 4 · 128 ms
+        <p style={{ font: 'var(--kreo-type-body)', color: 'var(--kreo-text-body)', margin: 0 }}>
+          Съешь ещё этих мягких французских булок, да выпей чаю. One family covers both scripts, so
+          mixed text keeps a single drawing.
+        </p>
+      </Section>
+
+      <Section title="Tabular figures">
+        <p style={{ font: 'var(--kreo-type-body)', color: 'var(--kreo-text-muted)', margin: 0 }}>
+          No monospace family is bundled. Columns line up because the text face carries tabular
+          figures, which is the actual requirement behind &ldquo;use a mono for data&rdquo;.
+        </p>
+        <div
+          style={{
+            font: 'var(--kreo-type-data)',
+            fontVariantNumeric: 'var(--kreo-numeric-tabular)',
+            color: 'var(--kreo-text-body)',
+            display: 'flex',
+            flexDirection: 'column',
+          }}
+        >
+          <span>1 108 ms · 3 sent</span>
+          <span>9 411 ms · 7 sent</span>
+          <span>Шаг 2 / 4 · 128 мс</span>
         </div>
       </Section>
 
-      <Section title="Cyrillic coverage">
-        <p style={{ font: 'var(--kreo-type-body)', color: 'var(--kreo-text-body)', margin: 0 }}>
-          Съешь ещё этих мягких французских булок, да выпей чаю. Both families cover Cyrillic, so
-          mixed text keeps one drawing.
-        </p>
-        <div style={{ font: 'var(--kreo-type-data)', color: 'var(--kreo-text-muted)' }}>
-          Отправлено: 3 · Шаг 2 / 4
+      <Section title="Status colours">
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--kreo-space-2)' }}>
+          {(
+            [
+              ['--kreo-text-success', '--kreo-icon-success', 'Changes saved'],
+              ['--kreo-text-warning', '--kreo-icon-warning', 'The invitation expires today'],
+              ['--kreo-text-danger', '--kreo-icon-danger', 'Could not reach the server'],
+              ['--kreo-text-info', '--kreo-icon-info', 'This workspace is read-only'],
+            ] as const
+          ).map(([text, mark, label]) => (
+            <span
+              key={label}
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: 'var(--kreo-space-2)',
+                font: 'var(--kreo-type-body)',
+                color: `var(${text})`,
+              }}
+            >
+              <span
+                style={{
+                  width: 10,
+                  height: 10,
+                  borderRadius: 'var(--kreo-radius-full)',
+                  background: `var(${mark})`,
+                  flex: 'none',
+                }}
+              />
+              {label}
+            </span>
+          ))}
         </div>
       </Section>
 

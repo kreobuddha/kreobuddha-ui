@@ -1,12 +1,17 @@
-/* Type — IBM Plex Sans for everything readable, IBM Plex Mono for labels, data and buttons.
-   Both are bundled with the package (see `fonts.css` and ADR-0003); the fallbacks below only
-   matter while the font files are still loading. */
-:root {
-  --kreo-font-sans:
-    'IBM Plex Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, sans-serif;
-  --kreo-font-mono: 'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+/* Type — one family, Inter, bundled with the package (see `fonts.css` and ADR-0005). The
+   fallbacks below only matter while the font files are still loading.
 
-  --kreo-text-11: 0.6875rem; /* 11px — mono captions */
+   There is no monospace family. Numerals that need to line up in columns use
+   `--kreo-numeric-tabular`, which switches Inter to its tabular figures — the actual requirement
+   behind "use a mono for data". */
+:root {
+  --kreo-font-sans: Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, sans-serif;
+
+  /* Apply alongside a type role wherever figures must align: `font-variant-numeric` is a separate
+     property, so the `font` shorthand below cannot carry it. */
+  --kreo-numeric-tabular: tabular-nums;
+
+  --kreo-text-11: 0.6875rem; /* 11px — captions and eyebrows */
   --kreo-text-12: 0.75rem;
   --kreo-text-13: 0.8125rem;
   --kreo-text-14: 0.875rem; /* body default */
@@ -18,11 +23,9 @@
   --kreo-text-36: 2.25rem;
   --kreo-text-48: 3rem;
 
-  --kreo-weight-light: 300;
   --kreo-weight-regular: 400;
   --kreo-weight-medium: 500;
   --kreo-weight-semibold: 600;
-  --kreo-weight-bold: 700;
 
   --kreo-leading-tight: 1.15;
   --kreo-leading-snug: 1.3;
@@ -31,8 +34,8 @@
 
   --kreo-tracking-tight: -0.015em;
   --kreo-tracking-normal: 0;
-  --kreo-tracking-wide: 0.02em;
-  --kreo-tracking-label: 0.08em; /* mono field labels, eyebrows */
+  --kreo-tracking-wide: 0.01em;
+  --kreo-tracking-label: 0.06em; /* eyebrows and field labels */
 
   /* Composite roles */
   --kreo-type-display: var(--kreo-weight-semibold) var(--kreo-text-36) / var(--kreo-leading-tight)
@@ -45,7 +48,7 @@
     var(--kreo-font-sans);
   --kreo-type-body-lg: var(--kreo-weight-regular) var(--kreo-text-16) / var(--kreo-leading-relaxed)
     var(--kreo-font-sans);
-  --kreo-type-label: var(--kreo-weight-medium) var(--kreo-text-11) / 1.2 var(--kreo-font-mono);
-  --kreo-type-button: var(--kreo-weight-medium) var(--kreo-text-13) / 1 var(--kreo-font-mono);
-  --kreo-type-data: var(--kreo-weight-regular) var(--kreo-text-14) / 1.4 var(--kreo-font-mono);
+  --kreo-type-label: var(--kreo-weight-medium) var(--kreo-text-11) / 1.2 var(--kreo-font-sans);
+  --kreo-type-button: var(--kreo-weight-medium) var(--kreo-text-14) / 1 var(--kreo-font-sans);
+  --kreo-type-data: var(--kreo-weight-regular) var(--kreo-text-14) / 1.4 var(--kreo-font-sans);
 }

@@ -49,10 +49,10 @@
 .sm {
   min-height: var(--kreo-control-h-sm);
   padding-inline: var(--kreo-control-px-sm);
-  font-size: var(--kreo-text-12);
+  font-size: var(--kreo-text-13);
 }
 
-/* Off the 4px scale on purpose: the design source specifies a tighter gap at this size. */
+/* Off the 4px scale on purpose: the full gap crowds a 32px control. */
 .sm .content {
   gap: 6px;
 }
@@ -60,13 +60,13 @@
 .md {
   min-height: var(--kreo-control-h-md);
   padding-inline: var(--kreo-control-px-md);
-  font-size: var(--kreo-text-13);
+  font-size: var(--kreo-text-14);
 }
 
 .lg {
   min-height: var(--kreo-control-h-lg);
   padding-inline: var(--kreo-control-px-lg);
-  font-size: var(--kreo-text-14);
+  font-size: var(--kreo-text-16);
 }
 
 .filled {

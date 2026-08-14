@@ -1,49 +1,47 @@
-/* Color — warm neutral paper ramp + a single evergreen accent.
-   Numeric ramps are the base layer; components reference only the semantic aliases. */
+/* Colour — a neutral grey ramp, one berry accent, four status hues.
+   Numeric ramps are the base layer; components reference only the semantic aliases.
+
+   Two rules govern every value here, and both were arrived at by measurement (see ADR-0005):
+
+   1. A status carries two colours, not one. `--kreo-text-*` is readable body text at 4.5:1 or
+      better; `--kreo-icon-*` is the brighter mark used for dots, icons and borders, which need
+      only 3:1. One value cannot do both — an amber dark enough to read as text is a brown.
+   2. The dark theme runs at lower saturation than the light one. At equal contrast a colour reads
+      louder on a dark surface, and green shows it first. */
 :root {
-  /* Warm neutrals (paper) */
+  /* Neutrals — no temperature, so any accent sits on them cleanly */
   --kreo-neutral-0: #fff;
-  --kreo-neutral-25: #fcfbf8;
-  --kreo-neutral-50: #f7f5f0;
-  --kreo-neutral-100: #efece5;
-  --kreo-neutral-200: #e2ded4;
-  --kreo-neutral-300: #cdc8bb;
-  --kreo-neutral-400: #a9a499;
-  --kreo-neutral-500: #86817a;
-  --kreo-neutral-600: #676259;
-  --kreo-neutral-700: #4a463f;
-  --kreo-neutral-800: #302d28;
-  --kreo-neutral-900: #1f1d1a;
-  --kreo-neutral-950: #1a1917;
+  --kreo-neutral-25: #fbfbfc;
+  --kreo-neutral-50: #f5f6f8;
+  --kreo-neutral-100: #edeef1;
+  --kreo-neutral-200: #e0e2e7;
+  --kreo-neutral-300: #c8ccd3;
+  --kreo-neutral-400: #9aa0a9;
+  --kreo-neutral-500: #6f7681;
+  --kreo-neutral-600: #545b65;
+  --kreo-neutral-700: #3b414a;
+  --kreo-neutral-800: #272c33;
+  --kreo-neutral-900: #181b20;
+  --kreo-neutral-950: #131518;
 
-  /* Accent — evergreen */
-  --kreo-accent-50: #eaf4f0;
-  --kreo-accent-100: #d0e7de;
-  --kreo-accent-200: #a4cfbf;
-  --kreo-accent-300: #6fb29b;
-  --kreo-accent-400: #3e937a;
-  --kreo-accent-500: #1f7a5c;
-  --kreo-accent-600: #19654c;
-  --kreo-accent-700: #14503d;
-  --kreo-accent-800: #0f3c2e;
-  --kreo-accent-900: #0a281f;
+  /* Accent — berry */
+  --kreo-accent-50: #f8eef6;
+  --kreo-accent-100: #ecd4e6;
+  --kreo-accent-500: #93357f;
+  --kreo-accent-600: #802e6f;
+  --kreo-accent-700: #6d275f;
 
-  /* Semantic hues — same lightness family as the accent */
-  --kreo-danger-50: #fbeceb;
-  --kreo-danger-100: #f5d4d1;
-  --kreo-danger-500: #a62b28;
-  --kreo-danger-600: #8c2320;
-  --kreo-warning-50: #f9f1e2;
-  --kreo-warning-100: #f0e0bf;
-  --kreo-warning-500: #a9761b;
-  --kreo-warning-600: #8c6015;
-  --kreo-info-50: #eaf1f6;
-  --kreo-info-100: #cddfeb;
-  --kreo-info-500: #2a6f97;
-  --kreo-info-600: #225a7c;
-  --kreo-success-500: var(--kreo-accent-500);
-  --kreo-success-50: var(--kreo-accent-50);
-  --kreo-success-100: var(--kreo-accent-100);
+  /* Status hues. The `-500` step is the fill and the light-theme text; `-600` is its pressed
+     state; `-mark` is the brighter non-text value. */
+  --kreo-danger-500: #ca3c2c;
+  --kreo-danger-600: #b13426;
+  --kreo-danger-mark: #ee5f4f;
+  --kreo-success-500: #078217;
+  --kreo-success-mark: #029916;
+  --kreo-warning-500: #916820;
+  --kreo-warning-mark: #bf8013;
+  --kreo-info-500: #2c6fc7;
+  --kreo-info-mark: #458eed;
 
   /* ---- Semantic aliases: surfaces ---- */
   --kreo-surface-page: var(--kreo-neutral-25);
@@ -61,20 +59,29 @@
   --kreo-text-body: var(--kreo-neutral-800);
   --kreo-text-muted: var(--kreo-neutral-600);
 
-  /* Sits between neutral-500 and -600 rather than on the ramp: at -500 this measured 3.73:1, and
-     the eyebrow labels that use it are 11px, so it has to clear the 4.5:1 small-text threshold. */
-  --kreo-text-subtle: #767168;
+  /* Off the ramp on purpose: neutral-500 measures 4.43:1, and the 11px labels using this need
+     to clear the 4.5:1 small-text threshold. */
+  --kreo-text-subtle: #6a717b;
   --kreo-text-disabled: var(--kreo-neutral-400);
   --kreo-text-inverse: var(--kreo-neutral-25);
   --kreo-text-accent: var(--kreo-accent-600);
   --kreo-text-on-accent: #fff;
 
-  /* Danger fills need their own label colour. Borrowing `--kreo-text-on-accent` works only while
-     both happen to be white, and silently fails in a theme where the accent label is dark. */
+  /* Fills need their own label colour rather than borrowing the accent's; that reuse works only
+     while both happen to be white, and fails silently in a theme where they differ. */
   --kreo-text-on-danger: #fff;
-  --kreo-text-danger: var(--kreo-danger-600);
+  --kreo-text-danger: var(--kreo-danger-500);
+  --kreo-text-success: var(--kreo-success-500);
+  --kreo-text-warning: var(--kreo-warning-500);
+  --kreo-text-info: var(--kreo-info-500);
   --kreo-text-link: var(--kreo-accent-600);
   --kreo-text-link-hover: var(--kreo-accent-700);
+
+  /* ---- Semantic aliases: status marks (icons, dots, borders — 3:1, not 4.5:1) ---- */
+  --kreo-icon-danger: var(--kreo-danger-mark);
+  --kreo-icon-success: var(--kreo-success-mark);
+  --kreo-icon-warning: var(--kreo-warning-mark);
+  --kreo-icon-info: var(--kreo-info-mark);
 
   /* ---- Semantic aliases: borders ---- */
   --kreo-border-subtle: var(--kreo-neutral-100);
@@ -84,56 +91,63 @@
   /* The visible boundary of an interactive control. WCAG 2.2 SC 1.4.11 asks for 3:1 against the
      surface behind it, which the decorative border tokens above deliberately do not meet — they
      separate content, they do not identify a control. */
-  --kreo-border-control: var(--kreo-neutral-500);
+  --kreo-border-control: #868c95;
   --kreo-border-input: var(--kreo-border-control);
   --kreo-border-focus: var(--kreo-accent-500);
-  --kreo-border-danger: var(--kreo-danger-500);
+  --kreo-border-danger: var(--kreo-danger-mark);
   --kreo-border-inverse: var(--kreo-neutral-700);
 }
 
-/* Dark theme — warm charcoal, not black. Same token names, remapped. */
+/* Dark theme — same token names, remapped, at lower saturation. */
 [data-kreo-theme='dark'] {
-  --kreo-surface-page: #1a1917;
-  --kreo-surface-card: #211f1d;
-  --kreo-surface-sunken: #171614;
-  --kreo-surface-raised: #292724;
+  --kreo-surface-page: #131518;
+  --kreo-surface-card: #1a1d21;
+  --kreo-surface-sunken: #101215;
+  --kreo-surface-raised: #22262b;
   --kreo-surface-inverse: var(--kreo-neutral-50);
-  --kreo-surface-accent-soft: #16302a;
-  --kreo-surface-hover: #292724;
-  --kreo-surface-active: #322f2b;
-  --kreo-surface-disabled: #211f1d;
+  --kreo-surface-accent-soft: #2c1a27;
+  --kreo-surface-hover: #22262b;
+  --kreo-surface-active: #2b3037;
+  --kreo-surface-disabled: #1a1d21;
 
-  --kreo-text-primary: #f4f1ea;
-  --kreo-text-body: #e4e0d7;
-  --kreo-text-muted: #a9a499;
-  --kreo-text-subtle: #8b867e;
-  --kreo-text-disabled: #625d56;
+  --kreo-text-primary: #f2f4f7;
+  --kreo-text-body: #dfe3e9;
+  --kreo-text-muted: #a4abb3;
+  --kreo-text-subtle: #8c939c;
+  --kreo-text-disabled: #5c636d;
   --kreo-text-inverse: var(--kreo-neutral-900);
-  --kreo-text-accent: var(--kreo-accent-300);
-  --kreo-text-on-accent: #08201a;
+  --kreo-text-accent: #dd8fcb;
+  --kreo-text-on-accent: #280d22;
   --kreo-text-on-danger: #fff;
-  --kreo-text-danger: #ef8a7c;
-  --kreo-text-link: var(--kreo-accent-300);
-  --kreo-text-link-hover: var(--kreo-accent-200);
+  --kreo-text-danger: #eb8378;
 
-  --kreo-border-subtle: #2a2825;
-  --kreo-border-default: #37342f;
-  --kreo-border-strong: #4a463f;
-  --kreo-border-control: #767065;
-  --kreo-border-input: var(--kreo-border-control);
-  --kreo-border-focus: var(--kreo-accent-300);
-  --kreo-border-danger: #d1503c;
+  /* Green runs quieter than the other three. At the 7:1 they use it reads as neon on a dark
+     surface, and the accessible floor is 4.5:1, so there is room to calm it. */
+  --kreo-text-success: #3da54b;
+  --kreo-text-warning: #d59320;
+  --kreo-text-info: #6da3e9;
+  --kreo-text-link: #dd8fcb;
+  --kreo-text-link-hover: #e2a1d4;
+
+  --kreo-icon-danger: #eb8378;
+  --kreo-icon-success: #3da54b;
+  --kreo-icon-warning: #d59320;
+  --kreo-icon-info: #6da3e9;
+
+  --kreo-border-subtle: #22262b;
+  --kreo-border-default: #2b3037;
+  --kreo-border-strong: #3b414a;
+  --kreo-border-control: #666d77;
+  --kreo-border-focus: #dd8fcb;
+  --kreo-border-danger: #eb8378;
   --kreo-border-inverse: var(--kreo-neutral-300);
 
-  /* On a charcoal surface the accent has to carry the label, not just be visible. These values
-     are brighter than the light-theme ramp on purpose: contrast against the dark label rises as
-     the green lightens, so brightening is what makes a filled button readable here. */
-  --kreo-accent-500: #5cbf9b;
-  --kreo-accent-600: #6bcaa8;
-  --kreo-accent-700: #7ad5b5;
+  --kreo-accent-500: #dd8fcb;
+  --kreo-accent-600: #e2a1d4;
+  --kreo-accent-700: #e7b3dc;
 
-  /* Danger is remapped for dark as well. Leaving it at the light values put a near-black label
-     on a mid red, which measured below the AA threshold. */
-  --kreo-danger-500: #c0392b;
-  --kreo-danger-600: #ca3a2c;
+  /* The destructive fill keeps its light-theme value: it carries a white label at 5.1:1 and reads
+     correctly against the charcoal page. */
+  --kreo-danger-500: #ca3c2c;
+  --kreo-danger-600: #b13426;
 }

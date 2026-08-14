@@ -2,11 +2,11 @@
    Separation is carried by borders, not elevation: there is no shadow on cards or controls.
    The overlay shadow arrives with the first component that floats over the page. */
 :root {
-  --kreo-radius-xs: 3px;
-  --kreo-radius-sm: 4px;
-  --kreo-radius-md: 6px; /* base: buttons, inputs */
-  --kreo-radius-lg: 10px; /* cards, panels */
-  --kreo-radius-xl: 14px; /* modals, sheets */
+  --kreo-radius-xs: 2px;
+  --kreo-radius-sm: 3px;
+  --kreo-radius-md: 4px; /* base: buttons, inputs */
+  --kreo-radius-lg: 8px; /* cards, panels */
+  --kreo-radius-xl: 12px; /* modals, sheets */
   --kreo-radius-full: 999px;
 
   --kreo-border-w: 1px;
