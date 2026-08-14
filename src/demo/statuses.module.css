@@ -1,6 +1,16 @@
-/* Candidate status sets, all shown under the chosen berry accent. Neutrals come from
-   `palettes.module.css` and the accent from `accents.module.css`, so the statuses are the only
-   variable. Every value was measured; nothing here ships. */
+/* Status candidates, all under the chosen berry accent.
+ *
+ * Two things changed after the first round. Each status now carries two values instead of one:
+ * a readable text colour, and a brighter indicator colour for dots, icons and borders, which only
+ * need 3:1 rather than 4.5:1. Forcing one value to do both jobs is what made the warning muddy —
+ * amber dark enough to read as text is brown.
+ *
+ * And the lightness of every colour was solved for a contrast target rather than picked, so all
+ * four hues carry the same weight. That leaves saturation as the only difference between the sets.
+ *
+ * Targets: text 5.0:1 on white, indicator 3.3:1, dark theme 7.0:1 on the page. Green sits at hue
+ * 134 — a real green, not the emerald of the previous round.
+ */
 
 .frame {
   background: var(--kreo-surface-page);
@@ -35,27 +45,42 @@
 }
 
 .dot {
-  width: 8px;
-  height: 8px;
+  width: 10px;
+  height: 10px;
   border-radius: 999px;
-  background: currentcolor;
   flex: none;
 }
 
 .success {
-  color: var(--demo-success);
+  color: var(--demo-success-text);
+}
+
+.success .dot {
+  background: var(--demo-success-ind);
 }
 
 .warning {
-  color: var(--demo-warning);
+  color: var(--demo-warning-text);
+}
+
+.warning .dot {
+  background: var(--demo-warning-ind);
 }
 
 .danger {
   color: var(--kreo-text-danger);
 }
 
+.danger .dot {
+  background: var(--demo-danger-ind);
+}
+
 .info {
-  color: var(--demo-info);
+  color: var(--demo-info-text);
+}
+
+.info .dot {
+  background: var(--demo-info-ind);
 }
 
 .caption {
@@ -63,59 +88,83 @@
   color: var(--kreo-text-subtle);
 }
 
-/* ---- Set A: standard ---- */
+/* ---- Set A: subtle — 48% saturation ---- */
 
 .setA {
-  --kreo-danger-500: #c2352b;
-  --kreo-danger-600: #a52c24;
-  --kreo-text-danger: #c2352b;
-  --kreo-border-danger: #c2352b;
-  --demo-success: #1f7a4d;
-  --demo-warning: #96630f;
-  --demo-info: #1d64ba;
+  --kreo-danger-500: #b94d41;
+  --kreo-danger-600: #a44238;
+  --kreo-text-danger: #b94d41;
+  --kreo-border-danger: #de6b5e;
+  --demo-danger-ind: #de6b5e;
+  --demo-success-text: #2d7f40;
+  --demo-success-ind: #21a340;
+  --demo-warning-text: #8b6a31;
+  --demo-warning-ind: #b98326;
+  --demo-info-text: #3f71b2;
+  --demo-info-ind: #558fdc;
 }
 
 .setA[data-kreo-theme='dark'] {
-  --kreo-text-danger: #ef8a80;
-  --demo-success: #5fc48f;
-  --demo-warning: #dfae54;
-  --demo-info: #7fb0ee;
+  --kreo-text-danger: #de8a81;
+  --demo-danger-ind: #de8a81;
+  --demo-success-text: #31b750;
+  --demo-success-ind: #31b750;
+  --demo-warning-text: #cb973d;
+  --demo-warning-ind: #cb973d;
+  --demo-info-text: #78a3db;
+  --demo-info-ind: #78a3db;
 }
 
-/* ---- Set B: shifted warm, to sit further from the accent ---- */
+/* ---- Set B: balanced — 64% saturation ---- */
 
 .setB {
-  --kreo-danger-500: #c0442a;
-  --kreo-danger-600: #a63a24;
-  --kreo-text-danger: #c0442a;
-  --kreo-border-danger: #c0442a;
-  --demo-success: #177a45;
-  --demo-warning: #8a5a12;
-  --demo-info: #1b5fae;
+  --kreo-danger-500: #ca3c2c;
+  --kreo-danger-600: #b13426;
+  --kreo-text-danger: #ca3c2c;
+  --kreo-border-danger: #ee5f4f;
+  --demo-danger-ind: #ee5f4f;
+  --demo-success-text: #1c8033;
+  --demo-success-ind: #10a433;
+  --demo-warning-text: #916820;
+  --demo-warning-ind: #bf8013;
+  --demo-info-text: #2c6fc7;
+  --demo-info-ind: #458eed;
 }
 
 .setB[data-kreo-theme='dark'] {
-  --kreo-text-danger: #f0937f;
-  --demo-success: #57c288;
-  --demo-warning: #d9a648;
-  --demo-info: #79abe9;
+  --kreo-text-danger: #eb8378;
+  --demo-danger-ind: #eb8378;
+  --demo-success-text: #1cb940;
+  --demo-success-ind: #1cb940;
+  --demo-warning-text: #d59320;
+  --demo-warning-ind: #d59320;
+  --demo-info-text: #6da3e9;
+  --demo-info-ind: #6da3e9;
 }
 
-/* ---- Set C: muted, to match the editorial direction ---- */
+/* ---- Set C: vivid — 82% saturation ---- */
 
 .setC {
-  --kreo-danger-500: #a83f36;
-  --kreo-danger-600: #8f362e;
-  --kreo-text-danger: #a83f36;
-  --kreo-border-danger: #a83f36;
-  --demo-success: #3d7a5c;
-  --demo-warning: #8a6a2f;
-  --demo-info: #3f6795;
+  --kreo-danger-500: #d72915;
+  --kreo-danger-600: #bc2412;
+  --kreo-text-danger: #d72915;
+  --kreo-border-danger: #fa5341;
+  --demo-danger-ind: #fa5341;
+  --demo-success-text: #0d8128;
+  --demo-success-ind: #04a42a;
+  --demo-warning-text: #97650f;
+  --demo-warning-ind: #c47e05;
+  --demo-info-text: #166cdc;
+  --demo-info-ind: #398dfa;
 }
 
 .setC[data-kreo-theme='dark'] {
-  --kreo-text-danger: #e0918a;
-  --demo-success: #79bb9d;
-  --demo-warning: #cbab72;
-  --demo-info: #9db9dc;
+  --kreo-text-danger: #f77b6e;
+  --demo-danger-ind: #f77b6e;
+  --demo-success-text: #0ab933;
+  --demo-success-ind: #0ab933;
+  --demo-warning-text: #dc900c;
+  --demo-warning-ind: #dc900c;
+  --demo-info-text: #62a2f7;
+  --demo-info-ind: #62a2f7;
 }

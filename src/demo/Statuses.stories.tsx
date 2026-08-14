@@ -8,10 +8,14 @@ import palettes from './palettes.module.css';
 import statuses from './statuses.module.css';
 
 /**
- * Status colours, all shown under the chosen berry accent. The pairing that matters is the top
- * row: the accent button beside the destructive one. Berry sits at hue 313 and red at hue 4, so
- * the question is whether 51 degrees is enough separation to read them as different kinds of
- * action at a glance.
+ * Status colours, all shown under the chosen berry accent.
+ *
+ * Each status now carries two values: a readable text colour, and a brighter indicator colour for
+ * the dot, which only needs 3:1 rather than 4.5:1. That split is what lets the warning stay amber
+ * instead of collapsing into brown.
+ *
+ * Every lightness was solved for a contrast target rather than chosen by eye, so all four hues
+ * carry equal weight and the sets differ only in saturation.
  *
  * Nothing here ships; the page goes away once a set is picked.
  */
@@ -26,21 +30,21 @@ interface StatusSet {
 const SETS: StatusSet[] = [
   {
     key: 'a',
-    name: 'A — standard',
+    name: 'A — subtle (48% saturation)',
     className: statuses.setA ?? '',
-    note: 'Conventional signal colours. Strongest, most immediately legible, least subtle.',
+    note: 'The quietest of the three, but no longer dusty: the lightness was solved for contrast rather than guessed.',
   },
   {
     key: 'b',
-    name: 'B — shifted warm',
+    name: 'B — balanced (64%)',
     className: statuses.setB ?? '',
-    note: 'Danger pushed towards orange to sit further from the accent; warning deepened so the two do not collide in turn.',
+    note: 'A clear step brighter. Signals read as signals without shouting.',
   },
   {
     key: 'c',
-    name: 'C — muted',
+    name: 'C — vivid (82%)',
     className: statuses.setC ?? '',
-    note: 'Lower saturation throughout, closest to the calm editorial direction. Quieter alarms.',
+    note: 'Full-strength signal colours. Unmissable, and furthest from the calm direction.',
   },
 ];
 
