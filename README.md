@@ -38,6 +38,7 @@ import '@kreobuddha/ui/styles.css';
 | `danger`    | `boolean`                           | `false`    |
 | `loading`   | `boolean`                           | `false`    |
 | `fullWidth` | `boolean`                           | `false`    |
+| `textWrap`  | `boolean`                           | `false`    |
 | `icon`      | `ReactNode`                         | —          |
 | `iconEnd`   | `ReactNode`                         | —          |
 | `type`      | `'button' \| 'submit' \| 'reset'`   | `'button'` |
@@ -49,10 +50,16 @@ secondary, and `ghost` for tertiary or inline actions.
 `type` defaults to `button` rather than the platform default of `submit`, so placing a button in a
 form never submits it unintentionally.
 
-A `loading` button keeps its label, stays in the tab order, reports `aria-busy`, and refuses
-activation — including form submission. It is deliberately not natively `disabled`, because that
-would drop it out of the tab order and take focus away from a keyboard user mid-action. Use
-`disabled` when the action is genuinely unavailable rather than in flight.
+A `loading` button stays in the tab order, reports `aria-busy`, and refuses activation — including
+form submission. Its content fades while keeping its box and a spinner is laid over it, so **the
+button's size never changes**. It is deliberately not natively `disabled`: that would drop it out
+of the tab order and take focus away from a keyboard user mid-action. It is also not dimmed the way
+a disabled button is, which is what tells "in flight" apart from "unavailable". Use `disabled` when
+the action is genuinely unavailable.
+
+A label longer than the available width is truncated with an ellipsis; the full text stays in the
+DOM, so the accessible name is unaffected. Set `textWrap` to let it run onto several lines and grow
+the button instead.
 
 Icons are `ReactNode` and are hidden from assistive technology, so the label remains the accessible
 name. The library bundles no icon set.
@@ -71,6 +78,10 @@ reads the system preference — that state belongs to the application.
 Customisation happens through the semantic tokens, not through component classes. Every
 `--kreo-*` custom property in the published stylesheet is public API under SemVer; CSS Module class
 names are private implementation details.
+
+If you override the palette, keep the pairs contrastable: `npm run check:contrast` measures every
+pairing the components put on screen, in both themes, and fails below the WCAG 2.2 target — 4.5:1
+for text, 3:1 for control borders and the focus ring.
 
 ## Fonts
 
@@ -108,8 +119,10 @@ build setup, not of this package.
 npm install
 npm run typecheck
 npm run lint
+npm run lint:css
 npm run format:check
 npm test
+npm run check:contrast
 npm run build
 npm run check:package
 npm run storybook

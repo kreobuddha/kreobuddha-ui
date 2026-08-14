@@ -6,7 +6,12 @@ This file records direction, not blanket implementation permission. Each phase r
 Finish and verify the current phase before starting the next. Reduce feature scope before reducing
 verification quality.
 
-## Phase 0 — Local repository and package foundation
+## Status
+
+Phase 0 and Phase 1 are complete. The repository is public at `kreobuddha/kreobuddha-ui` with CI
+green; the package remains `private` and unpublished. Phase 2 has not started.
+
+## Phase 0 — Local repository and package foundation — **done**
 
 Goal: create the smallest verified package foundation without production components.
 
@@ -30,9 +35,13 @@ Exit criteria:
 - no production component has been claimed or published;
 - commit and remote creation remain behind separate approval gates.
 
-## Phase 1 — Tokens and `Button` vertical slice
+## Phase 1 — Tokens and `Button` vertical slice — **done**
 
 Goal: validate the complete component workflow with one component.
+
+Delivered beyond the original list: dark theme (ADR-0001), bundled IBM Plex with Cyrillic coverage
+(ADR-0003), and a contrast check that runs in CI (ADR-0004). Density remains deferred — the sizes
+`sm`/`md`/`lg` cover the need a single component can demonstrate.
 
 Deliverables:
 
@@ -55,7 +64,7 @@ Exit criteria:
 Candidate components:
 
 - `IconButton`;
-- `Spinner`;
+- `Spinner` — `Button` already contains a private one; extract it here rather than shipping two;
 - `Badge`;
 - `Alert`.
 

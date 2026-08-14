@@ -151,6 +151,19 @@ export const Kit: Story = {
           </Button>
         </div>
       </Section>
+
+      <Section title="Button — long labels in a narrow column">
+        <div style={{ display: 'flex', gap: 'var(--kreo-space-4)', alignItems: 'flex-start' }}>
+          <div style={{ width: 200 }}>
+            <Button fullWidth>Continue to workspace configuration</Button>
+          </div>
+          <div style={{ width: 200 }}>
+            <Button fullWidth textWrap>
+              Continue to workspace configuration
+            </Button>
+          </div>
+        </div>
+      </Section>
     </div>
   ),
 };

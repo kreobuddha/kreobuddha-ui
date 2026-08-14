@@ -51,6 +51,19 @@ composed from a helper that drops falsy values.
 100-character print width, single quotes, `es5` trailing commas, `arrowParens: always`.
 `npm run format` rewrites files; `npm run format:check` only reports.
 
+### Stylelint
+
+`stylelint-config-standard`, with four rules turned off for documented reasons in
+`.stylelintrc.json`:
+
+- `selector-class-pattern` — CSS Module classes are camelCase to match the props they mirror
+  (`fullWidth`, `textWrap`).
+- `import-notation` — the token layer reaches the bundle through `@import`, and changing the
+  notation risks changing whether the bundler inlines it. Not worth a stylistic preference.
+- `custom-property-empty-line-before` — token files are grouped with blank lines on purpose.
+- `value-keyword-case` is relaxed for the font-family tokens, where the values are proper nouns
+  rather than keywords.
+
 ## Deviations, and why
 
 ### Named exports, not a default export at the bottom

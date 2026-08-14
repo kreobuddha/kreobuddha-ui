@@ -2,7 +2,7 @@
    Numeric ramps are the base layer; components reference only the semantic aliases. */
 :root {
   /* Warm neutrals (paper) */
-  --kreo-neutral-0: #ffffff;
+  --kreo-neutral-0: #fff;
   --kreo-neutral-25: #fcfbf8;
   --kreo-neutral-50: #f7f5f0;
   --kreo-neutral-100: #efece5;
@@ -29,10 +29,10 @@
   --kreo-accent-900: #0a281f;
 
   /* Semantic hues — same lightness family as the accent */
-  --kreo-danger-50: #fbeeea;
-  --kreo-danger-100: #f4d8cf;
-  --kreo-danger-500: #b4472c;
-  --kreo-danger-600: #973824;
+  --kreo-danger-50: #fbeceb;
+  --kreo-danger-100: #f5d4d1;
+  --kreo-danger-500: #a62b28;
+  --kreo-danger-600: #8c2320;
   --kreo-warning-50: #f9f1e2;
   --kreo-warning-100: #f0e0bf;
   --kreo-warning-500: #a9761b;
@@ -64,7 +64,11 @@
   --kreo-text-disabled: var(--kreo-neutral-400);
   --kreo-text-inverse: var(--kreo-neutral-25);
   --kreo-text-accent: var(--kreo-accent-600);
-  --kreo-text-on-accent: #ffffff;
+  --kreo-text-on-accent: #fff;
+
+  /* Danger fills need their own label colour. Borrowing `--kreo-text-on-accent` works only while
+     both happen to be white, and silently fails in a theme where the accent label is dark. */
+  --kreo-text-on-danger: #fff;
   --kreo-text-danger: var(--kreo-danger-600);
   --kreo-text-link: var(--kreo-accent-600);
   --kreo-text-link-hover: var(--kreo-accent-700);
@@ -73,7 +77,12 @@
   --kreo-border-subtle: var(--kreo-neutral-100);
   --kreo-border-default: var(--kreo-neutral-200);
   --kreo-border-strong: var(--kreo-neutral-300);
-  --kreo-border-input: var(--kreo-neutral-300);
+
+  /* The visible boundary of an interactive control. WCAG 2.2 SC 1.4.11 asks for 3:1 against the
+     surface behind it, which the decorative border tokens above deliberately do not meet — they
+     separate content, they do not identify a control. */
+  --kreo-border-control: var(--kreo-neutral-500);
+  --kreo-border-input: var(--kreo-border-control);
   --kreo-border-focus: var(--kreo-accent-500);
   --kreo-border-danger: var(--kreo-danger-500);
   --kreo-border-inverse: var(--kreo-neutral-700);
@@ -99,19 +108,29 @@
   --kreo-text-inverse: var(--kreo-neutral-900);
   --kreo-text-accent: var(--kreo-accent-300);
   --kreo-text-on-accent: #08201a;
-  --kreo-text-danger: #e08a70;
+  --kreo-text-on-danger: #fff;
+  --kreo-text-danger: #ef8a7c;
   --kreo-text-link: var(--kreo-accent-300);
   --kreo-text-link-hover: var(--kreo-accent-200);
 
   --kreo-border-subtle: #2a2825;
   --kreo-border-default: #37342f;
   --kreo-border-strong: #4a463f;
-  --kreo-border-input: #4a463f;
+  --kreo-border-control: #767065;
+  --kreo-border-input: var(--kreo-border-control);
   --kreo-border-focus: var(--kreo-accent-300);
-  --kreo-border-danger: #c7593c;
+  --kreo-border-danger: #d1503c;
   --kreo-border-inverse: var(--kreo-neutral-300);
 
-  --kreo-accent-500: #3e937a;
-  --kreo-accent-600: #4aa387;
-  --kreo-accent-700: #57b394;
+  /* On a charcoal surface the accent has to carry the label, not just be visible. These values
+     are brighter than the light-theme ramp on purpose: contrast against the dark label rises as
+     the green lightens, so brightening is what makes a filled button readable here. */
+  --kreo-accent-500: #5cbf9b;
+  --kreo-accent-600: #6bcaa8;
+  --kreo-accent-700: #7ad5b5;
+
+  /* Danger is remapped for dark as well. Leaving it at the light values put a near-black label
+     on a mid red, which measured below the AA threshold. */
+  --kreo-danger-500: #c0392b;
+  --kreo-danger-600: #ca3a2c;
 }

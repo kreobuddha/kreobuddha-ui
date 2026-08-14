@@ -158,17 +158,47 @@ describe('loading', () => {
     expect(onSubmit).not.toHaveBeenCalled();
   });
 
-  test('replaces a leading icon rather than adding a slot beside it', () => {
-    const { rerender, container } = render(<Button icon={<span>+</span>}>Add member</Button>);
-    const slotsBefore = container.querySelectorAll('button > span').length;
+  test('keeps the label in the accessibility tree while it is visually hidden', () => {
+    // The label is faded with opacity rather than `visibility: hidden`, which would remove it
+    // from the accessibility tree and leave the button with no accessible name.
+    render(<Button loading>Save changes</Button>);
 
-    rerender(
-      <Button icon={<span>+</span>} loading>
-        Add member
-      </Button>
+    expect(screen.getByRole('button', { name: 'Save changes' })).toBeDefined();
+  });
+
+  test('adds a spinner that is hidden from assistive technology', () => {
+    const { container } = render(<Button loading>Save changes</Button>);
+
+    const spinner = container.querySelector('button > span[aria-hidden="true"]');
+    expect(spinner).not.toBeNull();
+  });
+
+  test('is visually distinct from a disabled button', () => {
+    const { container: loadingTree } = render(<Button loading>Save</Button>);
+    const { container: disabledTree } = render(<Button disabled>Save</Button>);
+
+    const loadingClasses = loadingTree.querySelector('button')?.className ?? '';
+    const disabledClasses = disabledTree.querySelector('button')?.className ?? '';
+
+    expect(loadingClasses).not.toBe(disabledClasses);
+  });
+});
+
+describe('long labels', () => {
+  test('renders the full label even though it truncates visually', () => {
+    const label = 'Continue to workspace configuration';
+    render(<Button>{label}</Button>);
+
+    expect(screen.getByRole('button', { name: label })).toBeDefined();
+  });
+
+  test('textWrap changes the root class so the label may wrap', () => {
+    const { container: wrapped } = render(<Button textWrap>Continue to configuration</Button>);
+    const { container: clipped } = render(<Button>Continue to configuration</Button>);
+
+    expect(wrapped.querySelector('button')?.className).not.toBe(
+      clipped.querySelector('button')?.className
     );
-
-    expect(container.querySelectorAll('button > span').length).toBe(slotsBefore);
   });
 });
 

@@ -17,16 +17,21 @@ Purpose:
 - deterministic formatting;
 - no accidental internal imports.
 
-Expected scripts after initialization:
+The non-mutating scripts that exist:
 
 ```text
 npm run typecheck
 npm run lint
+npm run lint:css
 npm run format:check
 ```
 
-These names are targets, not permission to invent duplicate tools. Update this document to match the
-actual non-mutating scripts accepted in Phase 0.
+`lint:css` is Stylelint. It exists because ESLint does not look at stylesheets at all, so until it
+was added an invalid property or a malformed value would have shipped silently. Note that it also
+catches `no-descending-specificity`, which is a correctness signal in a cascade this flat.
+
+`npm run format` also exists and **rewrites files**, as does `stylelint --fix`; never run either to
+satisfy a check.
 
 ### 2. Unit and component behavior
 
@@ -62,6 +67,22 @@ failures. Any temporary exception must include:
 
 Automated scanning is only a first line of defense. It cannot prove correct focus movement,
 meaningful announcements, complete keyboard behavior, or usable forced-colors presentation.
+
+Two things about how this currently runs:
+
+- axe executes inside jsdom, which neither lays out nor paints, so its `color-contrast` rule is
+  disabled there. It is not skipped — contrast is measured separately, below.
+- Storybook's accessibility panel scans a story on demand in the browser. Running those scans in CI
+  needs the Storybook Vitest addon and a real browser, which is not set up yet.
+
+### 4a. Contrast
+
+`npm run check:contrast` resolves the token graph in `src/tokens/colors.css`, measures every colour
+pair a shipped component puts on screen in both themes, and exits non-zero below its WCAG 2.2
+target — 4.5:1 for text, 3:1 for control borders and the focus ring. It runs in CI.
+
+This is the only reason contrast may be described as verified. Every new pairing a component
+introduces must be added to the script's list, or it goes unmeasured.
 
 ### 5. Manual accessibility
 
@@ -108,8 +129,13 @@ The public package is verified independently of workspace source:
 - verify React is not bundled;
 - verify one-component import does not execute or include the whole library unexpectedly.
 
-`publint` and `@arethetypeswrong/cli` are candidates to validate during initialization, not assumed
-dependencies.
+`publint` and `@arethetypeswrong/cli` were evaluated and adopted; both run under
+`npm run check:package`. `attw` uses the `esm-only` profile, because the Node 10 and CommonJS
+failures it reports are the intended consequence of the ESM-only decision in `ARCHITECTURE.md`
+rather than defects.
+
+The consumer step is currently a temporary generated app rather than a committed fixture. It is a
+local step; CI does not run it yet.
 
 ### 8. Public documentation
 
@@ -134,20 +160,21 @@ links. Documentation must not claim support or functionality that the published 
 The intended required checks are introduced incrementally as their corresponding capability exists:
 
 ```text
-install with locked dependencies
-format:check
-lint
-typecheck
-unit/component tests
-Storybook interaction and accessibility tests
-package build
-Storybook build
-package artifact checks
-consumer smoke build
-visual regression for protected states
+install with locked dependencies      running
+format:check                          running
+lint                                  running
+typecheck                             running
+unit/component tests                  running
+contrast check                        running
+package build                         running
+Storybook build                       running
+package artifact checks               running
+Storybook interaction tests           not set up — needs a browser runner
+consumer smoke build                  local only — no committed fixture yet
+visual regression for protected states not started
 ```
 
-Do not create empty or permanently skipped CI jobs merely to match this future list. A check becomes
+Do not create empty or permanently skipped CI jobs merely to match this list. A check becomes
 required when the feature it validates is real.
 
 GitHub Actions should use minimum permissions. Third-party actions should be pinned according to the

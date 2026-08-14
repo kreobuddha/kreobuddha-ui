@@ -4,24 +4,75 @@
 @import '../../styles.css';
 
 .button {
+  position: relative;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: var(--kreo-space-2);
+  max-width: 100%;
   border-style: solid;
   border-width: var(--kreo-border-w);
   border-radius: var(--kreo-radius-md);
   font: var(--kreo-type-button);
   letter-spacing: var(--kreo-tracking-wide);
-  white-space: nowrap;
   cursor: pointer;
   transition: var(--kreo-transition-color);
+}
+
+/* Everything the button renders lives in one box, so the loading indicator can be laid over it
+   without the content moving or the button changing size. */
+.content {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--kreo-space-2);
+  min-width: 0;
+  max-width: 100%;
+}
+
+/* A long label is clipped rather than allowed to push the button past its container. The full
+   text stays in the DOM, so truncation is visual only and the accessible name is unaffected. */
+.label {
+  min-width: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 
 /* Focus doubles the border inside the box, so gaining focus never reflows the layout. */
 .button:focus-visible {
   outline: none;
   box-shadow: var(--kreo-focus-ring);
+}
+
+/* Sizes come after .button so their font-size wins over the `font` shorthand. `min-height` rather
+   than `height`: a single line still lands exactly on the token, but a wrapped label can grow. */
+.sm {
+  min-height: var(--kreo-control-h-sm);
+  padding-inline: var(--kreo-control-px-sm);
+  font-size: var(--kreo-text-12);
+}
+
+/* Off the 4px scale on purpose: the design source specifies a tighter gap at this size. */
+.sm .content {
+  gap: 6px;
+}
+
+.md {
+  min-height: var(--kreo-control-h-md);
+  padding-inline: var(--kreo-control-px-md);
+  font-size: var(--kreo-text-13);
+}
+
+.lg {
+  min-height: var(--kreo-control-h-lg);
+  padding-inline: var(--kreo-control-px-lg);
+  font-size: var(--kreo-text-14);
+}
+
+.filled {
+  background-color: var(--kreo-accent-500);
+  border-color: var(--kreo-accent-500);
+  color: var(--kreo-text-on-accent);
 }
 
 /*
@@ -31,33 +82,6 @@
  */
 .filled:focus-visible {
   box-shadow: inset 0 0 0 var(--kreo-border-w-focus) var(--kreo-text-on-accent);
-}
-
-/* Sizes come after .button so their font-size wins over the `font` shorthand. */
-.sm {
-  height: var(--kreo-control-h-sm);
-  padding-inline: var(--kreo-control-px-sm);
-  font-size: var(--kreo-text-12);
-  /* Off the 4px scale on purpose: the design source specifies a tighter gap at this size. */
-  gap: 6px;
-}
-
-.md {
-  height: var(--kreo-control-h-md);
-  padding-inline: var(--kreo-control-px-md);
-  font-size: var(--kreo-text-13);
-}
-
-.lg {
-  height: var(--kreo-control-h-lg);
-  padding-inline: var(--kreo-control-px-lg);
-  font-size: var(--kreo-text-14);
-}
-
-.filled {
-  background-color: var(--kreo-accent-500);
-  border-color: var(--kreo-accent-500);
-  color: var(--kreo-text-on-accent);
 }
 
 .filled:not(.inactive):hover {
@@ -72,7 +96,7 @@
 
 .outlined {
   background-color: transparent;
-  border-color: var(--kreo-border-strong);
+  border-color: var(--kreo-border-control);
   color: var(--kreo-text-primary);
 }
 
@@ -102,6 +126,11 @@
 .danger.filled {
   background-color: var(--kreo-danger-500);
   border-color: var(--kreo-danger-500);
+  color: var(--kreo-text-on-danger);
+}
+
+.danger.filled:focus-visible {
+  box-shadow: inset 0 0 0 var(--kreo-border-w-focus) var(--kreo-text-on-danger);
 }
 
 .danger.filled:not(.inactive):hover,
@@ -119,14 +148,47 @@
   color: var(--kreo-text-danger);
 }
 
+/* `inactive` only suppresses the hover and active responses. The visual treatments below are
+   what tell disabled and loading apart — they used to share one, which made an action in flight
+   indistinguishable from an action that is unavailable. */
 .inactive {
-  opacity: 0.45;
   cursor: not-allowed;
 }
 
-.fullWidth {
-  display: flex;
-  width: 100%;
+.dimmed {
+  opacity: 0.45;
+}
+
+.loading {
+  cursor: progress;
+}
+
+/* The content keeps its box while it is hidden, so the button's width is identical in both
+   states. `opacity` rather than `visibility` because the latter would also remove the label from
+   the accessibility tree, taking the button's accessible name with it. */
+.loading .content {
+  opacity: 0;
+}
+
+.spinner {
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  width: 1em;
+  height: 1em;
+  border: var(--kreo-border-w-focus) solid currentcolor;
+  border-top-color: transparent;
+  border-radius: var(--kreo-radius-full);
+
+  /* A literal rather than a motion token: the scale holds transition durations, and a looping
+     rotation is a different kind of value that no shipped token expresses. */
+  animation: spin 700ms linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 .icon {
@@ -135,9 +197,31 @@
   flex: none;
 }
 
-.indicator {
-  font-family: var(--kreo-font-mono);
-  flex: none;
+.fullWidth {
+  display: flex;
+  width: 100%;
+}
+
+/* The content stretches too, so a truncating label has the whole width to use. */
+.fullWidth .content {
+  width: 100%;
+}
+
+.textWrap {
+  padding-block: var(--kreo-space-2);
+}
+
+.textWrap .label {
+  overflow: visible;
+  white-space: normal;
+  text-overflow: clip;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  /* A static ring still reads as an indicator, and `aria-busy` carries the state regardless. */
+  .spinner {
+    animation: none;
+  }
 }
 
 /* In forced-colors mode box-shadow is not painted, so focus falls back to a real outline,
@@ -152,7 +236,7 @@
     outline-offset: 1px;
   }
 
-  .inactive {
+  .dimmed {
     opacity: 1;
     color: GrayText;
     border-color: GrayText;

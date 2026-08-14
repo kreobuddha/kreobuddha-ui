@@ -2,12 +2,15 @@
 
 ## Current status
 
-No release is authorized by this document. The package name is not final, the project has not been
-initialized, and the package must remain private until Rustam explicitly approves publication.
+No release is authorized by this document, and **nothing has been published to npm**. The package
+is still marked `private`.
 
-The GitHub repository name is fixed as `kreobuddha-ui`. Creating a GitHub repository, commit, tag,
-push, release, or npm package is an external action governed by the gates in `INIT_PROMPT.md` and
-`CLAUDE.md`.
+What is settled: the npm package name is `@kreobuddha/ui` (ADR-0001), the licence is MIT, and the
+public repository exists at `kreobuddha/kreobuddha-ui` with CI green on `master`.
+
+What is not: ownership of the `@kreobuddha` npm scope has never been verified, and must be before
+any publish attempt. Tagging, releasing, or publishing remains an external action requiring
+Rustam's explicit approval for the exact action.
 
 ## Release principles
 

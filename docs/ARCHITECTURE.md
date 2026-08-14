@@ -84,8 +84,23 @@ Package rules:
 
 ## Build
 
-The initial recommendation is Vite library mode plus a verified declaration-generation approach.
-Claude must compare current stable options during Phase 0 rather than assume a remembered setup.
+Vite library mode produces the JavaScript and the stylesheet; `tsc -p tsconfig.build.json` emits the
+declarations. Three constraints were found by verification rather than chosen, and changing any of
+them silently breaks the published package:
+
+- **The JavaScript output preserves the module tree** (`preserveModules`). Bundling to one file left
+  every `./components/….js` path in the emitted declarations pointing at something that does not
+  exist.
+- **No stylesheet is imported from TypeScript.** TypeScript keeps side-effect imports in the
+  declarations it emits, and a `.css` specifier is not resolvable there, so the published types
+  failed for every consumer. Component stylesheets pull in the token layer with a CSS `@import`
+  instead.
+- **The `@font-face` rules are joined to the built stylesheet afterwards** by
+  `scripts/bundle-fonts.mjs`. Library mode inlines every asset it resolves as a base64 data URI with
+  no opt-out, which would embed all eight font files and defeat their `unicode-range` split.
+
+That script is the only custom build machinery in the package, and it exists for a documented tool
+limitation rather than a preference.
 
 Required properties:
 

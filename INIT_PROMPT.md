@@ -1,7 +1,13 @@
 # Kreobuddha UI Initialization Prompt
 
-Open Claude Code in the directory that contains this file and use this prompt to initialize the
-project.
+> **Historical. Initialization is complete.** All three passes below have been carried out: the
+> local repository exists on `master`, Phase 0 shipped the package foundation, and the public
+> GitHub repository `kreobuddha/kreobuddha-ui` was created and pushed. Phase 1 delivered the token
+> layer and `Button`.
+>
+> This file is kept as the record of how the project was started and of the gates that were
+> honoured. It is **not** a live instruction set — do not re-run it. Current governance lives in
+> `CLAUDE.md`, the accepted ADRs in `docs/adr/`, and `docs/ROADMAP.md`.
 
 ---
 

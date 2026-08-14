@@ -14,12 +14,17 @@ export interface ButtonProps extends Omit<ComponentPropsWithRef<'button'>, 'type
   /** Swaps the accent for the danger hue. For destructive confirmations only. */
   danger?: boolean;
   /**
-   * Marks the action as in flight. The button stays focusable and keeps its label, reports
-   * `aria-busy`, and ignores activation until loading ends.
+   * Marks the action as in flight. The button stays focusable, reports `aria-busy`, keeps its
+   * exact size, and shows a spinner in place of its content until loading ends.
    */
   loading?: boolean;
   fullWidth?: boolean;
-  /** Decorative element before the label. Replaced by the loading indicator while loading. */
+  /**
+   * Lets a long label wrap onto several lines and the button grow past its minimum height.
+   * By default the label stays on one line and truncates with an ellipsis.
+   */
+  textWrap?: boolean;
+  /** Decorative element before the label. */
   icon?: ReactNode;
   /** Decorative element after the label. */
   iconEnd?: ReactNode;
@@ -36,6 +41,7 @@ export const Button = ({
   danger = false,
   loading = false,
   fullWidth = false,
+  textWrap = false,
   icon,
   iconEnd,
   type = 'button',
@@ -45,8 +51,6 @@ export const Button = ({
   onClick,
   ...rest
 }: ButtonProps): ReactElement => {
-  const inactive = disabled || loading;
-
   const handleClick = (event: MouseEvent<HTMLButtonElement>): void => {
     // A loading button stays in the tab order, so it has to refuse activation itself —
     // including the form submission a click would otherwise trigger.
@@ -73,25 +77,27 @@ export const Button = ({
         styles[size],
         danger && styles.danger,
         fullWidth && styles.fullWidth,
-        inactive && styles.inactive,
+        textWrap && styles.textWrap,
+        (disabled || loading) && styles.inactive,
+        disabled && styles.dimmed,
+        loading && styles.loading,
         className
       )}
     >
-      {loading ? (
-        <span className={styles.indicator} aria-hidden="true">
-          ···
-        </span>
-      ) : icon ? (
-        <span className={styles.icon} aria-hidden="true">
-          {icon}
-        </span>
-      ) : null}
-      <span>{children}</span>
-      {iconEnd ? (
-        <span className={styles.icon} aria-hidden="true">
-          {iconEnd}
-        </span>
-      ) : null}
+      <span className={styles.content}>
+        {icon ? (
+          <span className={styles.icon} aria-hidden="true">
+            {icon}
+          </span>
+        ) : null}
+        <span className={styles.label}>{children}</span>
+        {iconEnd ? (
+          <span className={styles.icon} aria-hidden="true">
+            {iconEnd}
+          </span>
+        ) : null}
+      </span>
+      {loading ? <span className={styles.spinner} aria-hidden="true" /> : null}
     </button>
   );
 };

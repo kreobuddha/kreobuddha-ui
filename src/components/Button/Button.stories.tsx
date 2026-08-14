@@ -110,8 +110,10 @@ export const WithIcons: Story = {
 };
 
 /**
- * A loading button keeps its label and stays in the tab order, so keyboard users do not lose
- * focus mid-action. It reports `aria-busy` and refuses activation.
+ * A loading button stays in the tab order, so keyboard users do not lose focus mid-action. It
+ * reports `aria-busy`, refuses activation, and keeps its exact size: the content fades but holds
+ * its box while the spinner is laid over it. Unlike a disabled button it is not dimmed, which is
+ * what tells "in flight" apart from "unavailable".
  */
 export const Loading: Story = {
   render: (args) => (
@@ -155,11 +157,24 @@ export const FullWidth: Story = {
   ),
 };
 
-/** Labels stay on one line, so a narrow container scrolls rather than wrapping the control. */
+/**
+ * A label too long for its container is clipped with an ellipsis rather than pushing the button
+ * past the container edge. The full text stays in the DOM, so the accessible name is unaffected.
+ */
 export const LongLabel: Story = {
   args: { children: 'Continue to workspace configuration' },
   render: (args) => (
-    <div style={{ maxWidth: 240, overflowX: 'auto' }}>
+    <div style={{ maxWidth: 240 }}>
+      <Button {...args} />
+    </div>
+  ),
+};
+
+/** `textWrap` lets the label run onto several lines and the button grow to fit. */
+export const TextWrap: Story = {
+  args: { children: 'Continue to workspace configuration', textWrap: true },
+  render: (args) => (
+    <div style={{ maxWidth: 240 }}>
       <Button {...args} />
     </div>
   ),

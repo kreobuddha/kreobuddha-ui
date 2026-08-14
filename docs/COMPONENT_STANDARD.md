@@ -30,9 +30,13 @@ src/components/Button/
 ├── Button.tsx
 ├── Button.module.css
 ├── Button.stories.tsx
-├── Button.test.tsx
-└── index.ts
+└── Button.test.tsx
 ```
+
+There is no per-folder `index.ts`. The public barrel at `src/index.ts` re-exports the component
+file directly, so a folder barrel is a file nothing imports — and a pure re-export module does not
+survive the bundler's tree shaking, which left the emitted declarations pointing at a JavaScript
+file that was never written.
 
 Additional files are added only for a real concern, not to enforce symmetry. Cross-component test
 helpers belong in a shared test location rather than being duplicated.
@@ -81,6 +85,12 @@ helpers belong in a shared test location rather than being duplicated.
 ## Styling and tokens
 
 - Component-local styles use CSS Modules unless an accepted ADR changes the strategy.
+- A component stylesheet declares its dependency on the token layer with `@import '../../styles.css'`
+  rather than importing a stylesheet from the `.tsx` file. TypeScript keeps side-effect imports in
+  the declarations it emits, where a `.css` specifier is not resolvable, which breaks the published
+  types for every consumer.
+- Any new foreground/background pairing must be added to `scripts/check-contrast.mjs`. A pairing
+  that is not in that list is not measured.
 - Theme-relevant values use semantic or justified component tokens.
 - Do not use reference palette values directly in component styles.
 - Do not hardcode a light-theme value and patch dark mode inside every component.

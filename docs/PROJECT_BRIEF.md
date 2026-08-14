@@ -5,12 +5,14 @@
 - Product name: Kreobuddha UI
 - Local directory: `kreobuddha-ui`
 - GitHub repository name: `kreobuddha-ui`
-- npm package name: not decided; `@kreobuddha/ui` is a proposal that must be checked before use
+- npm package name: `@kreobuddha/ui`, accepted in ADR-0001; scope ownership not yet verified
 - Product type: frontend-only React component library and design system
 - Public repository language: English
 - Working conversation language: Russian
 - Backend: none by design
-- License target: MIT, pending confirmation during initialization
+- License: MIT
+- Typefaces: IBM Plex Sans and IBM Plex Mono, bundled with the package (ADR-0003)
+- Shipped components: `Button`
 
 ## Product summary
 

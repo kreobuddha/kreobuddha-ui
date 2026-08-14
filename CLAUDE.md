@@ -53,6 +53,22 @@ Use this precedence when instructions conflict:
 Roadmap items are plans, not permission to implement every phase. A proposed ADR is not an accepted
 decision. If documentation and code disagree, report the conflict instead of silently choosing one.
 
+## The design source
+
+The visual foundation was authored separately in a Claude Design project. Its token values were
+ported into `src/tokens/` and are recorded in ADR-0001. **That project is an archive of the original
+intent and carries no authority.** This repository is the single source of truth, and Rustam gives
+instructions here.
+
+Practically: Rustam describes the change he wants in plain language; translate it into token or
+component changes, measure the result rather than judging it by eye, and show it in Storybook —
+`Overview → Kit` renders everything the library ships. Anything that changes a public token, a
+public prop, or a documented visual contract needs an ADR.
+
+Where the design source and this repository already disagree — the sans family, the focus ring on
+filled buttons, the border palette, density — this repository is correct and the divergence is
+recorded in the relevant ADR. Do not "restore" a design-source value to close a gap.
+
 ## Scope
 
 - Keep Kreobuddha UI frontend-only.
