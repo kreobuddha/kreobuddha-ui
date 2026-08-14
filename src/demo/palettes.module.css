@@ -1,0 +1,168 @@
+/* Candidate palettes for the visual refresh, scoped to the specimen story. Nothing here ships.
+   All three share one neutral ramp and one status set, so the only variable on the page is the
+   accent. Every value below was measured before being written down. */
+
+.palette {
+  --kreo-surface-page: #fbfbfc;
+  --kreo-surface-card: #fff;
+  --kreo-surface-sunken: #f5f6f8;
+  --kreo-surface-hover: #f5f6f8;
+  --kreo-surface-active: #edeef1;
+
+  --kreo-text-primary: #181b20;
+  --kreo-text-body: #272c33;
+  --kreo-text-muted: #545b65;
+  --kreo-text-subtle: #6a717b;
+
+  --kreo-border-subtle: #edeef1;
+  --kreo-border-default: #e0e2e7;
+  --kreo-border-control: #868c95;
+
+  --kreo-danger-500: #c2352b;
+  --kreo-danger-600: #a52c24;
+  --kreo-text-on-danger: #fff;
+  --kreo-text-danger: #a52c24;
+  --kreo-border-danger: #c2352b;
+}
+
+.palette[data-kreo-theme='dark'] {
+  --kreo-surface-page: #131518;
+  --kreo-surface-card: #1a1d21;
+  --kreo-surface-sunken: #101215;
+  --kreo-surface-hover: #22262b;
+  --kreo-surface-active: #2b3037;
+
+  --kreo-text-primary: #f2f4f7;
+  --kreo-text-body: #dfe3e9;
+  --kreo-text-muted: #a4abb3;
+  --kreo-text-subtle: #8c939c;
+
+  --kreo-border-subtle: #22262b;
+  --kreo-border-default: #2b3037;
+  --kreo-border-control: #666d77;
+
+  --kreo-text-danger: #ef8a80;
+}
+
+/* A — classic blue. The most conventional reading of "interactive". */
+.blue {
+  --kreo-accent-500: #2563eb;
+  --kreo-accent-600: #1d4ed8;
+  --kreo-accent-700: #1e40af;
+  --kreo-text-on-accent: #fff;
+  --kreo-border-focus: #2563eb;
+  --kreo-text-accent: #1d4ed8;
+}
+
+.blue[data-kreo-theme='dark'] {
+  --kreo-accent-500: #7aa2f7;
+  --kreo-accent-600: #8fb3f9;
+  --kreo-accent-700: #a3c2fb;
+  --kreo-text-on-accent: #0b1220;
+  --kreo-border-focus: #7aa2f7;
+  --kreo-text-accent: #7aa2f7;
+}
+
+/* B — indigo. Same job, more personality, further from a browser default link. */
+.indigo {
+  --kreo-accent-500: #4f46e5;
+  --kreo-accent-600: #4338ca;
+  --kreo-accent-700: #3730a3;
+  --kreo-text-on-accent: #fff;
+  --kreo-border-focus: #4f46e5;
+  --kreo-text-accent: #4338ca;
+}
+
+.indigo[data-kreo-theme='dark'] {
+  --kreo-accent-500: #9b8cfa;
+  --kreo-accent-600: #ab9efb;
+  --kreo-accent-700: #bcb0fc;
+  --kreo-text-on-accent: #140f2e;
+  --kreo-border-focus: #9b8cfa;
+  --kreo-text-accent: #9b8cfa;
+}
+
+/* C — ink. A deep navy that reads as considered rather than as a call to action. */
+.ink {
+  --kreo-accent-500: #1e40af;
+  --kreo-accent-600: #1b3a9c;
+  --kreo-accent-700: #17318a;
+  --kreo-text-on-accent: #fff;
+  --kreo-border-focus: #1e40af;
+  --kreo-text-accent: #1b3a9c;
+}
+
+.ink[data-kreo-theme='dark'] {
+  --kreo-accent-500: #88a4e8;
+  --kreo-accent-600: #9bb3ed;
+  --kreo-accent-700: #aec2f1;
+  --kreo-text-on-accent: #0b1220;
+  --kreo-border-focus: #88a4e8;
+  --kreo-text-accent: #88a4e8;
+}
+
+/* The specimen frame itself, so each palette is judged on its own surface. */
+.frame {
+  background: var(--kreo-surface-page);
+  border: 1px solid var(--kreo-border-default);
+  border-radius: 10px;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  flex: 1 1 320px;
+  min-width: 320px;
+}
+
+.card {
+  background: var(--kreo-surface-card);
+  border: 1px solid var(--kreo-border-default);
+  border-radius: 8px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.title {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 600;
+  letter-spacing: -0.015em;
+  color: var(--kreo-text-primary);
+}
+
+.body {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.65;
+  color: var(--kreo-text-body);
+}
+
+.caption {
+  font-size: 12px;
+  color: var(--kreo-text-subtle);
+}
+
+.field {
+  background: var(--kreo-surface-card);
+  border: 1px solid var(--kreo-border-control);
+  border-radius: 4px;
+  padding: 10px 12px;
+  font-size: 14px;
+  color: var(--kreo-text-muted);
+}
+
+.row {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.link {
+  color: var(--kreo-text-accent);
+  font-size: 14px;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
