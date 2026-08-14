@@ -8,16 +8,11 @@ import palettes from './palettes.module.css';
 import statuses from './statuses.module.css';
 
 /**
- * Status colours, all shown under the chosen berry accent.
+ * Set B was chosen; only the green is still open. The light green is fixed and identical in every
+ * column — hue moved off cyan, chroma raised so it survives being dark enough to read. What varies
+ * is the dark-theme green, which was as bright as every other status and looked neon for it.
  *
- * Each status now carries two values: a readable text colour, and a brighter indicator colour for
- * the dot, which only needs 3:1 rather than 4.5:1. That split is what lets the warning stay amber
- * instead of collapsing into brown.
- *
- * Every lightness was solved for a contrast target rather than chosen by eye, so all four hues
- * carry equal weight and the sets differ only in saturation.
- *
- * Nothing here ships; the page goes away once a set is picked.
+ * Nothing here ships; the page goes away once a level is picked.
  */
 
 interface StatusSet {
@@ -29,22 +24,22 @@ interface StatusSet {
 
 const SETS: StatusSet[] = [
   {
-    key: 'a',
-    name: 'A — subtle (48% saturation)',
-    className: statuses.setA ?? '',
-    note: 'The quietest of the three, but no longer dusty: the lightness was solved for contrast rather than guessed.',
+    key: 'g1',
+    name: 'Green 1 — calm (5.2:1)',
+    className: statuses.g1 ?? '',
+    note: 'The quietest green that still passes comfortably. Closest in weight to the body text around it.',
   },
   {
-    key: 'b',
-    name: 'B — balanced (64%)',
-    className: statuses.setB ?? '',
-    note: 'A clear step brighter. Signals read as signals without shouting.',
+    key: 'g2',
+    name: 'Green 2 — medium (5.8:1)',
+    className: statuses.g2 ?? '',
+    note: 'A step up. Reads as a signal without lighting up the panel.',
   },
   {
-    key: 'c',
-    name: 'C — vivid (82%)',
-    className: statuses.setC ?? '',
-    note: 'Full-strength signal colours. Unmissable, and furthest from the calm direction.',
+    key: 'g3',
+    name: 'Green 3 — as it was (7.0:1)',
+    className: statuses.g3 ?? '',
+    note: 'The level every other status uses, kept here for reference — this is the one that read as neon.',
   },
 ];
 
@@ -57,7 +52,7 @@ interface FrameProps {
 
 const Frame = ({ set, dark = false }: FrameProps): ReactElement => (
   <div
-    className={cx(palettes.palette, accents.berry, set.className, statuses.frame)}
+    className={cx(palettes.palette, accents.berry, statuses.base, set.className, statuses.frame)}
     data-kreo-theme={dark ? 'dark' : undefined}
   >
     <div className={statuses.row}>

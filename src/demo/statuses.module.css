@@ -1,15 +1,15 @@
-/* Status candidates, all under the chosen berry accent.
+/* Set B was chosen. What remains is the green, which failed in two opposite directions: too flat
+ * on light, too loud on dark. Both were the same underlying mistake — treating one saturation as
+ * correct for both themes.
  *
- * Two things changed after the first round. Each status now carries two values instead of one:
- * a readable text colour, and a brighter indicator colour for dots, icons and borders, which only
- * need 3:1 rather than 4.5:1. Forcing one value to do both jobs is what made the warning muddy —
- * amber dark enough to read as text is brown.
+ * Light: the hue moved from 134 to 128. At 134 the green is already fourteen degrees towards cyan,
+ * which is what read as blue. Saturation went from 64% to 90%, because green is the lightest hue
+ * at any given lightness, so reaching 5:1 on white forces it dark — and a dark green with little
+ * chroma just reads as a dark neutral. More chroma at the same contrast: 100 to 123.
  *
- * And the lightness of every colour was solved for a contrast target rather than picked, so all
- * four hues carry the same weight. That leaves saturation as the only difference between the sets.
- *
- * Targets: text 5.0:1 on white, indicator 3.3:1, dark theme 7.0:1 on the page. Green sits at hue
- * 134 — a real green, not the emerald of the previous round.
+ * Dark: the green sat at 7:1 like every other status, which on a dark surface is neon. The
+ * accessible floor is 4.5:1, so there is room to calm it down. Three levels below; everything
+ * else in the set is unchanged.
  */
 
 .frame {
@@ -88,83 +88,43 @@
   color: var(--kreo-text-subtle);
 }
 
-/* ---- Set A: subtle — 48% saturation ---- */
-
-.setA {
-  --kreo-danger-500: #b94d41;
-  --kreo-danger-600: #a44238;
-  --kreo-text-danger: #b94d41;
-  --kreo-border-danger: #de6b5e;
-  --demo-danger-ind: #de6b5e;
-  --demo-success-text: #2d7f40;
-  --demo-success-ind: #21a340;
-  --demo-warning-text: #8b6a31;
-  --demo-warning-ind: #b98326;
-  --demo-info-text: #3f71b2;
-  --demo-info-ind: #558fdc;
-}
-
-.setA[data-kreo-theme='dark'] {
-  --kreo-text-danger: #de8a81;
-  --demo-danger-ind: #de8a81;
-  --demo-success-text: #31b750;
-  --demo-success-ind: #31b750;
-  --demo-warning-text: #cb973d;
-  --demo-warning-ind: #cb973d;
-  --demo-info-text: #78a3db;
-  --demo-info-ind: #78a3db;
-}
-
-/* ---- Set B: balanced — 64% saturation ---- */
-
-.setB {
+/* Set B, with the corrected light green. Identical in all three columns. */
+.base {
   --kreo-danger-500: #ca3c2c;
   --kreo-danger-600: #b13426;
   --kreo-text-danger: #ca3c2c;
   --kreo-border-danger: #ee5f4f;
   --demo-danger-ind: #ee5f4f;
-  --demo-success-text: #1c8033;
-  --demo-success-ind: #10a433;
+  --demo-success-text: #078217;
+  --demo-success-ind: #029916;
   --demo-warning-text: #916820;
   --demo-warning-ind: #bf8013;
   --demo-info-text: #2c6fc7;
   --demo-info-ind: #458eed;
 }
 
-.setB[data-kreo-theme='dark'] {
+.base[data-kreo-theme='dark'] {
   --kreo-text-danger: #eb8378;
   --demo-danger-ind: #eb8378;
-  --demo-success-text: #1cb940;
-  --demo-success-ind: #1cb940;
   --demo-warning-text: #d59320;
   --demo-warning-ind: #d59320;
   --demo-info-text: #6da3e9;
   --demo-info-ind: #6da3e9;
 }
 
-/* ---- Set C: vivid — 82% saturation ---- */
+/* ---- Dark-theme green, three levels ---- */
 
-.setC {
-  --kreo-danger-500: #d72915;
-  --kreo-danger-600: #bc2412;
-  --kreo-text-danger: #d72915;
-  --kreo-border-danger: #fa5341;
-  --demo-danger-ind: #fa5341;
-  --demo-success-text: #0d8128;
-  --demo-success-ind: #04a42a;
-  --demo-warning-text: #97650f;
-  --demo-warning-ind: #c47e05;
-  --demo-info-text: #166cdc;
-  --demo-info-ind: #398dfa;
+.g1[data-kreo-theme='dark'] {
+  --demo-success-text: #459a50;
+  --demo-success-ind: #459a50;
 }
 
-.setC[data-kreo-theme='dark'] {
-  --kreo-text-danger: #f77b6e;
-  --demo-danger-ind: #f77b6e;
-  --demo-success-text: #0ab933;
-  --demo-success-ind: #0ab933;
-  --demo-warning-text: #dc900c;
-  --demo-warning-ind: #dc900c;
-  --demo-info-text: #62a2f7;
-  --demo-info-ind: #62a2f7;
+.g2[data-kreo-theme='dark'] {
+  --demo-success-text: #3da54b;
+  --demo-success-ind: #3da54b;
+}
+
+.g3[data-kreo-theme='dark'] {
+  --demo-success-text: #2eb840;
+  --demo-success-ind: #2eb840;
 }
