@@ -1,8 +1,9 @@
-/* Type — Public Sans for everything readable, IBM Plex Mono for labels, data and buttons.
-   The library loads no fonts; the value lists end in platform fallbacks. See ADR-0002. */
+/* Type — IBM Plex Sans for everything readable, IBM Plex Mono for labels, data and buttons.
+   Both are bundled with the package (see `fonts.css` and ADR-0003); the fallbacks below only
+   matter while the font files are still loading. */
 :root {
   --kreo-font-sans:
-    'Public Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, sans-serif;
+    'IBM Plex Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, sans-serif;
   --kreo-font-mono: 'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
 
   --kreo-text-11: 0.6875rem; /* 11px — mono captions */

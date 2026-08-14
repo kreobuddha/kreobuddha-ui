@@ -74,10 +74,18 @@ names are private implementation details.
 
 ## Fonts
 
-**The library loads no fonts.** The type tokens ask for Public Sans and IBM Plex Mono and fall back
-to platform families, so nothing breaks if they are absent — but the intended typographic character
-only appears once the application loads them itself. Bundling them into the package is planned; see
-[ADR-0002](docs/adr/0002-no-external-font-or-icon-requests.md).
+**The fonts are bundled and no external request is made.** Importing `styles.css` is enough: IBM
+Plex Sans and IBM Plex Mono ship inside the package, so the library renders as intended with no
+host setup, no CDN, and no network dependency.
+
+Only the four faces the type roles use are included — sans 400 and 600, mono 400 and 500 — each
+split into a Latin and a Cyrillic file behind a `unicode-range`, so a Latin-only page never
+downloads the Cyrillic subsets. Both families cover Cyrillic. That is about 123 KB of font data in
+total, none of it on the JavaScript path.
+
+The fonts are licensed under the SIL Open Font License 1.1; see [NOTICE](NOTICE) and the licence
+files published beside them. The reasoning is in
+[ADR-0003](docs/adr/0003-bundle-ibm-plex-and-replace-public-sans.md).
 
 ## Package boundary
 
@@ -106,6 +114,9 @@ npm run build
 npm run check:package
 npm run storybook
 ```
+
+`npm run storybook` opens the workbench. **Overview → Kit** is a single page showing everything the
+library currently ships, in either theme — the quickest way to see the whole kit at once.
 
 ## License
 

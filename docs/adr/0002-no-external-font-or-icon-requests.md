@@ -3,6 +3,9 @@
 - Status: Accepted
 - Date: 2026-08-14
 - Decision owners: Rustam
+- Update: the "follow-up conditions for bundling fonts" below are resolved by
+  [ADR-0003](0003-bundle-ibm-plex-and-replace-public-sans.md). The decisions in this record — no
+  external requests, icons as `ReactNode`, no bundled icon font — all still stand.
 
 ## Context
 

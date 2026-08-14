@@ -1,0 +1,14 @@
+Kreobuddha UI bundles third-party font software.
+
+IBM Plex Sans and IBM Plex Mono
+  Copyright 2019 IBM Corp. All rights reserved.
+  Licensed under the SIL Open Font License, Version 1.1.
+
+  The font files are published in this package under `dist/assets/fonts`, together with the full
+  licence text: `LICENSE-ibm-plex-sans.txt` and `LICENSE-ibm-plex-mono.txt`.
+
+  Only the four faces this library's type roles use are included — sans 400 and 600, mono 400 and
+  500 — each split into a Latin and a Cyrillic subset. The files are taken unmodified from the
+  @fontsource distribution of IBM Plex.
+
+Everything else in this package is covered by the MIT licence in LICENSE.
