@@ -2,19 +2,34 @@
 
 ## Current status
 
-No release is authorized by this document, and **nothing has been published to npm**. The package
-is still marked `private`.
+`@kreobuddha/ui` is published to npm under the `@kreobuddha` scope with public access. The licence
+is MIT and the public repository is `kreobuddha/kreobuddha-ui` with CI green on `master`.
 
-What is settled: the npm package name is `@kreobuddha/ui` (ADR-0001), the licence is MIT, and the
-public repository exists at `kreobuddha/kreobuddha-ui` with CI green on `master`.
+Publishing is still an external action: each release requires Rustam's explicit approval for the
+exact version and action. See ADR-0006 for how releases are authenticated.
 
-What is not: ownership of the `@kreobuddha` npm scope has never been verified, and must be before
-any publish attempt. Tagging, releasing, or publishing remains an external action requiring
-Rustam's explicit approval for the exact action.
+## How a release is cut
 
-## Consumption before publication
+1. `master` is green and the working tree is clean.
+2. `CHANGELOG.md` gains an entry describing user-visible impact; the version in `package.json`
+   matches it.
+3. `npm run check:package` passes, and `npm pack --dry-run` is read — the archive must contain
+   `dist`, `README.md`, `LICENSE`, `NOTICE` and the manifest, and nothing else.
+4. The release is published from CI. `.github/workflows/release.yml` runs the same checks as
+   `ci.yml` and then publishes through npm trusted publishing (OIDC), so no npm token is stored
+   anywhere.
+5. A `vX.Y.Z` tag and a matching GitHub release are pushed.
 
-Until the npm scope is verified and a publish is approved, consumers install straight from GitHub:
+`0.3.0` is the exception to step 4: npm can only attach a trusted publisher to a package that
+already exists, so the very first version was published by hand. Every release after it goes
+through CI.
+
+## Installing from git (superseded)
+
+Kept for reference. Since `0.3.0` the package is on npm, so `npm install @kreobuddha/ui` is the
+supported way to consume it and the mechanism below is no longer needed.
+
+Before publication, consumers installed straight from GitHub:
 
 ```jsonc
 // consumer package.json
