@@ -30,6 +30,9 @@ explicitly rather than treated as disposable.
 
 ### Fixed
 
+- Button and field labels render at the weight the tokens declare. The type roles ask for weight
+  500, which the bundled static pair did not contain, and CSS font matching resolved it silently to 400. Inter now ships as a variable font covering 100–900, so the declared scale and the shipped
+  font agree. A Latin page downloads 140 bytes more than before for it.
 - Contrast measurement now covers the placeholder colour, the field border, and body text on each
   message tint — 51 pairs across both themes, up from 31.
 

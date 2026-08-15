@@ -7,9 +7,9 @@ Inter
   The font files are published in this package under `dist/assets/fonts`, together with the full
   licence text: `LICENSE-inter.txt`.
 
-  Only the two weights this library's type roles use are included — 400 and 600 — each split into
-  a Latin and a Cyrillic subset. The files are taken unmodified from the @fontsource distribution
-  of Inter.
+  The variable font is included, covering the whole 100–900 weight range, split into a Latin and a
+  Cyrillic subset. The files are taken unmodified from the @fontsource-variable distribution of
+  Inter.
 
   No monospace family is bundled. Inter carries tabular figures, which is what aligned numerals
   actually require.
