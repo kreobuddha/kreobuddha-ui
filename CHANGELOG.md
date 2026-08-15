@@ -9,6 +9,8 @@ explicitly rather than treated as disposable.
 
 ## [Unreleased]
 
+## [0.7.0] — 2026-08-15
+
 ### Added
 
 - `IconButton` — a square button carrying a mark instead of a word, matching `Button` in variants,
