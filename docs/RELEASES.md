@@ -34,6 +34,19 @@ version number can never be reused once it reaches the registry.
 token. A local `npm publish` therefore fails now — deliberately. Releasing from a laptop is no
 longer possible, which is what keeps step 4 honest.
 
+### Branches
+
+The repository deletes a branch when its pull request merges. A merged branch that stays around
+still looks like work in progress, and the one real incident this project has had came from exactly
+that confusion: a pull request merged into a stale branch eleven seconds after that branch had gone
+to `master`, and the commit sat in a branch nobody would merge again.
+
+The tag is the recovery point, not the branch. Once a release is tagged, its branch holds nothing
+the tag does not.
+
+Do not stack pull requests on top of each other without a reason. If you do, merge bottom-up and
+check that each one retargets `master` before merging it.
+
 ### One-time setup on npmjs.com
 
 Package settings → **Publishing access** → add a trusted publisher, with:
