@@ -5,7 +5,7 @@ data-dense frontend applications.
 
 ## Status: early, but published
 
-**Four components ship today: `Button`, `IconButton`, `Badge` and `Spinner`.** Everything else in
+**Five components ship today: `Button`, `IconButton`, `Badge`, `Spinner` and `Alert`.** Everything else in
 [docs/ROADMAP.md](docs/ROADMAP.md) is a plan, not an available feature. The package is published so
 it can be consumed normally; treat the `0.x` line as a moving target and pin what you depend on.
 
@@ -96,6 +96,34 @@ because a symbol without a name is a guess for sighted users too — pass `title
 something different there.
 
 The icon itself is hidden from assistive technology, so it never competes with the label.
+
+### `Alert`
+
+| Prop           | Type                                           | Default   |
+| -------------- | ---------------------------------------------- | --------- |
+| `tone`         | `'success' \| 'warning' \| 'danger' \| 'info'` | `'info'`  |
+| `title`        | `string`                                       | —         |
+| `icon`         | `ReactNode`                                    | tone mark |
+| `live`         | `boolean`                                      | `false`   |
+| `onDismiss`    | `() => void`                                   | —         |
+| `dismissLabel` | `string`                                       | `Dismiss` |
+
+```tsx
+<Alert tone="danger" title="Save failed" live onDismiss={hide}>
+  The workspace was changed by someone else.
+</Alert>
+```
+
+A message about what just happened or what is currently true. Each tone brings its own mark, so the
+kind of message never depends on colour alone; pass `icon` to use your own instead.
+
+**`live` is off by default.** A banner already on screen when the page loads should not interrupt
+anyone. Turn it on for a message that appears in response to something — a failed save. A `danger`
+alert then interrupts (`role="alert"`); the quieter tones wait for a pause (`role="status"`).
+
+`onDismiss` is what adds the close button; without it the alert cannot be dismissed. The supporting
+text sits on the body colour rather than the tone colour, because a whole paragraph in a status
+colour is harder to read than it is informative.
 
 ### `Badge`
 
