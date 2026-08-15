@@ -3,8 +3,10 @@ name: CI
 on:
   push:
     branches: [master]
+  # Deliberately unfiltered: a pull request is checked wherever it is aimed. Restricting this to
+  # `master` left stacked pull requests unverified, which is exactly when verification is worth
+  # most — the base is itself unreviewed.
   pull_request:
-    branches: [master]
 
 # Least privilege: this workflow only reads the repository.
 permissions:
