@@ -42,17 +42,19 @@
   },
   "scripts": {
     "build": "vite build && node scripts/bundle-fonts.mjs && tsc -p tsconfig.build.json",
-    "prepare": "npm run build",
+    "build-storybook": "storybook build",
     "check:contrast": "node scripts/check-contrast.mjs",
     "check:package": "npm run build && publint && attw --pack --profile esm-only --exclude-entrypoints styles.css",
-    "typecheck": "tsc -p tsconfig.json",
-    "lint": "eslint .",
-    "lint:css": "stylelint \"src/**/*.css\"",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-    "test": "vitest run",
+    "lint": "eslint .",
+    "lint:css": "stylelint \"src/**/*.css\"",
+    "prepare": "npm run build",
     "storybook": "storybook dev -p 6006",
-    "build-storybook": "storybook build"
+    "test": "vitest run",
+    "test:one": "vitest run --project unit",
+    "typecheck": "tsc -p tsconfig.json",
+    "verify": "npm run format:check && npm run lint && npm run lint:css && npm run typecheck && npm test && npm run check:contrast && npm run build && npm run build-storybook && npm run check:package"
   },
   "peerDependencies": {
     "react": "^19.0.0",
