@@ -9,6 +9,8 @@ explicitly rather than treated as disposable.
 
 ## [Unreleased]
 
+## [0.6.0] — 2026-08-15
+
 ### Added
 
 - `Spinner` — a ring that turns while something is in flight, in three sizes. It is decorative
