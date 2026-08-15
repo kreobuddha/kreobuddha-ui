@@ -9,6 +9,19 @@ explicitly rather than treated as disposable.
 
 ## [Unreleased]
 
+### Added
+
+- `Spinner` — a ring that turns while something is in flight, in three sizes. It is decorative
+  unless given a `label`, which turns it into a `status` with that accessible name; making the
+  announcement opt-in is what stops a screen reader hearing the same thing twice when the spinner
+  sits beside the word "Loading". It takes its colour from the surrounding text and stops turning
+  under `prefers-reduced-motion`.
+
+### Changed
+
+- `Button` uses the public `Spinner` for its loading state instead of a private copy of the same
+  ring. Behaviour is unchanged; the duplication is gone.
+
 ## [0.5.0] — 2026-08-15
 
 ### Added

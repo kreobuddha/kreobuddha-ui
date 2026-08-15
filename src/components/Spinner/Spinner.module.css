@@ -1,0 +1,52 @@
+/* Component styles depend on the token layer, and declaring that dependency in CSS rather than
+   from TypeScript keeps the stylesheet out of the emitted declarations, where a `.css` specifier
+   is not resolvable. Vite inlines this into the single published `styles.css`. */
+@import '../../styles.css';
+
+.spinner {
+  display: inline-block;
+  flex: none;
+  border: var(--kreo-border-w-focus) solid currentcolor;
+  border-top-color: transparent;
+  border-radius: var(--kreo-radius-full);
+
+  /* A literal rather than a motion token: the scale holds transition durations, and a looping
+     rotation is a different kind of value that no shipped token expresses. */
+  animation: spin 700ms linear infinite;
+}
+
+.sm {
+  width: 16px;
+  height: 16px;
+}
+
+.md {
+  width: 20px;
+  height: 20px;
+}
+
+.lg {
+  width: 24px;
+  height: 24px;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  /* A static ring still reads as an indicator, and the announcement does not depend on movement. */
+  .spinner {
+    animation: none;
+  }
+}
+
+@media (forced-colors: active) {
+  /* `currentcolor` resolves to the forced text colour, which keeps the ring visible, but the
+     transparent segment would vanish into the background — so the gap is drawn with Canvas. */
+  .spinner {
+    border-top-color: Canvas;
+  }
+}
