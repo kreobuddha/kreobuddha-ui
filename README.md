@@ -5,9 +5,9 @@ data-dense frontend applications.
 
 ## Status: early, but published
 
-**One component ships today: `Button`.** Everything else in [docs/ROADMAP.md](docs/ROADMAP.md) is a
-plan, not an available feature. The package is published so it can be consumed normally; treat the
-`0.x` line as a moving target and pin what you depend on.
+**Two components ship today: `Button` and `Badge`.** Everything else in
+[docs/ROADMAP.md](docs/ROADMAP.md) is a plan, not an available feature. The package is published so
+it can be consumed normally; treat the `0.x` line as a moving target and pin what you depend on.
 
 What exists and is verified: an ESM library build with an extracted stylesheet and external React,
 TypeScript declarations, a semantic token layer with light and dark themes, strict type checking,
@@ -70,6 +70,34 @@ lines and grow the button instead, in which case nothing is hidden and no toolti
 
 Icons are `ReactNode` and are hidden from assistive technology, so the label remains the accessible
 name. The library bundles no icon set.
+
+### `Badge`
+
+| Prop   | Type                                                                    | Default     |
+| ------ | ----------------------------------------------------------------------- | ----------- |
+| `tone` | `'neutral' \| 'accent' \| 'success' \| 'warning' \| 'danger' \| 'info'` | `'neutral'` |
+| `dot`  | `boolean`                                                               | `false`     |
+
+```tsx
+import { Badge } from '@kreobuddha/ui';
+
+<Badge tone="warning" dot>
+  deprecated
+</Badge>;
+```
+
+A short label for a status or a category — `admin`, `beta`, `3 failed`. It renders a plain
+`<span>` and forwards `ref`, `className`, `style`, and every other native span prop to it.
+
+It is deliberately **not interactive**: it has no role, no ARIA state, and no place in the tab
+order, because it is text rather than a widget. It is not a dismissible chip, not a count bubble
+laid over an icon, and not a live region — announcing a change as it happens is a different
+component's job.
+
+`tone` is an outline and a text colour, never the meaning by itself: the wording has to say what
+the badge says with the colour removed. `dot` adds a decorative mark that repeats the label, so it
+is hidden from assistive technology. A label wider than the space available wraps rather than being
+clipped — nothing here could offer hidden text back.
 
 ## Theming
 
