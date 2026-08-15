@@ -9,6 +9,8 @@ explicitly rather than treated as disposable.
 
 ## [Unreleased]
 
+## [0.5.0] — 2026-08-15
+
 ### Added
 
 - Eight tokens for message surfaces: `--kreo-surface-{success,warning,danger,info}-soft` and the
