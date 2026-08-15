@@ -1,0 +1,113 @@
+/* The shared field parts live in `../field/field.module.css` and are pulled in with `composes`.
+   Only what is particular to a select is written here. */
+
+.field {
+  composes: field from '../field/field.module.css';
+}
+
+.fullWidth {
+  composes: fullWidth from '../field/field.module.css';
+}
+
+/* A class rather than a `[data-disabled]` attribute: `composes` is only allowed on a plain single
+   class selector, and the shared dimming lives in the field module. */
+.disabled {
+  composes: disabled from '../field/field.module.css';
+}
+
+.shell {
+  composes: shell from '../field/field.module.css';
+  align-items: center;
+
+  /* The chevron sits on top of the control's trailing padding rather than beside it, so the
+     control still fills the whole box and every click inside the border opens the list. */
+  position: relative;
+}
+
+.invalid {
+  composes: invalid from '../field/field.module.css';
+}
+
+.control {
+  composes: control from '../field/field.module.css';
+
+  /* `appearance: none` removes the platform arrow so the drawn one is not doubled. The rest of the
+     native behaviour — keyboard, type-ahead, the OS list on touch — is untouched, which is the
+     whole reason this is a `<select>`. */
+  appearance: none;
+  cursor: pointer;
+
+  /* The shared `control` allows a field to shrink below its content, which is right for a text
+     input the reader scrolls. A `<select>` cannot be scrolled: whatever is clipped is simply
+     unreadable, and the chevron ends up underneath it. So the box sizes to the longest option it
+     could show, and only `fullWidth` — where the container has decided the width — may clip. */
+  min-width: auto;
+
+  /* Room for the chevron, so a long option label never runs underneath it. The end padding has to
+     be written together with the start one: a size rule setting the `padding-inline` shorthand
+     would otherwise reset this side and drop the arrow on top of the text. */
+  padding-inline: var(--select-px) calc(var(--select-px) + 20px);
+}
+
+.control:disabled {
+  cursor: not-allowed;
+}
+
+.fullWidth .control {
+  min-width: 0;
+}
+
+.chevron {
+  position: absolute;
+  inset-inline-end: var(--select-px);
+  color: var(--kreo-text-muted);
+
+  /* The arrow is decoration over the control; a click on it must reach the control underneath. */
+  pointer-events: none;
+}
+
+/* Sizes come after .shell so their font-size wins over the inherited `font` shorthand. */
+
+/* `--select-px` is private to this component, not a `--kreo-*` token, so it is not public API. It
+   exists so the control's padding and the chevron's offset cannot drift apart across sizes. */
+.sm {
+  --select-px: var(--kreo-control-px-sm);
+
+  min-height: var(--kreo-control-h-sm);
+  font: var(--kreo-type-body);
+  font-size: var(--kreo-text-13);
+}
+
+.md {
+  --select-px: var(--kreo-control-px-md);
+
+  min-height: var(--kreo-control-h-md);
+  font: var(--kreo-type-body);
+}
+
+.lg {
+  --select-px: var(--kreo-control-px-lg);
+
+  min-height: var(--kreo-control-h-lg);
+  font: var(--kreo-type-body-lg);
+}
+
+/* While the placeholder option is the selected one, the control is painted as placeholder text
+   rather than as a chosen value. Matched through the option's own `:checked` state, which is live
+   and works whether the field is controlled or not — `:invalid` would only fire on a `required`
+   field, leaving an optional one showing its placeholder in full-strength text. */
+.control:has(option[value='']:checked) {
+  color: var(--kreo-text-subtle);
+}
+
+@media (forced-colors: active) {
+  /* `appearance: none` also removes the system's own arrow, and the drawn one inherits a colour
+     that is not painted here. */
+  .chevron {
+    color: CanvasText;
+  }
+
+  .disabled .chevron {
+    color: GrayText;
+  }
+}

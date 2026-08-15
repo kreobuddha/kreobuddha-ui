@@ -5,6 +5,7 @@ import { Alert } from '../components/Alert/Alert.js';
 import { Badge } from '../components/Badge/Badge.js';
 import { Button } from '../components/Button/Button.js';
 import { IconButton } from '../components/IconButton/IconButton.js';
+import { Select } from '../components/Select/Select.js';
 import { Spinner } from '../components/Spinner/Spinner.js';
 import { Textarea } from '../components/Textarea/Textarea.js';
 import { TextField } from '../components/TextField/TextField.js';
@@ -330,6 +331,26 @@ export const Kit: Story = {
           error="Describe the change in at least a sentence."
           defaultValue="tbd"
         />
+      </Section>
+
+      <Section title="Select — placeholder, groups and a chosen value">
+        <div style={{ display: 'flex', gap: 'var(--kreo-space-4)', alignItems: 'flex-start' }}>
+          <Select label="Timezone" placeholder="Choose a timezone">
+            <option value="utc">UTC</option>
+            <option value="cet">Central European Time</option>
+          </Select>
+          <Select label="Region" defaultValue="eu">
+            <optgroup label="Europe">
+              <option value="eu">Frankfurt</option>
+            </optgroup>
+            <optgroup label="Americas">
+              <option value="us">Oregon</option>
+            </optgroup>
+          </Select>
+          <Select label="Locked" disabled defaultValue="utc">
+            <option value="utc">UTC</option>
+          </Select>
+        </div>
       </Section>
 
       <Section title="A field and a button sit level">

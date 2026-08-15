@@ -1,5 +1,7 @@
-import { useId } from 'react';
 import type { ComponentPropsWithRef, ReactElement, ReactNode } from 'react';
+
+import { FieldLabel, FieldMessages } from '../field/FieldLabel.js';
+import { useFieldParts } from '../field/useFieldParts.js';
 
 import styles from './Textarea.module.css';
 
@@ -47,54 +49,35 @@ export const Textarea = ({
   rows = 3,
   ...rest
 }: TextareaProps): ReactElement => {
-  const generated = useId();
-  const fieldId = id ?? `${generated}-textarea`;
-  const hintId = `${generated}-hint`;
-  const errorId = `${generated}-error`;
-
-  // The error comes first: a screen reader reads these in order, and hearing what is wrong before
-  // hearing the guidance is the useful order.
-  const describedBy = cx(error ? errorId : undefined, hint ? hintId : undefined) || undefined;
+  const { controlId, hintId, errorId, describedBy, invalid } = useFieldParts({ id, hint, error });
 
   return (
     <div
-      className={cx(styles.field, fullWidth && styles.fullWidth, className)}
-      data-disabled={disabled || undefined}
+      className={cx(
+        styles.field,
+        fullWidth && styles.fullWidth,
+        Boolean(disabled) && styles.disabled,
+        className
+      )}
     >
-      <label className={styles.label} htmlFor={fieldId}>
+      <FieldLabel htmlFor={controlId} required={required}>
         {label}
-        {/* The marker is decorative; `required` on the control is what carries the fact. */}
-        {required ? (
-          <span className={styles.required} aria-hidden="true">
-            *
-          </span>
-        ) : null}
-      </label>
+      </FieldLabel>
 
       <div className={cx(styles.shell, styles[size], Boolean(error) && styles.invalid)}>
         <textarea
           {...rest}
-          id={fieldId}
+          id={controlId}
           rows={rows}
           className={cx(styles.control, styles[resize])}
           disabled={disabled}
           required={required}
-          aria-invalid={error ? true : undefined}
+          aria-invalid={invalid}
           aria-describedby={describedBy}
         />
       </div>
 
-      {error ? (
-        <p className={styles.error} id={errorId}>
-          {error}
-        </p>
-      ) : null}
-
-      {hint ? (
-        <p className={styles.hint} id={hintId}>
-          {hint}
-        </p>
-      ) : null}
+      <FieldMessages hint={hint} error={error} hintId={hintId} errorId={errorId} />
     </div>
   );
 };

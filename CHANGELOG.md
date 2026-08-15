@@ -9,6 +9,21 @@ explicitly rather than treated as disposable.
 
 ## [Unreleased]
 
+### Added
+
+- `Select` — a native single-choice `<select>` with the same label, hint, error and invalid
+  contract as the other fields. `placeholder` becomes a disabled first option with an empty value,
+  so the field cannot report a choice nobody made and native `required` means what it says. The
+  chevron is drawn by the component, because the platform paints a different arrow per operating
+  system.
+- A contrast measurement for the chevron.
+
+### Changed
+
+- The wiring the three fields repeat — generated ids, the `aria-describedby` order, the invalid
+  flag, and the label, shell and message styles — now lives in one internal place instead of three
+  copies. No public API, class name or rendered markup changed.
+
 ## [0.10.0] — 2026-08-16
 
 ### Added

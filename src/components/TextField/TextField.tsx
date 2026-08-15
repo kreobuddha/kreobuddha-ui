@@ -1,5 +1,7 @@
-import { useId } from 'react';
 import type { ComponentPropsWithRef, ReactElement, ReactNode } from 'react';
+
+import { FieldLabel, FieldMessages } from '../field/FieldLabel.js';
+import { useFieldParts } from '../field/useFieldParts.js';
 
 import styles from './TextField.module.css';
 
@@ -47,58 +49,38 @@ export const TextField = ({
   required,
   ...rest
 }: TextFieldProps): ReactElement => {
-  const generated = useId();
-  const inputId = id ?? `${generated}-input`;
-  const hintId = `${generated}-hint`;
-  const errorId = `${generated}-error`;
-
-  // The error comes first: a screen reader reads these in order, and hearing what is wrong before
-  // hearing the guidance is the useful order. `undefined` rather than an empty string, which some
-  // assistive technology treats as a reference to nothing rather than as no reference.
-  const describedBy = cx(error ? errorId : undefined, hint ? hintId : undefined) || undefined;
+  const { controlId, hintId, errorId, describedBy, invalid } = useFieldParts({ id, hint, error });
 
   return (
     <div
-      className={cx(styles.field, fullWidth && styles.fullWidth, className)}
-      data-disabled={disabled || undefined}
+      className={cx(
+        styles.field,
+        fullWidth && styles.fullWidth,
+        Boolean(disabled) && styles.disabled,
+        className
+      )}
     >
-      <label className={styles.label} htmlFor={inputId}>
+      <FieldLabel htmlFor={controlId} required={required}>
         {label}
-        {/* The marker is decorative; `required` on the input is what actually carries the fact. */}
-        {required ? (
-          <span className={styles.required} aria-hidden="true">
-            *
-          </span>
-        ) : null}
-      </label>
+      </FieldLabel>
 
       <div className={cx(styles.shell, styles[size], Boolean(error) && styles.invalid)}>
         {prefix ? <span className={styles.prefix}>{prefix}</span> : null}
 
         <input
           {...rest}
-          id={inputId}
+          id={controlId}
           className={styles.input}
           disabled={disabled}
           required={required}
-          aria-invalid={error ? true : undefined}
+          aria-invalid={invalid}
           aria-describedby={describedBy}
         />
 
         {suffix ? <span className={styles.suffix}>{suffix}</span> : null}
       </div>
 
-      {error ? (
-        <p className={styles.error} id={errorId}>
-          {error}
-        </p>
-      ) : null}
-
-      {hint ? (
-        <p className={styles.hint} id={hintId}>
-          {hint}
-        </p>
-      ) : null}
+      <FieldMessages hint={hint} error={error} hintId={hintId} errorId={errorId} />
     </div>
   );
 };

@@ -60,6 +60,7 @@ const PAIRS = [
   ['field hint', '--kreo-surface-page', '--kreo-text-muted', TEXT],
   ['field error', '--kreo-surface-page', '--kreo-text-danger', TEXT],
   ['field slot', '--kreo-surface-card', '--kreo-text-muted', TEXT],
+  ['select chevron', '--kreo-surface-card', '--kreo-text-muted', NON_TEXT],
   ['field focus border', '--kreo-surface-card', '--kreo-border-focus', NON_TEXT],
   ['field invalid border', '--kreo-surface-card', '--kreo-border-danger', NON_TEXT],
   ['success mark', '--kreo-surface-page', '--kreo-icon-success', NON_TEXT],
