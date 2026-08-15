@@ -3,20 +3,25 @@
 An accessible, themeable React component library for developer tools, technical products, and
 data-dense frontend applications.
 
-## Status: early, unpublished
+## Status: early, but published
 
-**One component ships today: `Button`.** The package is marked `private` and is not published to
-npm. Everything else in [docs/ROADMAP.md](docs/ROADMAP.md) is a plan, not an available feature.
+**One component ships today: `Button`.** Everything else in [docs/ROADMAP.md](docs/ROADMAP.md) is a
+plan, not an available feature. The package is published so it can be consumed normally; treat the
+`0.x` line as a moving target and pin what you depend on.
 
 What exists and is verified: an ESM library build with an extracted stylesheet and external React,
 TypeScript declarations, a semantic token layer with light and dark themes, strict type checking,
 lint and format checks, component and accessibility tests, Storybook as the workbench, and a
-package tarball proven to install in a separate consumer application.
+package proven to install and run in a separate consumer application.
 
-## Requirements
+## Install
+
+```bash
+npm install @kreobuddha/ui
+```
 
 - Node.js `^20.19.0 || >=22.12.0`
-- React `^19.0.0` as a peer dependency
+- React `^19.0.0` as a peer dependency (install it yourself; the package does not bundle React)
 
 ## Usage
 
