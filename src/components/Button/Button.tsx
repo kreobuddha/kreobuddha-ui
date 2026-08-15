@@ -1,6 +1,8 @@
 import { useEffect, useRef, useState } from 'react';
 import type { ComponentPropsWithRef, MouseEvent, ReactElement, ReactNode } from 'react';
 
+import { Spinner } from '../Spinner/Spinner.js';
+
 import styles from './Button.module.css';
 
 export type ButtonVariant = 'filled' | 'outlined' | 'ghost';
@@ -136,7 +138,7 @@ export const Button = ({
           </span>
         ) : null}
       </span>
-      {loading ? <span className={styles.spinner} aria-hidden="true" /> : null}
+      {loading ? <Spinner size="sm" className={styles.spinner} /> : null}
     </button>
   );
 };

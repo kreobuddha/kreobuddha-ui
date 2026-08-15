@@ -9,3 +9,5 @@ export { Badge } from './components/Badge/Badge.js';
 export type { BadgeProps, BadgeTone } from './components/Badge/Badge.js';
 export { Button } from './components/Button/Button.js';
 export type { ButtonProps, ButtonSize, ButtonVariant } from './components/Button/Button.js';
+export { Spinner } from './components/Spinner/Spinner.js';
+export type { SpinnerProps, SpinnerSize } from './components/Spinner/Spinner.js';

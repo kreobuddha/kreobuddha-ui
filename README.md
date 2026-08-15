@@ -5,7 +5,7 @@ data-dense frontend applications.
 
 ## Status: early, but published
 
-**Two components ship today: `Button` and `Badge`.** Everything else in
+**Three components ship today: `Button`, `Badge` and `Spinner`.** Everything else in
 [docs/ROADMAP.md](docs/ROADMAP.md) is a plan, not an available feature. The package is published so
 it can be consumed normally; treat the `0.x` line as a moving target and pin what you depend on.
 
@@ -98,6 +98,32 @@ component's job.
 the badge says with the colour removed. `dot` adds a decorative mark that repeats the label, so it
 is hidden from assistive technology. A label wider than the space available wraps rather than being
 clipped — nothing here could offer hidden text back.
+
+### `Spinner`
+
+| Prop    | Type                   | Default |
+| ------- | ---------------------- | ------- |
+| `size`  | `'sm' \| 'md' \| 'lg'` | `'md'`  |
+| `label` | `string`               | —       |
+
+```tsx
+import { Spinner } from '@kreobuddha/ui';
+
+<Spinner label="Loading members" />;
+```
+
+A ring that turns while something is in flight. It takes its colour from the surrounding text, so
+it works on any surface, and it stops turning under `prefers-reduced-motion` — a static ring still
+reads as an indicator.
+
+**It is decorative unless you give it a `label`.** Without one it carries no role and is hidden
+from assistive technology, which is correct whenever something nearby already says work is in
+progress: visible text, or a container with `aria-busy`. A label turns it into a `status` with that
+accessible name. Making the announcement opt-in is what stops a screen reader hearing the same
+thing twice, which is the usual failure when a spinner sits beside the word "Loading".
+
+`Button` uses it internally for its own loading state, where the button already carries `aria-busy`
+and the spinner stays decorative.
 
 ## Theming
 

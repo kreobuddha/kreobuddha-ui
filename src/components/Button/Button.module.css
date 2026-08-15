@@ -172,25 +172,11 @@
   opacity: 0;
 }
 
+/* Only positioning lives here: the ring itself is the public Spinner. */
 .spinner {
   position: absolute;
   inset: 0;
   margin: auto;
-  width: 1em;
-  height: 1em;
-  border: var(--kreo-border-w-focus) solid currentcolor;
-  border-top-color: transparent;
-  border-radius: var(--kreo-radius-full);
-
-  /* A literal rather than a motion token: the scale holds transition durations, and a looping
-     rotation is a different kind of value that no shipped token expresses. */
-  animation: spin 700ms linear infinite;
-}
-
-@keyframes spin {
-  to {
-    transform: rotate(360deg);
-  }
 }
 
 .icon {
@@ -217,13 +203,6 @@
   overflow: visible;
   white-space: normal;
   text-overflow: clip;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  /* A static ring still reads as an indicator, and `aria-busy` carries the state regardless. */
-  .spinner {
-    animation: none;
-  }
 }
 
 /* In forced-colors mode box-shadow is not painted, so focus falls back to a real outline,
