@@ -5,7 +5,7 @@ data-dense frontend applications.
 
 ## Status: early, but published
 
-**Five components ship today: `Button`, `IconButton`, `Badge`, `Spinner` and `Alert`.** Everything else in
+**Six components ship today: `Button`, `IconButton`, `TextField`, `Badge`, `Spinner` and `Alert`.** Everything else in
 [docs/ROADMAP.md](docs/ROADMAP.md) is a plan, not an available feature. The package is published so
 it can be consumed normally; treat the `0.x` line as a moving target and pin what you depend on.
 
