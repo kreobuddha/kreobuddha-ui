@@ -93,5 +93,6 @@ above catches a component that passes every check and looks wrong.
 
 ## 8. Release
 
-One component, one release. Version bump, a new heading in the changelog, merge, tag; the publishing
-workflow does the rest.
+One component, one release. Version bump, a new heading in the changelog, merge, then run the
+release workflow with that version. It publishes, tags the commit and writes the GitHub release
+from the changelog heading — so the heading has to be there before the run, not after.

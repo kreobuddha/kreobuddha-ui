@@ -18,7 +18,9 @@ exact version and action. See ADR-0006 for how releases are authenticated.
 4. The release is published from CI. `.github/workflows/release.yml` runs the same checks as
    `ci.yml` and then publishes through npm trusted publishing (OIDC), so no npm token is stored
    anywhere.
-5. A `vX.Y.Z` tag and a matching GitHub release are pushed.
+5. The same run tags the released commit `vX.Y.Z` and publishes a GitHub release whose notes are
+   read out of `CHANGELOG.md` by `scripts/release-notes.mjs`. None of this is a manual step, and
+   none of it happens if the publish fails.
 
 `0.3.0` is the exception to step 4: npm can only attach a trusted publisher to a package that
 already exists, so the very first version was published by hand. Every release after it goes
@@ -31,6 +33,19 @@ version number can never be reused once it reaches the registry.
 `publishConfig.provenance` is on, and provenance can only be produced by a CI run with an OIDC
 token. A local `npm publish` therefore fails now — deliberately. Releasing from a laptop is no
 longer possible, which is what keeps step 4 honest.
+
+### Branches
+
+The repository deletes a branch when its pull request merges. A merged branch that stays around
+still looks like work in progress, and the one real incident this project has had came from exactly
+that confusion: a pull request merged into a stale branch eleven seconds after that branch had gone
+to `master`, and the commit sat in a branch nobody would merge again.
+
+The tag is the recovery point, not the branch. Once a release is tagged, its branch holds nothing
+the tag does not.
+
+Do not stack pull requests on top of each other without a reason. If you do, merge bottom-up and
+check that each one retargets `master` before merging it.
 
 ### One-time setup on npmjs.com
 
