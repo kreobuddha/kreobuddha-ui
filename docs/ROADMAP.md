@@ -9,8 +9,8 @@ verification quality.
 ## Status
 
 Phase 0 and Phase 1 are complete. The repository is public at `kreobuddha/kreobuddha-ui` with CI
-green; the package is published to npm as `@kreobuddha/ui` (ADR-0006). Phase 2 is in progress: `Badge` and `Spinner` are
-done, `IconButton` and `Alert` are not started.
+green; the package is published to npm as `@kreobuddha/ui` (ADR-0006). Phase 2 is in progress: `Badge`, `Spinner` and
+`IconButton` are done, `Alert` is not started.
 
 ## Phase 0 — Local repository and package foundation — **done**
 
@@ -64,7 +64,7 @@ Exit criteria:
 
 Candidate components:
 
-- `IconButton`;
+- `IconButton` — **done**: square, `label` required and compiler-checked;
 - `Spinner` — **done**, extracted from `Button` rather than shipped twice;
 - `Badge` — **done** in `0.4.0`: tones and an optional dot, non-interactive, no new tokens;
 - `Alert`.
