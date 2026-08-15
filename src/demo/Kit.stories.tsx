@@ -3,10 +3,13 @@ import type { CSSProperties, ReactElement, ReactNode } from 'react';
 
 import { Alert } from '../components/Alert/Alert.js';
 import { Badge } from '../components/Badge/Badge.js';
+import { Checkbox } from '../components/Checkbox/Checkbox.js';
 import { Button } from '../components/Button/Button.js';
+import { FieldGroup } from '../components/FieldGroup/FieldGroup.js';
 import { IconButton } from '../components/IconButton/IconButton.js';
 import { Select } from '../components/Select/Select.js';
 import { Spinner } from '../components/Spinner/Spinner.js';
+import { Switch } from '../components/Switch/Switch.js';
 import { Textarea } from '../components/Textarea/Textarea.js';
 import { TextField } from '../components/TextField/TextField.js';
 
@@ -351,6 +354,33 @@ export const Kit: Story = {
             <option value="utc">UTC</option>
           </Select>
         </div>
+      </Section>
+
+      <Section title="Checkbox and Switch">
+        <div style={{ display: 'flex', gap: 'var(--kreo-space-8)', flexWrap: 'wrap' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--kreo-space-3)' }}>
+            <Checkbox label="Off" />
+            <Checkbox label="On" defaultChecked />
+            <Checkbox label="Some of these" indeterminate />
+            <Checkbox label="Unavailable" disabled defaultChecked />
+          </div>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--kreo-space-3)' }}>
+            <Switch label="Off" />
+            <Switch label="On" defaultChecked />
+            <Switch label="Unavailable" disabled defaultChecked />
+          </div>
+        </div>
+      </Section>
+
+      <Section title="FieldGroup — a settings form with no wrapper of its own">
+        <FieldGroup legend="Notify me about" hint="You can change any of this later.">
+          <Checkbox label="Releases" defaultChecked />
+          <Checkbox label="Incidents" />
+        </FieldGroup>
+
+        <FieldGroup legend="Workspace security" error="Turn on two-factor before inviting anyone.">
+          <Switch label="Require two-factor authentication" />
+        </FieldGroup>
       </Section>
 
       <Section title="A field and a button sit level">

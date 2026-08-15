@@ -9,6 +9,19 @@ explicitly rather than treated as disposable.
 
 ## [Unreleased]
 
+### Added
+
+- `Checkbox` — a drawn box over a real checkbox, with the label as part of the target. Supports
+  `indeterminate`, which has no HTML attribute and so cannot be set without a ref; it is a visual
+  and assistive state only and still submits as unchecked.
+- `Switch` — a checkbox underneath with `role="switch"` over it, so it is announced as on or off
+  while keeping native keyboard handling and form participation. No `required`: a switch is always
+  in one of its two states.
+- `FieldGroup` — a real `<fieldset>` and `<legend>`, so a set of controls is announced as a group.
+  Its hint and error describe the set rather than each control, and `disabled` switches off
+  everything inside it natively.
+- Contrast measurements for the box edge, the switch track and the thumb in both states.
+
 ## [0.11.0] — 2026-08-16
 
 ### Added

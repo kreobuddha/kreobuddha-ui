@@ -1,0 +1,119 @@
+/* A track with a thumb, drawn over a real checkbox. The label sits beside it, so the stack from
+   `../field/field.module.css` does not apply — only the dimming and the message styles are shared. */
+
+@import '../../styles.css';
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--kreo-space-1);
+}
+
+.disabled {
+  composes: disabled from '../field/field.module.css';
+}
+
+.row {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--kreo-space-2);
+}
+
+.control {
+  appearance: none;
+  position: relative;
+  flex: none;
+  width: 36px;
+  height: 20px;
+  margin: 0;
+  background: var(--kreo-surface-hover);
+  border: var(--kreo-border-w) solid var(--kreo-border-control);
+  border-radius: 999px;
+  cursor: pointer;
+  transition: var(--kreo-transition-color);
+}
+
+/* The thumb. Drawn on the control itself so no extra element is needed and the whole track stays
+   one hit area. */
+.control::after {
+  content: '';
+  position: absolute;
+  inset-block-start: 2px;
+  inset-inline-start: 2px;
+  width: 14px;
+  height: 14px;
+  background: var(--kreo-text-muted);
+  border-radius: 50%;
+  transition:
+    var(--kreo-transition-color),
+    translate var(--kreo-duration-base) var(--kreo-ease);
+}
+
+.control:checked {
+  background: var(--kreo-accent-500);
+  border-color: var(--kreo-accent-500);
+}
+
+.control:checked::after {
+  background: var(--kreo-text-on-accent);
+  translate: 16px 0;
+}
+
+.control:focus-visible {
+  outline: none;
+  border-color: var(--kreo-border-focus);
+  box-shadow: 0 0 0 var(--kreo-border-w-focus) var(--kreo-border-focus);
+}
+
+.control:disabled {
+  cursor: not-allowed;
+}
+
+.invalid {
+  border-color: var(--kreo-border-danger);
+}
+
+.label {
+  font: var(--kreo-type-body);
+  color: var(--kreo-text-primary);
+  cursor: pointer;
+
+  /* Lines the text up with the middle of the track rather than the top of it. */
+  padding-block-start: 1px;
+}
+
+.disabled .label {
+  cursor: not-allowed;
+}
+
+/* The messages line up under the label rather than under the track. 36px track plus the row gap. */
+.messages {
+  padding-inline-start: calc(36px + var(--kreo-space-2));
+}
+
+@media (prefers-reduced-motion: reduce) {
+  /* The thumb still moves, because its position is the state — only the animation is dropped. */
+  .control::after {
+    transition: none;
+  }
+}
+
+@media (forced-colors: active) {
+  /* Neither the accent track nor the thumb colour is painted here, so on and off would look
+     identical. The system keywords are the only colours that survive. */
+  .control {
+    border-color: CanvasText;
+  }
+
+  .control::after {
+    background: CanvasText;
+  }
+
+  .control:checked {
+    background: Highlight;
+  }
+
+  .control:checked::after {
+    background: Canvas;
+  }
+}

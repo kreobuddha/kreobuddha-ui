@@ -1,0 +1,50 @@
+/* A fieldset carries a default border, padding and margin in every browser. All three are cleared
+   here: the grouping is semantic, and drawing a box around every set of checkboxes would make a
+   settings page look like a stack of panels. */
+
+@import '../../styles.css';
+
+.group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--kreo-space-2);
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: none;
+}
+
+.disabled {
+  composes: disabled from '../field/field.module.css';
+}
+
+.legend {
+  composes: label from '../field/field.module.css';
+
+  /* A legend is not a flex item — it is taken out of flow by the fieldset — so the gap above the
+     controls has to be its own margin. */
+  margin-block-end: var(--kreo-space-2);
+  padding: 0;
+}
+
+.controls {
+  display: flex;
+  gap: var(--kreo-space-2);
+}
+
+.vertical {
+  flex-direction: column;
+}
+
+.horizontal {
+  flex-flow: row wrap;
+  gap: var(--kreo-space-4);
+}
+
+.hint {
+  composes: hint from '../field/field.module.css';
+}
+
+.error {
+  composes: error from '../field/field.module.css';
+}

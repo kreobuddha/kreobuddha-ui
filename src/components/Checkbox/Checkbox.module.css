@@ -1,0 +1,116 @@
+/* The label sits beside the control here rather than above it, so the stack from
+   `../field/field.module.css` does not apply — only the dimming and the message styles are shared. */
+
+@import '../../styles.css';
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--kreo-space-1);
+}
+
+.disabled {
+  composes: disabled from '../field/field.module.css';
+}
+
+.row {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--kreo-space-2);
+}
+
+.control {
+  /* The box is drawn rather than left to the platform, so it carries the same radius and focus
+     ring as every other control. The element itself stays a real checkbox: keyboard, form
+     participation and the `indeterminate` property are all native. */
+  appearance: none;
+  flex: none;
+  width: 18px;
+  height: 18px;
+  margin: 0;
+  background: var(--kreo-surface-card);
+  border: var(--kreo-border-w) solid var(--kreo-border-control);
+  border-radius: var(--kreo-radius-sm);
+  cursor: pointer;
+  transition: var(--kreo-transition-color);
+
+  /* Lines the box up with the first line of the label rather than the top of its box. */
+  margin-block-start: 2px;
+
+  /* The mark lives on a pseudo-element rather than on the box itself. Masking the box would clip
+     the box: everything outside the tick's own strokes — the fill and the border with it — stops
+     being painted, leaving a stray accent-coloured scratch where the control should be. */
+  display: grid;
+  place-items: center;
+}
+
+.control:focus-visible {
+  outline: none;
+  border-color: var(--kreo-border-focus);
+  box-shadow: 0 0 0 var(--kreo-border-w-focus) var(--kreo-border-focus);
+}
+
+.control:checked,
+.control:indeterminate {
+  background-color: var(--kreo-accent-500);
+  border-color: var(--kreo-accent-500);
+}
+
+/* The mark's colour comes from a token rather than being hard-coded inside the data URI: a
+   literal there would be invisible to the contrast script and would not follow the theme. */
+.control::after {
+  content: '';
+  width: 14px;
+  height: 14px;
+  background: var(--kreo-text-on-accent);
+  mask-repeat: no-repeat;
+  mask-position: center;
+}
+
+.control:checked::after {
+  mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none'%3E%3Cpath d='M3.5 8.5l3 3 6-6' stroke='%23000' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+}
+
+/* Indeterminate wins over checked: a box can be both, and the dash is the more truthful of the
+   two — it says "partly", where the tick would claim "all". */
+.control:indeterminate::after {
+  mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none'%3E%3Cpath d='M4 8h8' stroke='%23000' stroke-width='2.5' stroke-linecap='round'/%3E%3C/svg%3E");
+}
+
+.control:disabled {
+  cursor: not-allowed;
+}
+
+.invalid {
+  border-color: var(--kreo-border-danger);
+}
+
+.label {
+  font: var(--kreo-type-body);
+  color: var(--kreo-text-primary);
+  cursor: pointer;
+}
+
+.disabled .label {
+  cursor: not-allowed;
+}
+
+.required {
+  margin-inline-start: 2px;
+  color: var(--kreo-text-danger);
+}
+
+/* The messages line up under the label rather than under the box, so they read as belonging to
+   the sentence rather than to the control. 18px box plus the row's gap. */
+.messages {
+  padding-inline-start: calc(18px + var(--kreo-space-2));
+}
+
+@media (forced-colors: active) {
+  /* `appearance: none` removed the system rendering, and neither the accent fill nor the drawn
+     mark is painted here — a checked box would be indistinguishable from an empty one. Handing
+     the control back to the platform is the only treatment that stays correct. */
+  .control {
+    appearance: auto;
+  }
+}

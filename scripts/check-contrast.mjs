@@ -61,6 +61,14 @@ const PAIRS = [
   ['field error', '--kreo-surface-page', '--kreo-text-danger', TEXT],
   ['field slot', '--kreo-surface-card', '--kreo-text-muted', TEXT],
   ['select chevron', '--kreo-surface-card', '--kreo-text-muted', NON_TEXT],
+  // Checkbox and Switch: the box and the track are drawn, so their edges and marks are measured
+  // like any other control boundary.
+  // The checked box's mark is `--kreo-text-on-accent` on `--kreo-accent-500`, already measured
+  // above as 'focus ring on filled'. The label is 'ghost label'. Neither is repeated here.
+  ['checkbox box edge', '--kreo-surface-page', '--kreo-border-control', NON_TEXT],
+  ['switch track off', '--kreo-surface-page', '--kreo-border-control', NON_TEXT],
+  ['switch thumb off', '--kreo-surface-hover', '--kreo-text-muted', NON_TEXT],
+  ['switch thumb on', '--kreo-accent-500', '--kreo-text-on-accent', NON_TEXT],
   ['field focus border', '--kreo-surface-card', '--kreo-border-focus', NON_TEXT],
   ['field invalid border', '--kreo-surface-card', '--kreo-border-danger', NON_TEXT],
   ['success mark', '--kreo-surface-page', '--kreo-icon-success', NON_TEXT],
