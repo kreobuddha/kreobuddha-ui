@@ -1,22 +1,9 @@
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import axe from 'axe-core';
 import { createRef } from 'react';
 import { describe, expect, test } from 'vitest';
 
 import { Badge } from './Badge.js';
-
-/**
- * Colour contrast is excluded because jsdom does not lay out or paint, so axe cannot measure it.
- * Contrast is measured against the token palette by `npm run check:contrast` instead.
- */
-const expectNoAxeViolations = async (container: HTMLElement): Promise<void> => {
-  const results = await axe.run(container, {
-    rules: { 'color-contrast': { enabled: false } },
-  });
-
-  expect(results.violations).toEqual([]);
-};
 
 describe('semantics', () => {
   test('renders its children as text', () => {
@@ -117,28 +104,5 @@ describe('dot', () => {
     render(<Badge dot>passing</Badge>);
 
     expect(screen.getByText('passing').textContent).toBe('passing');
-  });
-});
-
-describe('accessibility', () => {
-  test('has no axe violations across tones, with and without a dot', async () => {
-    const { container } = render(
-      <div>
-        <Badge>draft</Badge>
-        <Badge tone="accent">beta</Badge>
-        <Badge tone="success" dot>
-          passing
-        </Badge>
-        <Badge tone="warning" dot>
-          deprecated
-        </Badge>
-        <Badge tone="danger" dot>
-          3 failed
-        </Badge>
-        <Badge tone="info">read-only</Badge>
-      </div>
-    );
-
-    await expectNoAxeViolations(container);
   });
 });

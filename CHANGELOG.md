@@ -9,6 +9,30 @@ explicitly rather than treated as disposable.
 
 ## [Unreleased]
 
+### Added
+
+- Eight tokens for message surfaces: `--kreo-surface-{success,warning,danger,info}-soft` and the
+  labels measured against them, `--kreo-text-on-{success,warning,danger,info}-soft`. A tinted
+  surface needs its own label colour, because the status text is tuned against the page and does
+  not survive being placed on its own tint in the light theme.
+- `--kreo-shadow-overlay`, for components that float over the page. Overlays keep a border as well:
+  forced-colors mode paints no shadow, and a panel relying on one would lose its edge there.
+- `docs/COMPONENT_RECIPE.md`, the mechanical checklist for adding a component, and
+  `npm run new:component`, which writes its four files with a skeleton that already passes.
+- `npm run verify`, which chains the nine checks into one call, and `npm run test:one`, which runs
+  the unit project alone for a fast inner loop.
+
+### Changed
+
+- The accessibility gate is now the browser scan alone. The jsdom axe test each component carried
+  was removed along with the `axe-core` dependency: jsdom cannot judge contrast, and the browser
+  scan already covers every story automatically.
+
+### Fixed
+
+- Contrast measurement now covers the placeholder colour, the field border, and body text on each
+  message tint — 51 pairs across both themes, up from 31.
+
 ## [0.4.0] — 2026-08-15
 
 ### Added

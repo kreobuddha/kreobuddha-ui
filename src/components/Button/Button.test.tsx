@@ -1,22 +1,9 @@
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import axe from 'axe-core';
 import { createRef, type FormEvent } from 'react';
 import { describe, expect, test, vi } from 'vitest';
 
 import { Button } from './Button.js';
-
-/**
- * Colour contrast is excluded because jsdom does not lay out or paint, so axe cannot measure it.
- * Contrast is verified visually against the token palette instead.
- */
-const expectNoAxeViolations = async (container: HTMLElement): Promise<void> => {
-  const results = await axe.run(container, {
-    rules: { 'color-contrast': { enabled: false } },
-  });
-
-  expect(results.violations).toEqual([]);
-};
 
 describe('semantics', () => {
   test('renders a button whose accessible name comes from its children', () => {
@@ -199,25 +186,5 @@ describe('long labels', () => {
     expect(wrapped.querySelector('button')?.className).not.toBe(
       clipped.querySelector('button')?.className
     );
-  });
-});
-
-describe('accessibility', () => {
-  test('has no axe violations across variants, sizes and states', async () => {
-    const { container } = render(
-      <div>
-        <Button>Filled</Button>
-        <Button variant="outlined">Outlined</Button>
-        <Button variant="ghost">Ghost</Button>
-        <Button size="sm">Small</Button>
-        <Button size="lg">Large</Button>
-        <Button danger>Delete workspace</Button>
-        <Button disabled>Disabled</Button>
-        <Button loading>Loading</Button>
-        <Button icon={<span>+</span>}>With icon</Button>
-      </div>
-    );
-
-    await expectNoAxeViolations(container);
   });
 });

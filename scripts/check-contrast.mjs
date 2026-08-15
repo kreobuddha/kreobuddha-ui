@@ -38,6 +38,18 @@ const PAIRS = [
   ['warning text on card', '--kreo-surface-card', '--kreo-text-warning', TEXT],
   ['info text', '--kreo-surface-page', '--kreo-text-info', TEXT],
   ['info text on card', '--kreo-surface-card', '--kreo-text-info', TEXT],
+  // Message surfaces: the label and the body text both sit on the tint, so both are measured.
+  ['success on tint', '--kreo-surface-success-soft', '--kreo-text-on-success-soft', TEXT],
+  ['warning on tint', '--kreo-surface-warning-soft', '--kreo-text-on-warning-soft', TEXT],
+  ['danger on tint', '--kreo-surface-danger-soft', '--kreo-text-on-danger-soft', TEXT],
+  ['info on tint', '--kreo-surface-info-soft', '--kreo-text-on-info-soft', TEXT],
+  ['body on success tint', '--kreo-surface-success-soft', '--kreo-text-body', TEXT],
+  ['body on warning tint', '--kreo-surface-warning-soft', '--kreo-text-body', TEXT],
+  ['body on danger tint', '--kreo-surface-danger-soft', '--kreo-text-body', TEXT],
+  ['body on info tint', '--kreo-surface-info-soft', '--kreo-text-body', TEXT],
+  // Field anatomy: the placeholder is the pair most often left unmeasured.
+  ['placeholder', '--kreo-surface-card', '--kreo-text-subtle', TEXT],
+  ['field border', '--kreo-surface-card', '--kreo-border-control', NON_TEXT],
   ['success mark', '--kreo-surface-page', '--kreo-icon-success', NON_TEXT],
   ['warning mark', '--kreo-surface-page', '--kreo-icon-warning', NON_TEXT],
   ['danger mark', '--kreo-surface-page', '--kreo-icon-danger', NON_TEXT],
