@@ -9,6 +9,8 @@ explicitly rather than treated as disposable.
 
 ## [Unreleased]
 
+## [0.8.0] — 2026-08-15
+
 ### Added
 
 - `Alert` — a message about what happened or what is true, in four tones, with an optional title
