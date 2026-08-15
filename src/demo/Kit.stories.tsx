@@ -1,8 +1,12 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import type { CSSProperties, ReactElement, ReactNode } from 'react';
 
+import { Alert } from '../components/Alert/Alert.js';
 import { Badge } from '../components/Badge/Badge.js';
 import { Button } from '../components/Button/Button.js';
+import { IconButton } from '../components/IconButton/IconButton.js';
+import { Spinner } from '../components/Spinner/Spinner.js';
+import { TextField } from '../components/TextField/TextField.js';
 
 /**
  * A single page showing everything the library currently ships, so progress is visible in one
@@ -51,6 +55,19 @@ interface SectionProps {
   title: string;
   children: ReactNode;
 }
+
+/** A stand-in mark, so the icon sections do not depend on an icon set the library does not ship. */
+const Mark = (): ReactElement => (
+  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+    <path
+      d="M3 8h10M9 4l4 4-4 4"
+      stroke="currentColor"
+      strokeWidth="1.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+  </svg>
+);
 
 const Section = ({ title, children }: SectionProps): ReactElement => (
   <section style={sectionStyle}>
@@ -232,6 +249,74 @@ export const Kit: Story = {
         <div style={row}>
           <Button variant="outlined">Invite member</Button>
           <Badge tone="accent">beta</Badge>
+        </div>
+      </Section>
+
+      <Section title="IconButton — variants and sizes">
+        <div style={row}>
+          <IconButton label="Continue" icon={<Mark />} />
+          <IconButton label="Continue" icon={<Mark />} variant="outlined" />
+          <IconButton label="Continue" icon={<Mark />} variant="ghost" />
+          <IconButton label="Delete" icon={<Mark />} danger />
+          <IconButton label="Saving" icon={<Mark />} loading />
+          <IconButton label="Unavailable" icon={<Mark />} disabled />
+        </div>
+        <div style={row}>
+          <IconButton label="Continue" icon={<Mark />} size="xs" variant="ghost" />
+          <IconButton label="Continue" icon={<Mark />} size="sm" variant="ghost" />
+          <IconButton label="Continue" icon={<Mark />} size="md" variant="ghost" />
+          <IconButton label="Continue" icon={<Mark />} size="lg" variant="ghost" />
+        </div>
+      </Section>
+
+      <Section title="Spinner — sizes">
+        <div style={row}>
+          <Spinner size="sm" />
+          <Spinner size="md" />
+          <Spinner size="lg" />
+          <Spinner size="md" label="Loading" />
+        </div>
+      </Section>
+
+      <Section title="Alert — tones">
+        <Alert tone="success">Changes saved.</Alert>
+        <Alert tone="warning">The invitation expires today.</Alert>
+        <Alert tone="danger" title="Could not reach the server">
+          The workspace was changed by someone else.
+        </Alert>
+        <Alert tone="info" onDismiss={(): void => undefined}>
+          This workspace is read-only.
+        </Alert>
+      </Section>
+
+      <Section title="TextField — sizes and slots">
+        <div style={{ display: 'flex', gap: 'var(--kreo-space-4)', alignItems: 'flex-end' }}>
+          <TextField label="Small" size="sm" placeholder="you@example.com" />
+          <TextField label="Medium" placeholder="you@example.com" />
+          <TextField label="Large" size="lg" placeholder="you@example.com" />
+        </div>
+        <div style={row}>
+          <TextField label="Amount" prefix="$" suffix="USD" defaultValue="1200" />
+          <TextField label="Unavailable" disabled defaultValue="you@example.com" />
+          <TextField label="Read-only" readOnly defaultValue="you@example.com" />
+        </div>
+      </Section>
+
+      <Section title="TextField — hint, error and required">
+        <div style={{ display: 'flex', gap: 'var(--kreo-space-4)', alignItems: 'flex-start' }}>
+          <TextField label="Email" required hint="We only use this to send receipts." />
+          <TextField
+            label="Email"
+            defaultValue="not-an-address"
+            error="Enter an address such as name@example.com."
+          />
+        </div>
+      </Section>
+
+      <Section title="A field and a button sit level">
+        <div style={{ display: 'flex', gap: 'var(--kreo-space-3)', alignItems: 'flex-end' }}>
+          <TextField label="Workspace" placeholder="acme" />
+          <Button>Create</Button>
         </div>
       </Section>
 

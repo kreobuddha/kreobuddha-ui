@@ -9,6 +9,22 @@ explicitly rather than treated as disposable.
 
 ## [Unreleased]
 
+### Added
+
+- `TextField` — a single-line text input that renders its own label, hint and error, and wires them
+  to the input so they are announced with it rather than sitting near it. `error` is what makes the
+  field invalid; there is no separate flag, and when both are present the error is announced before
+  the hint. Sizes match `Button`, so a field and a button sit level side by side. `prefix` and
+  `suffix` slots sit inside the border, and every native `<input>` prop passes through.
+- Contrast measurements for the seven pairings a field introduces, including the focus and invalid
+  borders and the value on the card surface.
+
+### Changed
+
+- Releases now tag the commit and publish a GitHub release from the same workflow run that
+  publishes to npm, with notes read out of this file. Four releases had reached npm with a tag and
+  no GitHub release, because both were manual steps taken afterwards.
+
 ## [0.8.0] — 2026-08-15
 
 ### Added

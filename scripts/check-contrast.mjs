@@ -55,6 +55,13 @@ const PAIRS = [
   // Field anatomy: the placeholder is the pair most often left unmeasured.
   ['placeholder', '--kreo-surface-card', '--kreo-text-subtle', TEXT],
   ['field border', '--kreo-surface-card', '--kreo-border-control', NON_TEXT],
+  ['field value', '--kreo-surface-card', '--kreo-text-primary', TEXT],
+  ['field label', '--kreo-surface-page', '--kreo-text-muted', TEXT],
+  ['field hint', '--kreo-surface-page', '--kreo-text-muted', TEXT],
+  ['field error', '--kreo-surface-page', '--kreo-text-danger', TEXT],
+  ['field slot', '--kreo-surface-card', '--kreo-text-muted', TEXT],
+  ['field focus border', '--kreo-surface-card', '--kreo-border-focus', NON_TEXT],
+  ['field invalid border', '--kreo-surface-card', '--kreo-border-danger', NON_TEXT],
   ['success mark', '--kreo-surface-page', '--kreo-icon-success', NON_TEXT],
   ['warning mark', '--kreo-surface-page', '--kreo-icon-warning', NON_TEXT],
   ['danger mark', '--kreo-surface-page', '--kreo-icon-danger', NON_TEXT],

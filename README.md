@@ -125,6 +125,59 @@ alert then interrupts (`role="alert"`); the quieter tones wait for a pause (`rol
 text sits on the body colour rather than the tone colour, because a whole paragraph in a status
 colour is harder to read than it is informative.
 
+### `TextField`
+
+| Prop        | Type                   | Default |
+| ----------- | ---------------------- | ------- |
+| `label`     | `string`               | —       |
+| `size`      | `'sm' \| 'md' \| 'lg'` | `'md'`  |
+| `hint`      | `ReactNode`            | —       |
+| `error`     | `ReactNode`            | —       |
+| `prefix`    | `ReactNode`            | —       |
+| `suffix`    | `ReactNode`            | —       |
+| `fullWidth` | `boolean`              | `false` |
+| `className` | `string`               | —       |
+
+Every other prop is a native `<input>` prop, including `value`, `onChange`, `type`, `disabled`,
+`readOnly`, `required` and `placeholder`. `ref` points at the `<input>`; `className` goes to the
+wrapper around the whole field.
+
+```tsx
+<TextField
+  label="Email"
+  type="email"
+  value={email}
+  onChange={(event) => setEmail(event.target.value)}
+  hint="We only use this to send receipts."
+  error={invalid ? 'Enter an address such as name@example.com.' : undefined}
+  required
+/>
+```
+
+**`label` is required.** A field without a visible label is unusable by anyone not looking at it,
+and a placeholder is not a substitute: it disappears the moment someone starts typing.
+
+**The `error` is what makes the field invalid.** There is no separate `invalid` prop, because a
+field flagged invalid without saying why is a dead end, and two props that must agree eventually
+disagree. When both are present the error is announced before the hint — the problem first, then
+the guidance.
+
+The field generates the ids that connect the label, hint and error to the input, so two fields on a
+page never collide. Pass `id` to take that over for the input.
+
+`required` renders an asterisk and sets the native attribute; the asterisk is `aria-hidden`, so the
+accessible name stays the label alone. Convey the requirement in the label or hint too, since an
+asterisk is a convention rather than a word.
+
+Slots sit at the **edges** inside the border — a `prefix` against the left, a `suffix` against the
+right, with the input filling everything between. A suffix does not hug the value, and cannot
+without the field measuring the text, so a slot meant to read as part of the value (`.example.dev`
+after a workspace name) will look detached. Units, currency marks and search glyphs are what these
+are for.
+
+Text in a slot **is** announced — `suffix="USD"` is read as part of the field. Add `aria-hidden`
+yourself to a purely decorative mark.
+
 ### `Badge`
 
 | Prop   | Type                                                                    | Default     |
