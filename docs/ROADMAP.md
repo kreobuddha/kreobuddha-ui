@@ -10,7 +10,7 @@ verification quality.
 
 Phase 0 and Phase 1 are complete. The repository is public at `kreobuddha/kreobuddha-ui` with CI
 green; the package is published to npm as `@kreobuddha/ui` (ADR-0006). Phase 2 is complete: `Badge`, `Spinner`, `IconButton`
-and `Alert` are done. Phase 3 is under way: `TextField` and `Textarea` are done.
+and `Alert` are done. Phase 3 is under way: `TextField`, `Textarea` and `Select` are done.
 
 ## Phase 0 — Local repository and package foundation — **done**
 
@@ -82,7 +82,7 @@ Candidate components:
 - `Textarea` — **done**;
 - `Checkbox`;
 - `Switch`;
-- native single `Select`.
+- native single `Select` — **done**.
 
 Goal: build a coherent accessible settings form with labels, descriptions, errors, required,
 disabled, read-only, and controlled behavior.

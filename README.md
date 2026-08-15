@@ -5,7 +5,7 @@ data-dense frontend applications.
 
 ## Status: early, but published
 
-**Seven components ship today: `Button`, `IconButton`, `TextField`, `Textarea`, `Badge`, `Spinner` and `Alert`.** Everything else in
+**Eight components ship today: `Button`, `IconButton`, `TextField`, `Textarea`, `Select`, `Badge`, `Spinner` and `Alert`.** Everything else in
 [docs/ROADMAP.md](docs/ROADMAP.md) is a plan, not an available feature. The package is published so
 it can be consumed normally; treat the `0.x` line as a moving target and pin what you depend on.
 
@@ -212,6 +212,44 @@ and `resize="none"` takes that away for a layout that must not move.
 
 **Dragging is vertical only, and that is not configurable.** A wider box breaks the form's column
 and does not make prose easier to read.
+
+### `Select`
+
+| Prop          | Type                   | Default |
+| ------------- | ---------------------- | ------- |
+| `label`       | `string`               | —       |
+| `size`        | `'sm' \| 'md' \| 'lg'` | `'md'`  |
+| `hint`        | `ReactNode`            | —       |
+| `error`       | `ReactNode`            | —       |
+| `placeholder` | `string`               | —       |
+| `fullWidth`   | `boolean`              | `false` |
+| `className`   | `string`               | —       |
+
+Every other prop is a native `<select>` prop. `ref` points at the `<select>`; `className` goes to
+the wrapper. `multiple` is not supported — a multi-select needs a different control, not a taller
+one.
+
+```tsx
+<Select label="Timezone" placeholder="Choose a timezone" required value={tz} onChange={pick}>
+  <option value="utc">UTC</option>
+  <option value="cet">Central European Time</option>
+</Select>
+```
+
+It is a real `<select>`. Keyboard behaviour, type-ahead and the platform's own list on touch all
+come from the browser, which is the whole reason not to build a custom listbox here.
+
+**`placeholder` becomes a disabled first option** with an empty value, selected until a choice is
+made. That is what lets native `required` mean what it says: the field cannot report a value nobody
+picked, and the reader cannot go back to "nothing" by accident. Leave it out when the first option
+is a genuine default — then the field starts on it, which is the browser's behaviour and usually
+the right one for a setting.
+
+An explicit `defaultValue` or a controlled `value` wins over the placeholder.
+
+The chevron is drawn by the component rather than left to the platform, which paints a different
+arrow per operating system. It does not intercept clicks, so anywhere inside the border opens the
+list.
 
 ### `Badge`
 

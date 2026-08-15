@@ -27,3 +27,5 @@ export type {
   TextareaResize,
   TextareaSize,
 } from './components/Textarea/Textarea.js';
+export { Select } from './components/Select/Select.js';
+export type { SelectProps, SelectSize } from './components/Select/Select.js';

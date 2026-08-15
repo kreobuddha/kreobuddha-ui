@@ -1,0 +1,119 @@
+/* The parts every field in this library draws identically: the stack, the label, the bordered
+   shell with its focus and invalid treatment, and the two lines underneath.
+
+   Extracted once `TextField`, `Textarea` and `Select` were three components repeating it. Consumed
+   through `composes`, so each component keeps its own class names and can still add to them —
+   nothing here is a public class, and the customization boundary remains the `--kreo-*` tokens. */
+
+@import '../../styles.css';
+
+.field {
+  display: inline-flex;
+  flex-direction: column;
+  gap: var(--kreo-space-1);
+  max-width: 100%;
+}
+
+.fullWidth {
+  display: flex;
+}
+
+.label {
+  font: var(--kreo-type-label);
+  letter-spacing: var(--kreo-tracking-label);
+  color: var(--kreo-text-muted);
+  text-transform: uppercase;
+}
+
+.required {
+  margin-inline-start: 2px;
+  color: var(--kreo-text-danger);
+}
+
+/* The whole field dims together, at the same 0.45 `Button` uses. Dimming only the control would
+   leave the label at full strength, which reads as an active field with a broken box. */
+.disabled {
+  cursor: not-allowed;
+  opacity: 0.45;
+}
+
+.shell {
+  display: flex;
+  min-width: 0;
+  background: var(--kreo-surface-card);
+  border: var(--kreo-border-w) solid var(--kreo-border-control);
+  border-radius: var(--kreo-radius-md);
+  transition: var(--kreo-transition-color);
+}
+
+/* Drawn inside the box, so gaining focus never reflows the layout — the treatment `Button`
+   uses. The border is recoloured too: the ring alone reads as a glow rather than as a state. */
+.shell:focus-within {
+  border-color: var(--kreo-border-focus);
+  box-shadow: var(--kreo-focus-ring);
+}
+
+.invalid {
+  border-color: var(--kreo-border-danger);
+}
+
+/* The control carries the padding rather than the shell, so every point inside the border that is
+   not a slot is part of the control's own hit area. A click near the edge focuses the field, and
+   no JavaScript is needed to make that true. */
+.control {
+  flex: 1;
+  min-width: 0;
+  background: none;
+  border: none;
+  color: var(--kreo-text-primary);
+  font: inherit;
+}
+
+.control:focus {
+  outline: none;
+}
+
+.control::placeholder {
+  color: var(--kreo-text-subtle);
+}
+
+/* Firefox dims a disabled control's text on its own, which lands on top of the wrapper's opacity
+   and takes the value below the surrounding label. */
+.control:disabled {
+  opacity: 1;
+  cursor: not-allowed;
+}
+
+.hint {
+  margin: 0;
+  font: var(--kreo-type-body);
+  font-size: var(--kreo-text-12);
+  color: var(--kreo-text-muted);
+}
+
+.error {
+  margin: 0;
+  font: var(--kreo-type-body);
+  font-size: var(--kreo-text-12);
+  color: var(--kreo-text-danger);
+}
+
+@media (forced-colors: active) {
+  /* Neither the recoloured border nor the ring is painted, so focus and invalid would look exactly
+     like rest. The system keywords are the only colours that survive here. */
+  .shell:focus-within {
+    border-color: Highlight;
+    outline: var(--kreo-border-w-focus) solid Highlight;
+    outline-offset: calc(var(--kreo-border-w) * -2);
+  }
+
+  .disabled {
+    opacity: 1;
+  }
+
+  .disabled .label,
+  .disabled .shell {
+    color: GrayText;
+    border-color: GrayText;
+  }
+}

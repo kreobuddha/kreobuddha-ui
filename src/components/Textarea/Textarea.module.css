@@ -1,106 +1,40 @@
-/* Component styles depend on the token layer, and declaring that dependency in CSS rather than
-   from TypeScript keeps the stylesheet out of the emitted declarations, where a `.css` specifier
-   is not resolvable. Vite inlines this into the single published `styles.css`. */
-@import '../../styles.css';
+/* The shared field parts live in `../field/field.module.css` and are pulled in with `composes`.
+   Only what is particular to a multi-line field is written here. */
 
 .field {
-  display: inline-flex;
-  flex-direction: column;
-  gap: var(--kreo-space-1);
-  max-width: 100%;
+  composes: field from '../field/field.module.css';
 }
 
 .fullWidth {
-  display: flex;
+  composes: fullWidth from '../field/field.module.css';
 }
 
-.label {
-  font: var(--kreo-type-label);
-  letter-spacing: var(--kreo-tracking-label);
-  color: var(--kreo-text-muted);
-  text-transform: uppercase;
-}
-
-.required {
-  margin-inline-start: 2px;
-  color: var(--kreo-text-danger);
-}
-
-/* The whole field dims together, at the same 0.45 `Button` and `TextField` use. */
-.field[data-disabled] {
-  cursor: not-allowed;
-  opacity: 0.45;
+/* A class rather than a `[data-disabled]` attribute: `composes` is only allowed on a plain single
+   class selector, and the shared dimming lives in the field module. */
+.disabled {
+  composes: disabled from '../field/field.module.css';
 }
 
 .shell {
-  display: flex;
-  min-width: 0;
-  background: var(--kreo-surface-card);
-  border: var(--kreo-border-w) solid var(--kreo-border-control);
-  border-radius: var(--kreo-radius-md);
-  transition: var(--kreo-transition-color);
-}
-
-/* Drawn inside the box, so gaining focus never reflows the layout — the treatment `TextField`
-   and `Button` share. */
-.shell:focus-within {
-  border-color: var(--kreo-border-focus);
-  box-shadow: var(--kreo-focus-ring);
+  composes: shell from '../field/field.module.css';
 }
 
 .invalid {
-  border-color: var(--kreo-border-danger);
+  composes: invalid from '../field/field.module.css';
 }
 
-/* The control carries the padding rather than the shell, so every point inside the border is part
-   of its own hit area — the same reason `TextField` does it. */
 .control {
-  flex: 1;
-  min-width: 0;
-  background: none;
-  border: none;
-  color: var(--kreo-text-primary);
-  font: inherit;
-}
-
-.control:focus {
-  outline: none;
-}
-
-.control::placeholder {
-  color: var(--kreo-text-subtle);
-}
-
-/* Firefox dims a disabled control's text on its own, which lands on top of the wrapper's opacity
-   and takes the value below the surrounding label. */
-.control:disabled {
-  opacity: 1;
-  cursor: not-allowed;
+  composes: control from '../field/field.module.css';
 }
 
 /* Vertical only. Horizontal dragging pushes the field out of the form's column and buys nothing:
-   a wider box does not make prose easier to read. `resize` is not painted in forced-colors mode
-   either way, so nothing is lost there. */
+   a wider box does not make prose easier to read. */
 .vertical {
   resize: vertical;
 }
 
 .none {
   resize: none;
-}
-
-.hint {
-  margin: 0;
-  font: var(--kreo-type-body);
-  font-size: var(--kreo-text-12);
-  color: var(--kreo-text-muted);
-}
-
-.error {
-  margin: 0;
-  font: var(--kreo-type-body);
-  font-size: var(--kreo-text-12);
-  color: var(--kreo-text-danger);
 }
 
 /* Sizes set the type scale and padding. Height comes from `rows`, so unlike a single-line field
@@ -128,24 +62,4 @@
 
 .lg .control {
   padding: var(--kreo-space-3) var(--kreo-control-px-lg);
-}
-
-@media (forced-colors: active) {
-  /* Neither the recoloured border nor the ring is painted, so focus and invalid would look exactly
-     like rest. The system keywords are the only colours that survive here. */
-  .shell:focus-within {
-    border-color: Highlight;
-    outline: var(--kreo-border-w-focus) solid Highlight;
-    outline-offset: calc(var(--kreo-border-w) * -2);
-  }
-
-  .field[data-disabled] {
-    opacity: 1;
-  }
-
-  .field[data-disabled] .label,
-  .field[data-disabled] .shell {
-    color: GrayText;
-    border-color: GrayText;
-  }
 }
