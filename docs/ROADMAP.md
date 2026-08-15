@@ -10,7 +10,8 @@ verification quality.
 
 Phase 0 and Phase 1 are complete. The repository is public at `kreobuddha/kreobuddha-ui` with CI
 green; the package is published to npm as `@kreobuddha/ui` (ADR-0006). Phase 2 is complete: `Badge`, `Spinner`, `IconButton`
-and `Alert` are done. Phase 3 is under way: `TextField`, `Textarea` and `Select` are done.
+and `Alert` are done. Phase 3 is complete: `TextField`, `Textarea`, `Select`, `Checkbox`, `Switch` and `FieldGroup` are
+done, and a settings form composes from them with no wrapper of its own.
 
 ## Phase 0 — Local repository and package foundation — **done**
 
@@ -74,14 +75,14 @@ matrices without introducing complex focus management.
 
 Each component remains a separate approved slice.
 
-## Phase 3 — Form foundation
+## Phase 3 — Form foundation — **done**
 
 Candidate components:
 
 - `TextField` — **done**;
 - `Textarea` — **done**;
-- `Checkbox`;
-- `Switch`;
+- `Checkbox` — **done**;
+- `Switch` — **done**;
 - native single `Select` — **done**.
 
 Goal: build a coherent accessible settings form with labels, descriptions, errors, required,

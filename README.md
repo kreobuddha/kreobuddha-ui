@@ -5,7 +5,7 @@ data-dense frontend applications.
 
 ## Status: early, but published
 
-**Eight components ship today: `Button`, `IconButton`, `TextField`, `Textarea`, `Select`, `Badge`, `Spinner` and `Alert`.** Everything else in
+**Eleven components ship today: `Button`, `IconButton`, `TextField`, `Textarea`, `Select`, `Checkbox`, `Switch`, `FieldGroup`, `Badge`, `Spinner` and `Alert`.** Everything else in
 [docs/ROADMAP.md](docs/ROADMAP.md) is a plan, not an available feature. The package is published so
 it can be consumed normally; treat the `0.x` line as a moving target and pin what you depend on.
 
@@ -250,6 +250,83 @@ An explicit `defaultValue` or a controlled `value` wins over the placeholder.
 The chevron is drawn by the component rather than left to the platform, which paints a different
 arrow per operating system. It does not intercept clicks, so anywhere inside the border opens the
 list.
+
+### `Checkbox`
+
+| Prop            | Type        | Default |
+| --------------- | ----------- | ------- |
+| `label`         | `ReactNode` | —       |
+| `hint`          | `ReactNode` | —       |
+| `error`         | `ReactNode` | —       |
+| `indeterminate` | `boolean`   | `false` |
+| `className`     | `string`    | —       |
+
+Every other prop is a native checkbox prop, including `checked`, `defaultChecked`, `onChange`,
+`name`, `value`, `required` and `disabled`.
+
+```tsx
+<Checkbox label="Send me release notes" hint="About one email a month." />
+```
+
+The label is part of the target: 18px of box is a small thing to hit, and the words beside it
+toggle the same control.
+
+**`indeterminate` has no HTML attribute**, only a DOM property, so a consumer cannot set it without
+a ref of their own — which is why it is a prop here. It is a visual and assistive state only: the
+box still submits as unchecked, because that is what the platform does and inventing a third value
+would break every form that reads it. It also wins over `checked`, since a dash saying "some" is
+more truthful than a tick claiming "all".
+
+### `Switch`
+
+| Prop        | Type        | Default |
+| ----------- | ----------- | ------- |
+| `label`     | `ReactNode` | —       |
+| `hint`      | `ReactNode` | —       |
+| `error`     | `ReactNode` | —       |
+| `className` | `string`    | —       |
+
+```tsx
+<Switch label="Dark theme" checked={dark} onChange={(e) => setDark(e.target.checked)} />
+```
+
+A checkbox underneath with `role="switch"` over it. The role changes what is announced — "on" and
+"off" rather than "checked" — while the element keeps native keyboard handling and form
+participation.
+
+There is no `required`. A switch is always in one of its two states, so demanding one of them is a
+rule about the value, not about the control.
+
+### `FieldGroup`
+
+| Prop          | Type                         | Default      |
+| ------------- | ---------------------------- | ------------ |
+| `legend`      | `string`                     | —            |
+| `hint`        | `ReactNode`                  | —            |
+| `error`       | `ReactNode`                  | —            |
+| `orientation` | `'vertical' \| 'horizontal'` | `'vertical'` |
+
+Every other prop is a native `<fieldset>` prop, including `disabled` and `name`.
+
+```tsx
+<FieldGroup legend="Notify me about" error={none ? 'Choose at least one.' : undefined}>
+  <Checkbox label="Releases" />
+  <Checkbox label="Incidents" />
+</FieldGroup>
+```
+
+A real `<fieldset>` and `<legend>`, so a set of checkboxes is announced as a group and each option
+is heard in the context of the question rather than on its own.
+
+**The hint and error describe the group, not each control.** "Choose at least one" is a fault of
+the set; repeating it on every box would have a screen reader read it once per option.
+
+`disabled` switches off everything inside it — that is the fieldset doing the work, not a loop over
+children. Note that `input.disabled` stays `false` on a control disabled this way; `:disabled` is
+what matches.
+
+The default fieldset border, padding and margin are cleared. Drawing a box around every set would
+make a settings page look like a stack of panels.
 
 ### `Badge`
 
