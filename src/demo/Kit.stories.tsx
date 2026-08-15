@@ -6,6 +6,7 @@ import { Badge } from '../components/Badge/Badge.js';
 import { Button } from '../components/Button/Button.js';
 import { IconButton } from '../components/IconButton/IconButton.js';
 import { Spinner } from '../components/Spinner/Spinner.js';
+import { Textarea } from '../components/Textarea/Textarea.js';
 import { TextField } from '../components/TextField/TextField.js';
 
 /**
@@ -311,6 +312,24 @@ export const Kit: Story = {
             error="Enter an address such as name@example.com."
           />
         </div>
+      </Section>
+
+      <Section title="Textarea — rows and a fixed box">
+        <div style={{ display: 'flex', gap: 'var(--kreo-space-4)', alignItems: 'flex-start' }}>
+          <Textarea label="Release notes" rows={3} placeholder="What changed?" />
+          <Textarea
+            label="Fixed at four rows"
+            rows={4}
+            resize="none"
+            placeholder="Cannot be dragged"
+          />
+        </div>
+        <Textarea
+          fullWidth
+          label="Summary"
+          error="Describe the change in at least a sentence."
+          defaultValue="tbd"
+        />
       </Section>
 
       <Section title="A field and a button sit level">

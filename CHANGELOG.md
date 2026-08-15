@@ -9,6 +9,14 @@ explicitly rather than treated as disposable.
 
 ## [Unreleased]
 
+### Added
+
+- `Textarea` — a multi-line text field with the same label, hint, error and invalid contract as
+  `TextField`; a field should not behave differently because it holds more than one line. Height
+  comes from `rows` and nothing else, so the field never grows mid-sentence and pushes the rest of
+  the form down. The reader can drag it taller, `resize="none"` takes that away, and dragging is
+  vertical only — a wider box breaks the form's column and does not make prose easier to read.
+
 ## [0.9.0] — 2026-08-15
 
 ### Added

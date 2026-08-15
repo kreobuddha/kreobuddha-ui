@@ -5,7 +5,7 @@ data-dense frontend applications.
 
 ## Status: early, but published
 
-**Six components ship today: `Button`, `IconButton`, `TextField`, `Badge`, `Spinner` and `Alert`.** Everything else in
+**Seven components ship today: `Button`, `IconButton`, `TextField`, `Textarea`, `Badge`, `Spinner` and `Alert`.** Everything else in
 [docs/ROADMAP.md](docs/ROADMAP.md) is a plan, not an available feature. The package is published so
 it can be consumed normally; treat the `0.x` line as a moving target and pin what you depend on.
 
@@ -177,6 +177,41 @@ are for.
 
 Text in a slot **is** announced — `suffix="USD"` is read as part of the field. Add `aria-hidden`
 yourself to a purely decorative mark.
+
+### `Textarea`
+
+| Prop        | Type                   | Default      |
+| ----------- | ---------------------- | ------------ |
+| `label`     | `string`               | —            |
+| `size`      | `'sm' \| 'md' \| 'lg'` | `'md'`       |
+| `hint`      | `ReactNode`            | —            |
+| `error`     | `ReactNode`            | —            |
+| `resize`    | `'vertical' \| 'none'` | `'vertical'` |
+| `rows`      | `number`               | `3`          |
+| `fullWidth` | `boolean`              | `false`      |
+| `className` | `string`               | —            |
+
+Every other prop is a native `<textarea>` prop. `ref` points at the `<textarea>`; `className` goes
+to the wrapper around the whole field.
+
+```tsx
+<Textarea
+  label="Release notes"
+  rows={6}
+  hint="Markdown is supported."
+  error={tooShort ? 'Describe the change in at least a sentence.' : undefined}
+/>
+```
+
+The label, hint, error, required marker and invalid contract are identical to `TextField` — a field
+should not behave differently because it holds more than one line.
+
+**Height comes from `rows` and nothing else.** The field does not measure its content or grow as
+you type, so it never pushes the rest of the form down mid-sentence. The reader can drag it taller,
+and `resize="none"` takes that away for a layout that must not move.
+
+**Dragging is vertical only, and that is not configurable.** A wider box breaks the form's column
+and does not make prose easier to read.
 
 ### `Badge`
 
