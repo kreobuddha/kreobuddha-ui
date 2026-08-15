@@ -1,0 +1,172 @@
+/* Component styles depend on the token layer, and declaring that dependency in CSS rather than
+   from TypeScript keeps the stylesheet out of the emitted declarations, where a `.css` specifier
+   is not resolvable. Vite inlines this into the single published `styles.css`. */
+@import '../../styles.css';
+
+.field {
+  display: inline-flex;
+  flex-direction: column;
+  gap: var(--kreo-space-1);
+  max-width: 100%;
+}
+
+.fullWidth {
+  display: flex;
+}
+
+.label {
+  font: var(--kreo-type-label);
+  letter-spacing: var(--kreo-tracking-label);
+  color: var(--kreo-text-muted);
+  text-transform: uppercase;
+}
+
+.required {
+  margin-inline-start: 2px;
+  color: var(--kreo-text-danger);
+}
+
+/* The whole field dims together. Dimming only the input would leave the label at full strength,
+   which reads as an active field with a broken box rather than a field that is switched off. */
+.field[data-disabled] {
+  cursor: not-allowed;
+
+  /* The same 0.45 `Button` dims with. Two controls side by side must switch off to the same
+     degree, or the weaker-looking one reads as the only one that is unavailable. */
+  opacity: 0.45;
+}
+
+.shell {
+  display: flex;
+  align-items: stretch;
+  min-width: 0;
+  background: var(--kreo-surface-card);
+  border: var(--kreo-border-w) solid var(--kreo-border-control);
+  border-radius: var(--kreo-radius-md);
+  transition: var(--kreo-transition-color);
+}
+
+/* Drawn inside the box, so gaining focus never reflows the layout — the same treatment `Button`
+   uses. The border is recoloured too: the ring alone reads as a glow rather than as a state. */
+.shell:focus-within {
+  border-color: var(--kreo-border-focus);
+  box-shadow: var(--kreo-focus-ring);
+}
+
+.invalid {
+  border-color: var(--kreo-border-danger);
+}
+
+/* The input carries the horizontal padding rather than the shell, so every point inside the
+   border that is not a slot is part of the input's own hit area. A click near the edge focuses
+   the field, and no JavaScript is needed to make that true. */
+.input {
+  flex: 1;
+  min-width: 0;
+  background: none;
+  border: none;
+  color: var(--kreo-text-primary);
+  font: inherit;
+}
+
+.input:focus {
+  outline: none;
+}
+
+.input::placeholder {
+  color: var(--kreo-text-subtle);
+}
+
+/* Firefox dims a disabled input's text on its own, which lands on top of the wrapper's opacity
+   and takes the value below the surrounding label. */
+.input:disabled {
+  opacity: 1;
+  cursor: not-allowed;
+}
+
+.prefix,
+.suffix {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  color: var(--kreo-text-muted);
+}
+
+.hint {
+  margin: 0;
+  font: var(--kreo-type-body);
+  font-size: var(--kreo-text-12);
+  color: var(--kreo-text-muted);
+}
+
+.error {
+  margin: 0;
+  font: var(--kreo-type-body);
+  font-size: var(--kreo-text-12);
+  color: var(--kreo-text-danger);
+}
+
+/* Sizes come after .shell so their font-size wins over the inherited `font` shorthand. */
+.sm {
+  min-height: var(--kreo-control-h-sm);
+  font: var(--kreo-type-body);
+  font-size: var(--kreo-text-13);
+}
+
+.sm .input,
+.sm .prefix,
+.sm .suffix {
+  padding-inline: var(--kreo-control-px-sm);
+}
+
+.md {
+  min-height: var(--kreo-control-h-md);
+  font: var(--kreo-type-body);
+}
+
+.md .input,
+.md .prefix,
+.md .suffix {
+  padding-inline: var(--kreo-control-px-md);
+}
+
+.lg {
+  min-height: var(--kreo-control-h-lg);
+  font: var(--kreo-type-body-lg);
+}
+
+.lg .input,
+.lg .prefix,
+.lg .suffix {
+  padding-inline: var(--kreo-control-px-lg);
+}
+
+/* A slot next to the input would otherwise put two full paddings between them, opening a gap wide
+   enough to read as a separate control. */
+.prefix + .input {
+  padding-inline-start: var(--kreo-space-2);
+}
+
+.input:has(+ .suffix) {
+  padding-inline-end: var(--kreo-space-2);
+}
+
+@media (forced-colors: active) {
+  /* Neither the recoloured border nor the ring is painted, so focus and invalid would look exactly
+     like rest. The system keywords are the only colours that survive here. */
+  .shell:focus-within {
+    border-color: Highlight;
+    outline: var(--kreo-border-w-focus) solid Highlight;
+    outline-offset: calc(var(--kreo-border-w) * -2);
+  }
+
+  .field[data-disabled] {
+    opacity: 1;
+  }
+
+  .field[data-disabled] .label,
+  .field[data-disabled] .shell {
+    color: GrayText;
+    border-color: GrayText;
+  }
+}

@@ -10,7 +10,7 @@ verification quality.
 
 Phase 0 and Phase 1 are complete. The repository is public at `kreobuddha/kreobuddha-ui` with CI
 green; the package is published to npm as `@kreobuddha/ui` (ADR-0006). Phase 2 is complete: `Badge`, `Spinner`, `IconButton`
-and `Alert` are done. Phase 3 has not started.
+and `Alert` are done. Phase 3 is under way: `TextField` is done.
 
 ## Phase 0 — Local repository and package foundation — **done**
 
@@ -78,7 +78,7 @@ Each component remains a separate approved slice.
 
 Candidate components:
 
-- `TextField`;
+- `TextField` — **done**;
 - `Textarea`;
 - `Checkbox`;
 - `Switch`;

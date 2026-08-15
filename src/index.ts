@@ -19,3 +19,5 @@ export type {
 } from './components/IconButton/IconButton.js';
 export { Spinner } from './components/Spinner/Spinner.js';
 export type { SpinnerProps, SpinnerSize } from './components/Spinner/Spinner.js';
+export { TextField } from './components/TextField/TextField.js';
+export type { TextFieldProps, TextFieldSize } from './components/TextField/TextField.js';
