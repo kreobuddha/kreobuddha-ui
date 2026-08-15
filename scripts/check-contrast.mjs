@@ -47,6 +47,11 @@ const PAIRS = [
   ['body on warning tint', '--kreo-surface-warning-soft', '--kreo-text-body', TEXT],
   ['body on danger tint', '--kreo-surface-danger-soft', '--kreo-text-body', TEXT],
   ['body on info tint', '--kreo-surface-info-soft', '--kreo-text-body', TEXT],
+  // The dismiss button on a tinted alert: a ghost control on a surface no other control uses.
+  ['dismiss on success tint', '--kreo-surface-success-soft', '--kreo-text-primary', TEXT],
+  ['dismiss on warning tint', '--kreo-surface-warning-soft', '--kreo-text-primary', TEXT],
+  ['dismiss on danger tint', '--kreo-surface-danger-soft', '--kreo-text-primary', TEXT],
+  ['dismiss on info tint', '--kreo-surface-info-soft', '--kreo-text-primary', TEXT],
   // Field anatomy: the placeholder is the pair most often left unmeasured.
   ['placeholder', '--kreo-surface-card', '--kreo-text-subtle', TEXT],
   ['field border', '--kreo-surface-card', '--kreo-border-control', NON_TEXT],

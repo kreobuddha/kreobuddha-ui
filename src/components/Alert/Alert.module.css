@@ -1,0 +1,73 @@
+/* Component styles depend on the token layer, and declaring that dependency in CSS rather than
+   from TypeScript keeps the stylesheet out of the emitted declarations, where a `.css` specifier
+   is not resolvable. Vite inlines this into the single published `styles.css`. */
+@import '../../styles.css';
+
+.alert {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--kreo-space-3);
+  padding: var(--kreo-space-3);
+  border-radius: var(--kreo-radius-md);
+  font: var(--kreo-type-body);
+}
+
+.mark {
+  display: inline-flex;
+  flex: none;
+
+  /* Aligns the mark with the first line of text rather than the top of the box. */
+  margin-block-start: 2px;
+}
+
+.body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--kreo-space-1);
+  min-width: 0;
+  flex: 1;
+}
+
+.title {
+  margin: 0;
+  font-weight: var(--kreo-weight-semibold);
+}
+
+.message {
+  /* The supporting text sits on the body colour: the tone colours the heading and the mark, and
+     a whole paragraph in a status colour is harder to read than it is informative. */
+  color: var(--kreo-text-body);
+}
+
+.dismiss {
+  flex: none;
+  margin-block-start: -2px;
+  margin-inline-end: -2px;
+}
+
+.success {
+  background: var(--kreo-surface-success-soft);
+  color: var(--kreo-text-on-success-soft);
+}
+
+.warning {
+  background: var(--kreo-surface-warning-soft);
+  color: var(--kreo-text-on-warning-soft);
+}
+
+.danger {
+  background: var(--kreo-surface-danger-soft);
+  color: var(--kreo-text-on-danger-soft);
+}
+
+.info {
+  background: var(--kreo-surface-info-soft);
+  color: var(--kreo-text-on-info-soft);
+}
+
+@media (forced-colors: active) {
+  /* The tint is not painted, so the alert would lose its edge entirely without a border. */
+  .alert {
+    border: var(--kreo-border-w) solid CanvasText;
+  }
+}

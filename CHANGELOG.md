@@ -9,6 +9,16 @@ explicitly rather than treated as disposable.
 
 ## [Unreleased]
 
+### Added
+
+- `Alert` — a message about what happened or what is true, in four tones, with an optional title
+  and an optional close button. Each tone carries its own mark so the kind of message never depends
+  on colour alone, and `icon` replaces it. Announcement is opt-in through `live`: a banner already
+  on screen should not interrupt, while a `danger` alert that appears in response to something
+  does.
+- Contrast measurements for the pairing `Alert` introduces: the dismiss button, a ghost control on
+  a tinted surface no other control uses.
+
 ## [0.7.0] — 2026-08-15
 
 ### Added
