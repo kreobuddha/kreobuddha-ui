@@ -73,14 +73,17 @@ failures. Any temporary exception must include:
 Automated scanning is only a first line of defense. It cannot prove correct focus movement,
 meaningful announcements, complete keyboard behavior, or usable forced-colors presentation.
 
-This runs at two levels:
+**Every story is scanned in a real browser** by the Storybook Vitest addon, with
+`a11y: { test: 'error' }` in `.storybook/preview.tsx` — a violation fails the build. This is the
+single automated accessibility gate, and no component writes its own axe test.
 
-- The focused test in `Button.test.tsx` executes axe inside jsdom, which neither lays out nor
-  paints, so its `color-contrast` rule is disabled there.
-- **Every story is scanned in a real browser** by the Storybook Vitest addon, with
-  `a11y: { test: 'error' }` in `.storybook/preview.tsx` — a violation fails the build. Because this
-  layer has real layout and painting, its contrast findings are real. It caught a token that had
-  been shipping below the threshold and that the token-level check below did not cover.
+There used to be a second, jsdom-based scan per component. It was removed: jsdom neither lays out
+nor paints, so it could not judge contrast, and it cost a hand-written test on every component for
+a strictly weaker result. The browser scan covers every story automatically, which means new stories
+are covered the moment they are written rather than when someone remembers to assert it.
+
+Component tests in jsdom therefore cover behaviour and semantics only. Anything needing real layout
+belongs in a story `play` function.
 
 ### 4a. Contrast
 

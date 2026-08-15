@@ -14,4 +14,15 @@
 
   /* Focus is a 2px accent border drawn inside the box so nothing reflows. */
   --kreo-focus-ring: inset 0 0 0 var(--kreo-border-w-focus) var(--kreo-border-focus);
+
+  /* Overlays only — menus, dialogs, tooltips. Nothing anchored to the page carries a shadow.
+     Panels also keep a border: forced-colors mode paints no shadow at all, and without one the
+     panel would lose its edge entirely there. See ADR-0007. */
+  --kreo-shadow-overlay: 0 1px 2px rgb(0 0 0 / 6%), 0 8px 24px rgb(0 0 0 / 10%);
+}
+
+[data-kreo-theme='dark'] {
+  /* A charcoal surface swallows a light shadow, so the dark theme needs a deeper one to read as
+     lifted at all. */
+  --kreo-shadow-overlay: 0 1px 2px rgb(0 0 0 / 40%), 0 8px 24px rgb(0 0 0 / 45%);
 }

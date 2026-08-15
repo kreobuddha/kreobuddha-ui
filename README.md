@@ -114,13 +114,22 @@ Customisation happens through the semantic tokens, not through component classes
 `--kreo-*` custom property in the published stylesheet is public API under SemVer; CSS Module class
 names are private implementation details.
 
-Two conventions are worth knowing before overriding anything:
+Three conventions are worth knowing before overriding anything:
 
 - **A status has two colours, not one.** `--kreo-text-success` and its siblings are readable text
   at 4.5:1; `--kreo-icon-success` and its siblings are brighter marks for dots, icons and borders,
   which need only 3:1. Using one value for both is what turns an amber into a brown.
 - **The dark theme runs at lower saturation than the light one.** At equal contrast a colour reads
   louder on a dark surface.
+- **A tinted surface needs its own label colour.** `--kreo-surface-success-soft` and its siblings
+  are the tints message components sit on; `--kreo-text-on-success-soft` and its siblings are the
+  labels measured against those tints. The ordinary status text is tuned against the page and does
+  not survive being placed on its own tint in the light theme — see
+  [ADR-0007](docs/adr/0007-component-foundations.md).
+
+`--kreo-shadow-overlay` is reserved for things that float — menus, dialogs, tooltips. Overlays keep
+a border as well, because forced-colors mode paints no shadow at all and a panel relying on one
+would lose its edge exactly where an edge matters most.
 
 If you override the palette, keep the pairs contrastable: `npm run check:contrast` measures every
 pairing the components put on screen, in both themes, and fails below the WCAG 2.2 target — 4.5:1

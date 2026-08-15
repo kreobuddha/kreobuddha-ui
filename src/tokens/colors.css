@@ -43,6 +43,15 @@
   --kreo-info-500: #2c6fc7;
   --kreo-info-mark: #458eed;
 
+  /* Tints for message surfaces, and the text that sits on them. The text tuned for white does not
+     survive being placed on its own tint: it already sits at 5:1 against white, and a tint only
+     darkens the ground. Solving for contrast against white drives the tint to 99.5% lightness —
+     invisible. So a tinted surface costs a second text value per status. See ADR-0007. */
+  --kreo-success-tint: #eafbee;
+  --kreo-warning-tint: #fbf4ea;
+  --kreo-danger-tint: #fbecea;
+  --kreo-info-tint: #eaf1fb;
+
   /* ---- Semantic aliases: surfaces ---- */
   --kreo-surface-page: var(--kreo-neutral-25);
   --kreo-surface-card: var(--kreo-neutral-0);
@@ -76,6 +85,19 @@
   --kreo-text-info: var(--kreo-info-500);
   --kreo-text-link: var(--kreo-accent-600);
   --kreo-text-link-hover: var(--kreo-accent-700);
+
+  /* ---- Semantic aliases: message surfaces ---- */
+  --kreo-surface-success-soft: var(--kreo-success-tint);
+  --kreo-surface-warning-soft: var(--kreo-warning-tint);
+  --kreo-surface-danger-soft: var(--kreo-danger-tint);
+  --kreo-surface-info-soft: var(--kreo-info-tint);
+
+  /* Parallel to `--kreo-text-on-accent`: the label colour for a specific background. These are
+     measured against the soft surfaces above, not against the page. */
+  --kreo-text-on-success-soft: #167c2e;
+  --kreo-text-on-warning-soft: #8b6118;
+  --kreo-text-on-danger-soft: #be3121;
+  --kreo-text-on-info-soft: #2165be;
 
   /* ---- Semantic aliases: status marks (icons, dots, borders — 3:1, not 4.5:1) ---- */
   --kreo-icon-danger: var(--kreo-danger-mark);
@@ -133,6 +155,17 @@
   --kreo-icon-success: #3da54b;
   --kreo-icon-warning: #d59320;
   --kreo-icon-info: #6da3e9;
+
+  /* On a dark surface the tint works the other way round and the ordinary status text survives
+     it, so no second value is needed here — only in the light theme. */
+  --kreo-surface-success-soft: #0f2815;
+  --kreo-surface-warning-soft: #3c2e17;
+  --kreo-surface-danger-soft: #50231f;
+  --kreo-surface-info-soft: #1d324d;
+  --kreo-text-on-success-soft: var(--kreo-text-success);
+  --kreo-text-on-warning-soft: var(--kreo-text-warning);
+  --kreo-text-on-danger-soft: var(--kreo-text-danger);
+  --kreo-text-on-info-soft: var(--kreo-text-info);
 
   --kreo-border-subtle: #22262b;
   --kreo-border-default: #2b3037;
