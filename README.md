@@ -141,9 +141,10 @@ for text, 3:1 for control borders, marks and the focus ring.
 ships inside the package, so the library renders as intended with no host setup, no CDN, and no
 network dependency.
 
-Only the two weights the type roles use are included — 400 and 600 — each split into a Latin and a
+Inter ships as a variable font covering the whole 100–900 weight range, split into a Latin and a
 Cyrillic file behind a `unicode-range`, so a Latin-only page never downloads the Cyrillic subset.
-About 64 KB in total, none of it on the JavaScript path.
+About 67 KB in total, none of it on the JavaScript path — and 48 KB of that is what a Latin page
+actually fetches, within 140 bytes of what two static weights cost.
 
 **No monospace family is bundled.** Numerals that must line up in columns use
 `--kreo-numeric-tabular`, which switches Inter to its tabular figures — the actual requirement
