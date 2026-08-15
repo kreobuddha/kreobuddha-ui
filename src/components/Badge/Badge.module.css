@@ -1,0 +1,108 @@
+/* Component styles depend on the token layer, and declaring that dependency in CSS rather than
+   from TypeScript keeps the stylesheet out of the emitted declarations, where a `.css` specifier
+   is not resolvable. Vite inlines this into the single published `styles.css`. */
+@import '../../styles.css';
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--kreo-space-1);
+  max-width: 100%;
+
+  /* Off the 4px scale on purpose: with the 12px label it keeps the badge at ~22px, just inside
+     the 23px line box of body text, so a badge sitting in a sentence does not stretch the line. */
+  padding-block: 2px;
+  padding-inline: var(--kreo-space-2);
+  border: var(--kreo-border-w) solid;
+  border-radius: var(--kreo-radius-full);
+  font-family: var(--kreo-font-sans);
+  font-size: var(--kreo-text-12);
+  font-weight: var(--kreo-weight-medium);
+  line-height: var(--kreo-leading-snug);
+
+  /* A label longer than the space available wraps instead of being clipped: nothing here offers
+     the hidden text back, so truncation would simply lose it. */
+  overflow-wrap: anywhere;
+}
+
+.dot {
+  width: 6px;
+  height: 6px;
+  border-radius: var(--kreo-radius-full);
+  flex: none;
+}
+
+/*
+ * Each tone carries two colours: the readable text value, and the brighter mark value shared by
+ * the border and the dot. One value cannot do both — see the note in `tokens/colors.css`.
+ *
+ * `neutral` has no status hue, so it borrows the control boundary for its outline. The decorative
+ * border tokens are deliberately below 3:1 against the page, which would leave the outline all
+ * but invisible next to the toned badges.
+ */
+.neutral {
+  color: var(--kreo-text-body);
+  border-color: var(--kreo-border-control);
+}
+
+.neutral .dot {
+  background-color: var(--kreo-border-control);
+}
+
+.accent {
+  color: var(--kreo-text-accent);
+  border-color: var(--kreo-accent-500);
+}
+
+.accent .dot {
+  background-color: var(--kreo-accent-500);
+}
+
+.success {
+  color: var(--kreo-text-success);
+  border-color: var(--kreo-icon-success);
+}
+
+.success .dot {
+  background-color: var(--kreo-icon-success);
+}
+
+.warning {
+  color: var(--kreo-text-warning);
+  border-color: var(--kreo-icon-warning);
+}
+
+.warning .dot {
+  background-color: var(--kreo-icon-warning);
+}
+
+.danger {
+  color: var(--kreo-text-danger);
+  border-color: var(--kreo-icon-danger);
+}
+
+.danger .dot {
+  background-color: var(--kreo-icon-danger);
+}
+
+.info {
+  color: var(--kreo-text-info);
+  border-color: var(--kreo-icon-info);
+}
+
+.info .dot {
+  background-color: var(--kreo-icon-info);
+}
+
+/* In forced-colors mode the palette is replaced wholesale, so the tones collapse into one. The
+   outline and the dot are restated in a system colour, otherwise both would disappear and the
+   badge would read as bare text. */
+@media (forced-colors: active) {
+  .badge {
+    border-color: CanvasText;
+  }
+
+  .dot {
+    background-color: CanvasText;
+  }
+}

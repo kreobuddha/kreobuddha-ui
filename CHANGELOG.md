@@ -9,6 +9,16 @@ explicitly rather than treated as disposable.
 
 ## [Unreleased]
 
+## [0.4.0] — 2026-08-15
+
+### Added
+
+- `Badge` — a short non-interactive status or category label. Tones `neutral`, `accent`,
+  `success`, `warning`, `danger`, `info`, plus an optional decorative `dot`. It renders a plain
+  `<span>` with no ARIA role and stays out of the tab order.
+- Contrast measurements for the pairings `Badge` introduces: the status marks and the accent on
+  `--kreo-surface-card`, and body text on `--kreo-surface-card`.
+
 ## [0.3.0] — 2026-08-14
 
 First release published to npm. Earlier version numbers existed only as git tags and were never
@@ -25,5 +35,6 @@ from git for a single consumer.
   is public API.
 - Inter bundled as WOFF2 subsets, so no external font request is made at runtime.
 
-[unreleased]: https://github.com/kreobuddha/kreobuddha-ui/compare/v0.3.0...HEAD
+[unreleased]: https://github.com/kreobuddha/kreobuddha-ui/compare/v0.4.0...HEAD
+[0.4.0]: https://github.com/kreobuddha/kreobuddha-ui/compare/v0.3.0...v0.4.0
 [0.3.0]: https://github.com/kreobuddha/kreobuddha-ui/releases/tag/v0.3.0

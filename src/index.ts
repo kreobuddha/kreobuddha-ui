@@ -5,5 +5,7 @@
 // imports in the declarations it emits, and a stylesheet is not a module it can resolve there, so
 // such an import would make the published types unresolvable. The stylesheet is a separate build
 // entry instead, and consumers link `@kreobuddha/ui/styles.css` themselves.
+export { Badge } from './components/Badge/Badge.js';
+export type { BadgeProps, BadgeTone } from './components/Badge/Badge.js';
 export { Button } from './components/Button/Button.js';
 export type { ButtonProps, ButtonSize, ButtonVariant } from './components/Button/Button.js';

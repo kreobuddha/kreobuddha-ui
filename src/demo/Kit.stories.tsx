@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import type { CSSProperties, ReactElement, ReactNode } from 'react';
 
+import { Badge } from '../components/Badge/Badge.js';
 import { Button } from '../components/Button/Button.js';
 
 /**
@@ -195,6 +196,42 @@ export const Kit: Story = {
           <Button danger variant="ghost">
             Delete workspace
           </Button>
+        </div>
+      </Section>
+
+      <Section title="Badge — tones">
+        <div style={row}>
+          <Badge>draft</Badge>
+          <Badge tone="accent">beta</Badge>
+          <Badge tone="success">passing</Badge>
+          <Badge tone="warning">deprecated</Badge>
+          <Badge tone="danger">3 failed</Badge>
+          <Badge tone="info">read-only</Badge>
+        </div>
+      </Section>
+
+      <Section title="Badge — with a dot, and in context">
+        <div style={row}>
+          <Badge dot tone="success">
+            passing
+          </Badge>
+          <Badge dot tone="warning">
+            deprecated
+          </Badge>
+          <Badge dot tone="danger">
+            3 failed
+          </Badge>
+        </div>
+        <p style={{ font: 'var(--kreo-type-body)', color: 'var(--kreo-text-body)', margin: 0 }}>
+          The endpoint{' '}
+          <Badge tone="warning" dot>
+            deprecated
+          </Badge>{' '}
+          still answers, but it is scheduled for removal.
+        </p>
+        <div style={row}>
+          <Button variant="outlined">Invite member</Button>
+          <Badge tone="accent">beta</Badge>
         </div>
       </Section>
 
