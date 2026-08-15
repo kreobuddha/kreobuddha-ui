@@ -18,7 +18,9 @@ exact version and action. See ADR-0006 for how releases are authenticated.
 4. The release is published from CI. `.github/workflows/release.yml` runs the same checks as
    `ci.yml` and then publishes through npm trusted publishing (OIDC), so no npm token is stored
    anywhere.
-5. A `vX.Y.Z` tag and a matching GitHub release are pushed.
+5. The same run tags the released commit `vX.Y.Z` and publishes a GitHub release whose notes are
+   read out of `CHANGELOG.md` by `scripts/release-notes.mjs`. None of this is a manual step, and
+   none of it happens if the publish fails.
 
 `0.3.0` is the exception to step 4: npm can only attach a trusted publisher to a package that
 already exists, so the very first version was published by hand. Every release after it goes
