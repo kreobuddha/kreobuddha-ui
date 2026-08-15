@@ -9,6 +9,13 @@ explicitly rather than treated as disposable.
 
 ## [Unreleased]
 
+### Added
+
+- `IconButton` — a square button carrying a mark instead of a word, matching `Button` in variants,
+  states and geometry, plus an `xs` size for marks inside another control. `label` is required and
+  checked by the compiler: an icon carries no text, so there is nowhere else an accessible name
+  could come from. It doubles as the hover tooltip.
+
 ## [0.6.0] — 2026-08-15
 
 ### Added

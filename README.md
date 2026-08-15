@@ -5,7 +5,7 @@ data-dense frontend applications.
 
 ## Status: early, but published
 
-**Three components ship today: `Button`, `Badge` and `Spinner`.** Everything else in
+**Four components ship today: `Button`, `IconButton`, `Badge` and `Spinner`.** Everything else in
 [docs/ROADMAP.md](docs/ROADMAP.md) is a plan, not an available feature. The package is published so
 it can be consumed normally; treat the `0.x` line as a moving target and pin what you depend on.
 
@@ -70,6 +70,32 @@ lines and grow the button instead, in which case nothing is hidden and no toolti
 
 Icons are `ReactNode` and are hidden from assistive technology, so the label remains the accessible
 name. The library bundles no icon set.
+
+### `IconButton`
+
+| Prop      | Type                                | Default    |
+| --------- | ----------------------------------- | ---------- |
+| `label`   | `string`                            | required   |
+| `icon`    | `ReactNode`                         | required   |
+| `variant` | `'filled' \| 'outlined' \| 'ghost'` | `'filled'` |
+| `size`    | `'xs' \| 'sm' \| 'md' \| 'lg'`      | `'md'`     |
+| `danger`  | `boolean`                           | `false`    |
+| `loading` | `boolean`                           | `false`    |
+
+```tsx
+<IconButton label="Close" icon={<CloseIcon />} variant="ghost" />
+```
+
+A square button carrying a mark instead of a word. Variants, states and geometry match `Button`;
+`xs` is the extra size, meant for marks that live inside another control.
+
+**`label` is required and the compiler enforces it.** An icon carries no text, so there is nowhere
+else an accessible name could come from, and an unlabelled icon button is the most common
+accessibility failure in any component library. The label is also used as the hover tooltip,
+because a symbol without a name is a guess for sighted users too — pass `title` explicitly to say
+something different there.
+
+The icon itself is hidden from assistive technology, so it never competes with the label.
 
 ### `Badge`
 
