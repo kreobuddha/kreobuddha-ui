@@ -1,0 +1,68 @@
+name: Release
+
+# Publishing is deliberate, never automatic on a push: the run is started by hand and told which
+# version it is releasing, so a merge to master can never ship a package on its own.
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version being released, e.g. 0.4.0 — must match package.json'
+        required: true
+        type: string
+
+permissions:
+  contents: read
+  # npm trusted publishing (OIDC): GitHub mints a short-lived identity token, so no npm token is
+  # stored in this repository. See ADR-0006.
+  id-token: write
+
+concurrency:
+  group: release
+  cancel-in-progress: false
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v7
+
+      # Node 24 carries an npm new enough for trusted publishing (needs npm >= 11.5.1 and
+      # Node >= 22.14). npm is still upgraded explicitly so the job does not silently regress
+      # if the runner image ships an older bundled npm.
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24.x
+          cache: npm
+          registry-url: https://registry.npmjs.org
+
+      - run: npm install -g npm@latest
+
+      - run: npm ci
+
+      - run: npx playwright install --with-deps chromium
+
+      # The same gate as CI. A release must not be able to pass on weaker checks than a pull
+      # request does.
+      - run: npm run format:check
+      - run: npm run lint
+      - run: npm run lint:css
+      - run: npm run typecheck
+      - run: npm test
+      - run: npm run check:contrast
+      - run: npm run build
+      - run: npm run build-storybook
+      - run: npm run check:package
+
+      # Publishing the wrong version is not recoverable — npm never lets a version number be
+      # reused — so the manifest has to agree with what the operator typed before anything is
+      # sent to the registry.
+      - name: Verify the version matches package.json
+        run: |
+          MANIFEST_VERSION="$(node -p "require('./package.json').version")"
+          if [ "$MANIFEST_VERSION" != "${{ inputs.version }}" ]; then
+            echo "package.json is $MANIFEST_VERSION but the run requested ${{ inputs.version }}" >&2
+            exit 1
+          fi
+
+      - run: npm publish

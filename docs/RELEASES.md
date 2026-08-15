@@ -24,6 +24,28 @@ exact version and action. See ADR-0006 for how releases are authenticated.
 already exists, so the very first version was published by hand. Every release after it goes
 through CI.
 
+Running the release workflow: **Actions → Release → Run workflow**, entering the version being
+released. The job refuses to publish if that string does not match `package.json`, because a
+version number can never be reused once it reaches the registry.
+
+`publishConfig.provenance` is on, and provenance can only be produced by a CI run with an OIDC
+token. A local `npm publish` therefore fails now — deliberately. Releasing from a laptop is no
+longer possible, which is what keeps step 4 honest.
+
+### One-time setup on npmjs.com
+
+Package settings → **Publishing access** → add a trusted publisher, with:
+
+| Field | Value |
+|---|---|
+| Organization or user | `kreobuddha` |
+| Repository | `kreobuddha-ui` |
+| Workflow filename | `release.yml` |
+| Environment | leave empty |
+
+Every field is case-sensitive, and npm does not validate them when saved — a typo surfaces only as
+a failed publish.
+
 ## Installing from git (superseded)
 
 Kept for reference. Since `0.3.0` the package is on npm, so `npm install @kreobuddha/ui` is the
