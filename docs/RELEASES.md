@@ -15,12 +15,18 @@ exact version and action. See ADR-0006 for how releases are authenticated.
    matches it.
 3. `npm run check:package` passes, and `npm pack --dry-run` is read — the archive must contain
    `dist`, `README.md`, `LICENSE`, `NOTICE` and the manifest, and nothing else.
-4. The release is published from CI. `.github/workflows/release.yml` runs the same checks as
-   `ci.yml` and then publishes through npm trusted publishing (OIDC), so no npm token is stored
-   anywhere.
-5. The same run tags the released commit `vX.Y.Z` and publishes a GitHub release whose notes are
-   read out of `CHANGELOG.md` by `scripts/release-notes.mjs`. None of this is a manual step, and
-   none of it happens if the publish fails.
+4. The release runs from CI. `.github/workflows/release.yml` runs the same checks as `ci.yml`,
+   checks the version against the manifest, reads the notes out of `CHANGELOG.md`, then tags the
+   released commit `vX.Y.Z` and pushes the tag.
+5. Only then does it publish, through npm trusted publishing (OIDC), so no npm token is stored
+   anywhere — and finally it creates the GitHub release from the notes collected in step 4. None
+   of this is a manual step.
+
+   The tag deliberately precedes the publish. Publishing is the only step in the sequence that
+   cannot be undone, because npm never lets a version number be reused; a tag can be deleted with
+   `git push origin :refs/tags/vX.Y.Z`. Recoverable failures therefore come first. A failed tag
+   push means nothing was published and the run can be repeated; a failed publish leaves a tag to
+   remove before repeating it.
 
 `0.3.0` is the exception to step 4: npm can only attach a trusted publisher to a package that
 already exists, so the very first version was published by hand. Every release after it goes
