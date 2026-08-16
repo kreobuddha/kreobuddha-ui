@@ -9,6 +9,16 @@ explicitly rather than treated as disposable.
 
 ## [Unreleased]
 
+### Added
+
+- `Tabs` — a tab list and its panel, with the full WAI-ARIA keyboard model: arrows move and select,
+  `Home` and `End` jump to the ends, the list wraps, and a roving tabindex keeps the whole list to
+  one tab stop so `Tab` reaches the panel. `activation="manual"` moves focus without selecting, for
+  a panel expensive enough that arrowing past four of them would fire four requests. A disabled tab
+  reports `aria-disabled` and stays reachable, so a keyboard user is never left with an unexplained
+  gap. Only the selected panel is mounted.
+- Contrast measurements for the selected tab's indicator and a disabled tab's label.
+
 ### Fixed
 
 - The published stylesheet no longer carries six literal `@import "../../styles.css"` rules, and

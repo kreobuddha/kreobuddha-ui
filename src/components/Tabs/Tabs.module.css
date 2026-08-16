@@ -1,0 +1,97 @@
+/* The token dependency has to be declared in this file. It cannot be inherited through `composes`:
+   an `@import` in a composed file is not inlined and survives into the build as a literal rule
+   whose path no longer resolves. */
+@import '../../styles.css';
+
+.tabs {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.list {
+  display: flex;
+  gap: var(--kreo-space-1);
+  border-block-end: var(--kreo-border-w) solid var(--kreo-border-default);
+
+  /* More tabs than room scrolls sideways rather than wrapping. A wrapped tab list puts the
+     selected tab's underline on a different line from the panel it belongs to. */
+  overflow-x: auto;
+
+  /* Room for the selected tab's indicator, which sits on the same line as the rule above. */
+  scrollbar-width: thin;
+}
+
+.tab {
+  position: relative;
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--kreo-space-2);
+  padding: var(--kreo-space-2) var(--kreo-space-3);
+  background: none;
+  border: none;
+  border-radius: var(--kreo-radius-sm) var(--kreo-radius-sm) 0 0;
+  color: var(--kreo-text-muted);
+  font: var(--kreo-type-button);
+  white-space: nowrap;
+  cursor: pointer;
+  transition: var(--kreo-transition-color);
+}
+
+/* Drawn inside the box, matching every other control, so gaining focus never reflows the row. */
+.tab:focus-visible {
+  outline: none;
+  box-shadow: var(--kreo-focus-ring);
+}
+
+.tab:hover:not([aria-disabled='true']) {
+  background: var(--kreo-surface-hover);
+  color: var(--kreo-text-primary);
+}
+
+.tab[aria-disabled='true'] {
+  color: var(--kreo-text-subtle);
+  cursor: not-allowed;
+}
+
+.selected {
+  color: var(--kreo-text-accent);
+}
+
+/* The indicator overlaps the list's own rule rather than sitting above it, so the selected tab
+   reads as joined to its panel. */
+.selected::after {
+  content: '';
+  position: absolute;
+  inset-inline: 0;
+  inset-block-end: calc(var(--kreo-border-w) * -1);
+  block-size: 2px;
+  background: var(--kreo-accent-500);
+}
+
+.panel {
+  padding-block-start: var(--kreo-space-4);
+  min-width: 0;
+}
+
+.panel:focus-visible {
+  outline: var(--kreo-border-w-focus) solid var(--kreo-border-focus);
+  outline-offset: 2px;
+}
+
+@media (forced-colors: active) {
+  /* Neither the accent text nor the indicator is painted here, so the selected tab would look
+     exactly like the rest. The system keywords are the only colours that survive. */
+  .selected {
+    color: Highlight;
+  }
+
+  .selected::after {
+    background: Highlight;
+  }
+
+  .tab[aria-disabled='true'] {
+    color: GrayText;
+  }
+}
