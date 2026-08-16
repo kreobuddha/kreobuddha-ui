@@ -1,6 +1,8 @@
 import { useId, useRef, useState } from 'react';
 import type { ComponentPropsWithRef, KeyboardEvent, ReactElement, ReactNode } from 'react';
 
+import { cx } from '../../internal/cx.js';
+
 import styles from './Tabs.module.css';
 
 export type TabsActivation = 'automatic' | 'manual';
@@ -36,9 +38,6 @@ export interface TabsProps extends Omit<ComponentPropsWithRef<'div'>, 'onChange'
    */
   activation?: TabsActivation;
 }
-
-const cx = (...values: Array<string | false | undefined>): string =>
-  values.filter(Boolean).join(' ');
 
 export const Tabs = ({
   items,

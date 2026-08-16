@@ -1,5 +1,7 @@
 import type { ComponentPropsWithRef, ReactElement, ReactNode } from 'react';
 
+import { cx } from '../../internal/cx.js';
+
 import { FieldLabel, FieldMessages } from '../field/FieldLabel.js';
 import { useFieldParts } from '../field/useFieldParts.js';
 
@@ -31,9 +33,6 @@ export interface TextareaProps extends Omit<ComponentPropsWithRef<'textarea'>, '
   /** Class for the outer wrapper. Native props and `ref` go to the `<textarea>` itself. */
   className?: string;
 }
-
-const cx = (...values: Array<string | false | undefined>): string =>
-  values.filter(Boolean).join(' ');
 
 export const Textarea = ({
   label,

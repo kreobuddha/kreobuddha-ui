@@ -1,5 +1,7 @@
 import type { ComponentPropsWithRef, MouseEvent, ReactElement, ReactNode } from 'react';
 
+import { cx } from '../../internal/cx.js';
+
 import { Spinner } from '../Spinner/Spinner.js';
 
 import styles from './IconButton.module.css';
@@ -36,9 +38,6 @@ export interface IconButtonProps extends Omit<
   /** Defaults to `button` so a button inside a form never submits it by accident. */
   type?: 'button' | 'submit' | 'reset';
 }
-
-const cx = (...values: Array<string | false | undefined>): string =>
-  values.filter(Boolean).join(' ');
 
 export const IconButton = ({
   label,

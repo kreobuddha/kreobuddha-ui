@@ -1,5 +1,7 @@
 import type { ComponentPropsWithRef, ReactElement, ReactNode } from 'react';
 
+import { cx } from '../../internal/cx.js';
+
 import { FieldLabel, FieldMessages } from '../field/FieldLabel.js';
 import { useFieldParts } from '../field/useFieldParts.js';
 
@@ -32,9 +34,6 @@ export interface SelectProps extends Omit<ComponentPropsWithRef<'select'>, 'size
   /** The `<option>` and `<optgroup>` elements. */
   children?: ReactNode;
 }
-
-const cx = (...values: Array<string | false | undefined>): string =>
-  values.filter(Boolean).join(' ');
 
 /** Drawn by the component rather than left to the platform, which paints a different arrow per OS. */
 const Chevron = (): ReactElement => (

@@ -1,5 +1,7 @@
 import type { ComponentPropsWithRef, ReactElement } from 'react';
 
+import { cx } from '../../internal/cx.js';
+
 import styles from './Spinner.module.css';
 
 export type SpinnerSize = 'sm' | 'md' | 'lg';
@@ -17,9 +19,6 @@ export interface SpinnerProps extends Omit<ComponentPropsWithRef<'span'>, 'child
    */
   label?: string;
 }
-
-const cx = (...values: Array<string | false | undefined>): string =>
-  values.filter(Boolean).join(' ');
 
 export const Spinner = ({ size = 'md', label, className, ...rest }: SpinnerProps): ReactElement => (
   <span

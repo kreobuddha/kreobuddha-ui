@@ -1,5 +1,7 @@
 import type { ComponentPropsWithRef, ReactElement, ReactNode } from 'react';
 
+import { cx } from '../../internal/cx.js';
+
 import { IconButton } from '../IconButton/IconButton.js';
 
 import { DEFAULT_MARKS } from './icons.js';
@@ -31,9 +33,6 @@ export interface AlertProps extends ComponentPropsWithRef<'div'> {
   /** The close button's accessible name. */
   dismissLabel?: string;
 }
-
-const cx = (...values: Array<string | false | undefined>): string =>
-  values.filter(Boolean).join(' ');
 
 const CloseMark = (): ReactElement => (
   <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true">

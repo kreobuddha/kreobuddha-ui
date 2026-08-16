@@ -1,5 +1,7 @@
 import type { ComponentPropsWithRef, ReactElement } from 'react';
 
+import { cx } from '../../internal/cx.js';
+
 import styles from './Badge.module.css';
 
 export type BadgeTone = 'neutral' | 'accent' | 'success' | 'warning' | 'danger' | 'info';
@@ -10,9 +12,6 @@ export interface BadgeProps extends ComponentPropsWithRef<'span'> {
   /** Decorative status dot before the label. */
   dot?: boolean;
 }
-
-const cx = (...values: Array<string | false | undefined>): string =>
-  values.filter(Boolean).join(' ');
 
 /**
  * A short, non-interactive label for a status or a category. It renders a plain `<span>` with no
