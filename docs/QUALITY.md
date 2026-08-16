@@ -147,7 +147,7 @@ Rules:
 
 - baseline changes are reviewed, never accepted automatically;
 - fonts, time, animation, and data are deterministic;
-- meaningful theme, density, focus, invalid, and long-content states receive priority;
+- meaningful theme, focus, invalid, and long-content states receive priority;
 - platform rendering differences are controlled by using the same baseline environment.
 
 The run is `npm run check:visual`, driven by `playwright.config.ts` over the built Storybook, with

@@ -61,14 +61,15 @@ Exit criteria:
 Goal: validate the complete component workflow with one component.
 
 Delivered beyond the original list: dark theme (ADR-0001), bundled IBM Plex with Cyrillic coverage
-(ADR-0003), and a contrast check that runs in CI (ADR-0004). Density remains deferred — the sizes
-`sm`/`md`/`lg` cover the need a single component can demonstrate.
+(ADR-0003), and a contrast check that runs in CI (ADR-0004). The `sm`/`md`/`lg` sizes covered the
+need a single component can demonstrate, and they went on covering it — density was deferred here
+and dropped in ADR-0012.
 
 Deliverables:
 
 - smallest useful reference and semantic token set;
 - original light theme and focused interaction states;
-- dark theme and density only if explicitly included after token/API review;
+- dark theme only if explicitly included after token/API review;
 - `Button` purpose, non-goals, API, semantics, stories, behavior tests, accessibility checks, and
   English docs;
 - built package and consumer use of `Button` through public exports.
@@ -142,7 +143,7 @@ Deliverables:
 
 - static Storybook foundation pages;
 - a deterministic developer-tool settings/diagnostics workbench;
-- theme and density controls that belong to the host demo;
+- a theme control that belongs to the host demo;
 - responsive and keyboard-only flow;
 - installation, tokens, theming, accessibility, composition, and contribution docs;
 - static deployment after separate approval.
