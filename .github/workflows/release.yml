@@ -83,17 +83,23 @@ jobs:
           VERSION: ${{ inputs.version }}
         run: node scripts/release-notes.mjs "$VERSION" > /tmp/release-notes.md
 
-      - run: npm publish
-
-      # The tag and the GitHub release were a manual step after the run, and four releases in a row
-      # went out with a tag and no release because a manual step is a step that gets forgotten.
-      # They now come from the same run that published, off the same commit, with the same notes.
+      # The tag goes up before the publish, and the order is the whole point.
+      #
+      # Publishing is the one step here that cannot be undone: npm never lets a version number be
+      # reused. Tagging can be undone with `git push origin :refs/tags/vX.Y.Z`. So the recoverable
+      # step goes first — if tagging fails, nothing has been published and the run can simply be
+      # started again; if publishing fails, the leftover tag is deleted and the run is started
+      # again. Publishing first meant a failed tag push left a version in the registry that could
+      # never be republished, and that ordering was not a decision: these steps were appended to
+      # the end of a workflow that already ended in `npm publish`.
       - name: Tag the released commit
         env:
           VERSION: ${{ inputs.version }}
         run: |
           git tag "v$VERSION"
           git push origin "v$VERSION"
+
+      - run: npm publish
 
       - name: Publish the GitHub release
         env:
