@@ -1,6 +1,8 @@
 import { cloneElement, useEffect, useId, useRef, useState } from 'react';
 import type { ReactElement, ReactNode } from 'react';
 
+import { cx } from '../../internal/cx.js';
+
 import styles from './Tooltip.module.css';
 
 export type TooltipPlacement = 'top' | 'bottom' | 'left' | 'right';
@@ -21,9 +23,6 @@ export interface TooltipProps {
   /** Class for the tooltip itself, not the trigger. */
   className?: string;
 }
-
-const cx = (...values: Array<string | false | undefined>): string =>
-  values.filter(Boolean).join(' ');
 
 /**
  * A pointer crossing a row of buttons should not set off a chain of tooltips, so opening waits.

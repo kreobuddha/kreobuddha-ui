@@ -1,5 +1,7 @@
 import type { ComponentPropsWithRef, ReactElement, ReactNode } from 'react';
 
+import { cx } from '../../internal/cx.js';
+
 import { useFieldParts } from '../field/useFieldParts.js';
 
 import styles from './FieldGroup.module.css';
@@ -16,9 +18,6 @@ export interface FieldGroupProps extends ComponentPropsWithRef<'fieldset'> {
   /** The controls. */
   children?: ReactNode;
 }
-
-const cx = (...values: Array<string | false | undefined>): string =>
-  values.filter(Boolean).join(' ');
 
 export const FieldGroup = ({
   legend,

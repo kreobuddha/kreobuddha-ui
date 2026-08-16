@@ -26,15 +26,14 @@ if (existsSync(dir)) {
 
 const component = `import type { ComponentPropsWithRef, ReactElement } from 'react';
 
+import { cx } from '../../internal/cx.js';
+
 import styles from './${name}.module.css';
 
 export interface ${name}Props extends ComponentPropsWithRef<'div'> {
   /** Describe every prop. The doc comment is what Storybook shows in the controls table. */
   tone?: 'neutral' | 'accent';
 }
-
-const cx = (...values: Array<string | false | undefined>): string =>
-  values.filter(Boolean).join(' ');
 
 export const ${name} = ({
   tone = 'neutral',
