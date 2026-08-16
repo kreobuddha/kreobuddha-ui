@@ -69,3 +69,9 @@ jobs:
       # The only check that crosses the package boundary: it packs the package, installs the
       # tarball into an independent application and uses it there.
       - run: npm run check:consumer
+
+      # Behaviour that belongs to the browser rather than to the DOM — `Escape` on a modal, the
+      # focus trap, forced-colors — driven by real key presses against the built Storybook. It
+      # compares nothing against a baseline, so unlike `check:visual` it is a CI gate. Chromium is
+      # already installed above.
+      - run: npm run check:browser

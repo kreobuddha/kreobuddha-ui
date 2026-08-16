@@ -100,9 +100,9 @@ export const FocusReturnsToTheTrigger: Story = {
  * be testing the simulation and calling it the platform.
  *
  * What covers them instead: `Dialog.test.tsx` dispatches a real `cancel` event and proves the
- * wiring from it to `onClose`, and ADR-0010 lists both as manual checks. The trap was confirmed by
- * hand with real key presses — six tabs, focus never leaving the panel — and Escape could not be
- * confirmed in the available browser pane, which is recorded rather than glossed over.
+ * wiring from it to `onClose`, and `tests/browser/overlays.spec.ts` drives this very story with
+ * real key presses in a real engine — Escape closes it and returns focus, six tabs never reach the
+ * page behind, and a script cannot focus the trigger while the modal is open.
  */
 
 /** A click beside the panel closes it. This is the default, and the thing the next story turns off. */

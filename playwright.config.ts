@@ -1,19 +1,26 @@
 import { defineConfig, devices } from '@playwright/test';
 
 /**
- * The visual run. Separate from `vitest.config.ts` on purpose: the story tests there judge
- * behaviour and accessibility, and this judges pixels, which needs a baseline, a diff artifact and
- * an update path that a behaviour runner has no reason to carry.
+ * Two runs against the built Storybook, separated by what they judge and therefore by where they
+ * can run.
  *
- * **This is a local check, not a CI gate.** Baselines are committed for one platform, and a
- * screenshot taken on another does not match it — the same text renders differently on macOS and
- * on Linux, which is exactly why `docs/QUALITY.md` §6 asks for a fixed baseline environment. The
- * baselines here are macOS, so the run belongs on a developer's machine before merge rather than
- * on an Ubuntu runner. The platform is in the snapshot path, so a Linux set can be added later
- * beside this one rather than replacing it.
+ * `visual` judges pixels, which needs a baseline, a diff artifact and an update path that a
+ * behaviour runner has no reason to carry. **It is a local check, not a CI gate.** Baselines are
+ * committed for one platform, and a screenshot taken on another does not match it — the same text
+ * renders differently on macOS and on Linux, which is exactly why `docs/QUALITY.md` §6 asks for a
+ * fixed baseline environment. The baselines here are macOS, so the run belongs on a developer's
+ * machine before merge rather than on an Ubuntu runner. The platform is in the snapshot path, so a
+ * Linux set can be added later beside this one rather than replacing it.
+ *
+ * `browser` judges behaviour the story runner cannot reach: `Escape` and the modal focus trap are
+ * the browser's, not the DOM's, and a simulated key press does not exercise either. It compares
+ * nothing against a baseline, so nothing about it is platform-specific and it runs in CI.
  */
 export default defineConfig({
-  testDir: 'tests/visual',
+  projects: [
+    { name: 'visual', testDir: 'tests/visual' },
+    { name: 'browser', testDir: 'tests/browser' },
+  ],
 
   // A pixel diff that is retried is a pixel diff that is being hidden.
   retries: 0,

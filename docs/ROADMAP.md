@@ -20,8 +20,10 @@ done, and a settings form composes from them with no wrapper of its own.
 
 Phase 4 is complete: `Tabs`, `Tooltip` and `Dialog` are done, on the platform primitives accepted
 in [ADR-0010](adr/0010-overlay-and-composite-strategy.md) and with no runtime dependency added.
-The manual keyboard and screen-reader checks that ADR requires are **not all done** — see the
-outstanding list there.
+The keyboard and forced-colors checks that ADR requires are now automated in `tests/browser/` and
+run in CI under `npm run check:browser`. **The screen-reader check is still not done.** One
+cross-engine limitation is accepted and stated rather than worked around: WebKit does not return
+focus to the trigger when the dialog closes. Both are recorded in that ADR.
 
 ## Phase 0 — Local repository and package foundation — **done**
 

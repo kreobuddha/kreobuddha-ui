@@ -96,7 +96,10 @@ outside the panel, which is where it belongs anyway.
 - No runtime dependency is added, and the published bundle does not grow beyond the components
   themselves.
 - Focus trapping, background inertness, `Esc`, and stacking order in `Dialog` are the browser's
-  behaviour, not ours, and cannot regress through our own changes.
+  behaviour, not ours, and cannot regress through our own changes. The other side of that bargain
+  is that where an engine gets one of them wrong, so do we: WebKit does not return focus to the
+  trigger when the dialog closes, and this is accepted as a stated limitation rather than patched.
+  See "The one cross-engine run" below.
 - Overlays carry **both** a shadow and a border. Forced-colors mode paints no shadow at all, so a
   panel relying on one alone would lose its edge entirely — this was already decided in ADR-0007 and
   now takes effect.
@@ -134,18 +137,65 @@ Required by the Phase 4 gate, and recorded here so they are not renegotiated per
 Phase 4 shipped with part of the list above unperformed. Recorded here rather than in a pull
 request body, because a pull request is read once and this is not done.
 
+Most of it has since been closed, and by automation rather than by hand: `tests/browser/` is a
+second Playwright project that drives the built Storybook with real key presses in a real engine,
+and it runs in CI under `npm run check:browser`. A check that lives in a test does not have to be
+remembered.
+
 | Check | State |
 |---|---|
 | `Tabs` keyboard — arrows, `Home`/`End`, one tab stop | done, real key presses in a browser |
 | `Tooltip` — focus opens, placement, top layer | done, measured in a browser |
-| `Dialog` — focus into the panel, return to the trigger | done, real interaction |
-| `Dialog` — `Tab` never leaves the panel | done, six real `Tab` presses, focus never left |
-| `Dialog` — `Escape` closes | **not done.** The available browser pane produces `keydown` and no `cancel` on a dialog that `:modal` matches. The wiring from `cancel` to `onClose` is covered by a unit test that dispatches the event; whether the browser fires it was not observed here |
-| forced-colors mode, all three components | **not done.** The mode cannot be emulated from the available tooling |
-| Screen reader, all three components | **not done.** Needs a real assistive technology on a real machine |
+| `Tooltip` — `Esc` closes without moving focus | done, automated in `tests/browser/overlays.spec.ts` |
+| `Dialog` — focus into the panel, return to the trigger | done, real interaction — **Chromium and Firefox; not WebKit**, see below |
+| `Dialog` — `Tab` never leaves the panel | done, automated: six real `Tab` presses, and the page behind is never focused |
+| `Dialog` — the page behind is inert | done, automated: a script cannot move focus to the trigger while the modal is open |
+| `Dialog` — `Escape` closes | done, automated. The earlier note stands as history: the browser pane available then produced `keydown` and no `cancel`. A real press in a real engine does fire `cancel`, and `onClose` runs |
+| forced-colors mode | done for the overlays, automated: with `forced-colors: active` emulated, the `Dialog` panel and the `Tooltip` bubble each still compute a non-zero border, which is what ADR-0007 asked for and what a shadow-only overlay would fail. Asserted on computed style rather than on a screenshot, because the forced-colors palette is the operating system's and a baseline would not survive the move from macOS to Ubuntu |
+| Screen reader, all three components | **not done.** Needs a real assistive technology on a real machine. The script is below |
 
-None of these is blocked by anything in the code. They need an environment this work did not have,
-and they should be run before the library claims conformance anywhere.
+### The one cross-engine run
+
+The automated project is Chromium, like everything else here. The same file was also run once, by
+hand and not in any chain, against Playwright's WebKit 26.5 and Firefox 153 builds — enough to say
+something about the other engines without claiming a cross-browser suite that does not exist.
+
+Firefox passed all four behaviour checks. WebKit passed three and failed one, and the failure is
+worth stating plainly: **on WebKit, closing the dialog does not return focus to the trigger.** It
+closes correctly, `Escape` works, the trap holds — but focus lands on `<body>`, and it does so
+whether the dialog is closed by `Escape` or by the close button. A keyboard user on that engine
+loses their place in the page.
+
+**Decided: this stays as a stated limitation and is not worked around.** Decision 1 above is that
+overlay focus behaviour is the browser's, and a restoration path written here would be the first
+crack in it — code that has to be right in every engine, kept in agreement with the engines that
+already do it correctly, to compensate for one of the three. The cost is named rather than hidden:
+a keyboard user closing a dialog in Safari is returned to the top of the document instead of to the
+control they opened it from.
+
+Two things would reopen this. The first is a consumer reporting it in practice. The second is
+confirmation in shipping Safari — Playwright's WebKit is a build for testing, and the behaviour
+above was observed there rather than in the browser people actually use.
+
+### The screen-reader script
+
+Three checks, one component each, on a real machine with VoiceOver (`Cmd`+`F5`). Run Storybook
+(`npm run storybook`) and open each story from the sidebar.
+
+1. **`Dialog` announces its name, and the page behind is unreachable.** Open
+   `Components/Dialog → Focus Returns To The Trigger`. `Tab` to "Delete workspace", press `Enter`.
+   Expected: VoiceOver announces the dialog and reads "Delete workspace" as its name, not just
+   "dialog". Then `VO`+`→` repeatedly through the whole panel: nothing from the page behind should
+   ever be read. `Escape` returns to the trigger and it is announced again.
+2. **`Tabs` announces the selection, the position and the panel.** Open
+   `Components/Tabs → Default`. `Tab` into the tab list, then press `→`. Expected: each tab is read
+   as a tab, as selected, and with its position in the set ("2 of 3" or the equivalent). One more
+   `Tab` moves to the panel, and the panel's content is read as belonging to that tab.
+3. **`Tooltip` is read with its trigger.** Open `Components/Tooltip → Default`. `Tab` to the
+   button. Expected: the tooltip text is read as the button's description, after its name, in one
+   announcement — not as separate loose text encountered later while navigating.
+
+Record the result here, per line, including what was actually announced when it differs.
 
 ## Alternatives considered
 

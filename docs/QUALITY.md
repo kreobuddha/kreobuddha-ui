@@ -98,6 +98,9 @@ story actually puts on screen, including combinations nobody thought to declare.
 
 ### 5. Manual accessibility
 
+Some of the list below is no longer manual — see §5a. What stays manual is what a runner cannot
+judge: what a screen reader actually announces.
+
 For every interactive component, record applicable checks:
 
 - keyboard-only operation;
@@ -111,6 +114,26 @@ For every interactive component, record applicable checks:
 
 Use relevant WAI-ARIA Authoring Practices as guidance, while remembering that APG examples are
 illustrative patterns rather than a complete production design system.
+
+### 5a. Browser behaviour
+
+`npm run check:browser` is the second Playwright project, `tests/browser/`, driven by the same
+`playwright.config.ts` over the same built Storybook as the visual run.
+
+It exists because the story runner cannot reach a class of behaviour that matters most on exactly
+the components where it is hardest to get right. `userEvent` dispatches events from JavaScript: it
+computes the tab order itself and fires synthetic keys. The modal focus trap and `Escape` on a
+`<dialog>` are neither — they are the engine reacting to real input, and a simulated `Tab` walks
+straight out of a modal. Asserting against that would be testing the simulation and calling it the
+platform.
+
+It compares nothing against a baseline, so unlike §6 nothing about it is platform-specific and **it
+runs in CI**. That is also why forced-colors is asserted here on computed style rather than on a
+screenshot: the forced-colors palette belongs to the operating system, and a baseline taken on
+macOS would fail on an Ubuntu runner for a reason unrelated to the change under review.
+
+Chromium only, like every other automated check here. ADR-0010 records a one-off run against
+WebKit and Firefox, and what it found, rather than the suite pretending to be cross-browser.
 
 ### 6. Visual regression
 
@@ -197,7 +220,7 @@ links. Documentation must not claim support or functionality that the published 
 | Utility or token logic | typecheck, lint, focused unit tests, token/build check |
 | Component behavior | typecheck, lint, focused tests, a11y, package build |
 | Component styling | component checks plus Storybook build and visual inspection |
-| Keyboard/focus behavior | component checks plus manual keyboard/focus review |
+| Keyboard/focus behavior | component checks plus `check:browser` for anything the engine owns, and manual keyboard/focus review for the rest |
 | Public exports/types | package build, artifact inspection, type/package lint, consumer smoke |
 | Build configuration | all static, package, Storybook, and consumer checks |
 | Release workflow | full CI in a non-publishing dry run |
@@ -218,6 +241,7 @@ package build                         running
 Storybook build                       running
 package artifact checks               running
 consumer smoke build                  running — packed tarball in examples/react-vite
+browser behaviour checks              running — real key presses, tests/browser
 visual regression for protected states in `verify`, skipped on CI — macOS baselines
 ```
 
