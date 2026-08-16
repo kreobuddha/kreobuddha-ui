@@ -10,7 +10,13 @@ export default tseslint.config(
   },
   js.configs.recommended,
   {
-    files: ['src/**/*.{ts,tsx}', 'tests/**/*.ts', '.storybook/**/*.{ts,tsx}', 'vite.config.ts'],
+    files: [
+      'src/**/*.{ts,tsx}',
+      'tests/**/*.ts',
+      '.storybook/**/*.{ts,tsx}',
+      'vite.config.ts',
+      'playwright.config.ts',
+    ],
     extends: [...tseslint.configs.recommendedTypeChecked],
     languageOptions: {
       parserOptions: {

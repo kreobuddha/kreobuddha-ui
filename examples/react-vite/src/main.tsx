@@ -10,6 +10,7 @@ import {
   Badge,
   Button,
   Checkbox,
+  Dialog,
   FieldGroup,
   IconButton,
   Select,
@@ -17,6 +18,7 @@ import {
   Switch,
   Tabs,
   TextField,
+  Tooltip,
   Textarea,
 } from '@kreobuddha/ui';
 import type { ButtonProps, ButtonVariant } from '@kreobuddha/ui';
@@ -76,6 +78,20 @@ export const App = (): React.ReactElement => (
         { id: 'members', label: 'Members', content: 'Who can reach it.' },
       ]}
     />
+
+    <Tooltip content="Copies the link to your clipboard" placement="bottom">
+      <Button variant="outlined">Copy link</Button>
+    </Tooltip>
+
+    <Dialog
+      open={false}
+      onClose={(): void => undefined}
+      title="Delete workspace"
+      description="Everything in it goes with it."
+      footer={<Button danger>Delete</Button>}
+    >
+      This cannot be undone.
+    </Dialog>
   </main>
 );
 

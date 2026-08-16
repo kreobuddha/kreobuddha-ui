@@ -9,6 +9,53 @@ explicitly rather than treated as disposable.
 
 ## [Unreleased]
 
+## [0.14.0] — 2026-08-16
+
+### Added
+
+- `Dialog` — a real `<dialog>` opened with `showModal()`, so the focus trap, the inert page behind,
+  the top layer and `Escape` are the browser's rather than a reimplementation. Controlled through
+  `open` and `onClose`: every way of closing calls back rather than closing on its own, so the
+  element and the consumer's state cannot disagree. `title` is required and becomes the accessible
+  name. A backdrop click closes by default; `dismissOnBackdrop={false}` is for a dialog holding a
+  form. Only the body scrolls, so the heading and the actions stay reachable.
+- Contrast measurements for the panel's title, body, description and close button.
+
+### Added
+
+- `Tooltip` — a description that opens on hover and on focus and closes on `Escape` without moving
+  focus. It enters the browser's top layer through the `popover` attribute, so nothing on the page
+  can cover it and no portal is involved, and it is placed with CSS anchor positioning — no
+  measuring, no scroll listener, no runtime dependency. Hover waits about 400ms so a pointer
+  crossing a row of buttons sets off nothing; focus opens at once. **It may only carry what the
+  reader can do without: there is no hover on a touchscreen.**
+- `--kreo-shadow-overlay`, added in `0.5.0` and unused since, is finally applied. The tooltip keeps
+  a border as well, because forced-colors mode paints no shadow at all.
+- A contrast measurement for text on the overlay surface, and a visual baseline for the open
+  tooltip — the first state that lives in the top layer, and so the first that a screenshot of the
+  story root would have missed entirely.
+
+### Changed
+
+- `prepare` became `prepack`. Installing the package no longer builds it, which is what `prepare`
+  made every consumer do; the build still runs before `npm pack` and `npm publish`, so the
+  published tarball is unaffected.
+- Workflow inputs reach the shell through the environment instead of being expanded into the script
+  body. An expanded `${{ }}` is text spliced into the program before the shell sees it, which is how
+  a workflow input becomes a command.
+
+### Added
+
+- A consumer fixture in `examples/react-vite`, packed and installed from a tarball in CI. It
+  resolves the package through its own `exports` map with no alias back to `src`, renders without a
+  DOM, and fails if a public export is missing from it — which already caught one export drifting
+  out of sync.
+- Visual regression over a curated list of protected states, in both themes. Baselines are macOS
+  only and the check runs locally rather than in CI, because the runners are Linux and the
+  screenshots would not match; the platform is part of the baseline path, so a Linux set can be
+  added beside it.
+- `SECURITY.md`, `CONTRIBUTING.md` and a Dependabot configuration.
+
 ## [0.13.0] — 2026-08-16
 
 ### Added
@@ -183,7 +230,8 @@ from git for a single consumer.
   is public API.
 - Inter bundled as WOFF2 subsets, so no external font request is made at runtime.
 
-[unreleased]: https://github.com/kreobuddha/kreobuddha-ui/compare/v0.13.0...HEAD
+[unreleased]: https://github.com/kreobuddha/kreobuddha-ui/compare/v0.14.0...HEAD
+[0.14.0]: https://github.com/kreobuddha/kreobuddha-ui/compare/v0.13.0...v0.14.0
 [0.13.0]: https://github.com/kreobuddha/kreobuddha-ui/compare/v0.12.0...v0.13.0
 [0.12.0]: https://github.com/kreobuddha/kreobuddha-ui/compare/v0.11.0...v0.12.0
 [0.11.0]: https://github.com/kreobuddha/kreobuddha-ui/compare/v0.10.0...v0.11.0

@@ -37,3 +37,7 @@ export { FieldGroup } from './components/FieldGroup/FieldGroup.js';
 export type { FieldGroupProps } from './components/FieldGroup/FieldGroup.js';
 export { Tabs } from './components/Tabs/Tabs.js';
 export type { TabItem, TabsActivation, TabsProps } from './components/Tabs/Tabs.js';
+export { Tooltip } from './components/Tooltip/Tooltip.js';
+export type { TooltipPlacement, TooltipProps } from './components/Tooltip/Tooltip.js';
+export { Dialog } from './components/Dialog/Dialog.js';
+export type { DialogProps, DialogSize } from './components/Dialog/Dialog.js';

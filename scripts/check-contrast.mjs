@@ -70,6 +70,15 @@ const PAIRS = [
   // the page, already measured as 'outlined label'; the rest label is 'muted text'.
   ['tab disabled label', '--kreo-surface-page', '--kreo-text-subtle', TEXT],
   ['tab indicator', '--kreo-surface-page', '--kreo-accent-500', NON_TEXT],
+  // Overlays. The tooltip's edge is not measured for the same reason as the tab rule: it is
+  // `--kreo-border-default`, the decorative divider, and in normal mode the shadow does the
+  // separating. In forced-colors the border becomes CanvasText, which the system guarantees.
+  ['tooltip text', '--kreo-surface-raised', '--kreo-text-primary', TEXT],
+  ['dialog title', '--kreo-surface-raised', '--kreo-text-primary', TEXT],
+  ['dialog body', '--kreo-surface-raised', '--kreo-text-body', TEXT],
+  ['dialog description', '--kreo-surface-raised', '--kreo-text-muted', TEXT],
+  // The close button is a ghost control, and the overlay surface is one no other control sits on.
+  ['dialog dismiss', '--kreo-surface-raised', '--kreo-text-primary', TEXT],
   // The rule under the tab list is not measured. It is `--kreo-border-default`, the decorative
   // divider token, which is deliberately below 3:1 — that is why `--kreo-border-control` exists
   // separately. Which tab is selected is carried by the indicator above and by the label colour,

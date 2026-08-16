@@ -5,7 +5,7 @@ data-dense frontend applications.
 
 ## Status: early, but published
 
-**Twelve components ship today: `Button`, `IconButton`, `TextField`, `Textarea`, `Select`, `Checkbox`, `Switch`, `FieldGroup`, `Tabs`, `Badge`, `Spinner` and `Alert`.** Everything else in
+**Fourteen components ship today: `Button`, `IconButton`, `TextField`, `Textarea`, `Select`, `Checkbox`, `Switch`, `FieldGroup`, `Tabs`, `Tooltip`, `Dialog`, `Badge`, `Spinner` and `Alert`.** Everything else in
 [docs/ROADMAP.md](docs/ROADMAP.md) is a plan, not an available feature. The package is published so
 it can be consumed normally; treat the `0.x` line as a moving target and pin what you depend on.
 
@@ -383,6 +383,105 @@ The tab list takes no label of its own. It usually sits under a heading that alr
 adding one would have a screen reader say the same thing twice; pass `aria-label` or
 `aria-labelledby` through when there is no such heading. Tabs are horizontal only.
 
+### `Tooltip`
+
+| Prop        | Type                                     | Default |
+| ----------- | ---------------------------------------- | ------- |
+| `content`   | `ReactNode`                              | —       |
+| `children`  | `ReactElement`                           | —       |
+| `placement` | `'top' \| 'bottom' \| 'left' \| 'right'` | `'top'` |
+| `className` | `string`                                 | —       |
+
+```tsx
+<Tooltip content="Copies the link to your clipboard">
+  <IconButton label="Copy link" icon={<CopyIcon />} />
+</Tooltip>
+```
+
+> **A tooltip may only carry what the reader can do without.**
+>
+> It opens on hover and on focus, which means it **does not exist on a touchscreen** — there is no
+> hover there. This is inherent to the pattern, not a gap to be closed later. Anything a reader
+> needs belongs in a label, a hint, or visible text. See
+> [ADR-0010](docs/adr/0010-overlay-and-composite-strategy.md).
+
+`children` must be a single element that accepts a `ref` and DOM props. The tooltip's id is put on
+that element as `aria-describedby`, so the description is announced with the control rather than
+floating beside it.
+
+**Opening on hover waits about 400ms; focus opens at once.** A pointer crossing a row of buttons
+should not set off a chain of tooltips, and there is no such thing as a passing focus. Closing never
+waits — a tooltip that lingers after the pointer has left is in the way.
+
+`Escape` closes it without moving focus: the reader is still on the control.
+
+It enters the browser's top layer through the `popover` attribute, so nothing on the page can cover
+it, and no portal is involved. Placement is CSS anchor positioning — no measuring, no scroll
+listener, no runtime dependency. The browser flips it when there is no room; on Safari 18.2–18.3
+placement is correct but the flip does not happen.
+
+The tooltip never receives pointer events. Moving towards one is the most common way to lose the
+thing you were reading.
+
+### `Dialog`
+
+| Prop                | Type                   | Default |
+| ------------------- | ---------------------- | ------- |
+| `open`              | `boolean`              | —       |
+| `onClose`           | `() => void`           | —       |
+| `title`             | `string`               | —       |
+| `size`              | `'sm' \| 'md' \| 'lg'` | `'md'`  |
+| `description`       | `ReactNode`            | —       |
+| `footer`            | `ReactNode`            | —       |
+| `dismissible`       | `boolean`              | `true`  |
+| `dismissLabel`      | `string`               | `Close` |
+| `dismissOnBackdrop` | `boolean`              | `true`  |
+
+```tsx
+<Dialog
+  open={open}
+  onClose={() => setOpen(false)}
+  title="Delete workspace"
+  description="Everything in it goes with it, including the audit log."
+  footer={
+    <>
+      <Button variant="outlined" onClick={() => setOpen(false)}>
+        Keep it
+      </Button>
+      <Button danger onClick={remove}>
+        Delete
+      </Button>
+    </>
+  }
+>
+  This cannot be undone.
+</Dialog>
+```
+
+It is a real `<dialog>`, opened with `showModal()`. **The focus trap, the inert page behind, the
+top layer and `Escape` are the browser's**, not a reimplementation — which is the point of
+[ADR-0010](docs/adr/0010-overlay-and-composite-strategy.md). Focus moves into the panel on open and
+returns to whatever opened it on close, and neither is done by hand.
+
+**`title` is required.** It becomes the accessible name through `aria-labelledby`, and a dialog
+without one leaves a screen reader announcing nothing but "dialog".
+
+**It is controlled.** `open` and `onClose`, like everything else here. Every way of closing —
+`Escape`, the close button, the backdrop — calls `onClose` rather than closing on its own, so the
+element and your state can never disagree about what is on screen.
+
+**A click on the backdrop closes it, by default.** That is what people expect from a modal on the
+web, and it is the most common way to lose something typed. Set `dismissOnBackdrop={false}` on any
+dialog holding a form; nothing warns first otherwise.
+
+Only the body scrolls when the content is taller than the viewport, so the heading and the actions
+never scroll away from a reader who needs them.
+
+In a test environment without the `<dialog>` methods — jsdom has neither, as of version 30 — the
+`open` attribute is set directly instead, so the dialog is still present and queryable in your own
+tests. The top layer, the backdrop and the focus trap are absent there, because jsdom has no notion
+of any of them.
+
 ### `Badge`
 
 | Prop   | Type                                                                    | Default     |
@@ -525,6 +624,7 @@ npm run check:contrast
 npm run build
 npm run check:package
 npm run check:consumer
+npm run check:visual
 npm run storybook
 ```
 
@@ -533,6 +633,12 @@ independent application with its own lockfile and no alias back to `src` — and
 that the published declarations type-check, that the build works, that importing one component does
 not pull in the others, that React is not bundled, that the fonts are real files rather than inlined
 data, and that the package renders on a server with no DOM at all.
+
+`npm run check:visual` compares the protected visual states against committed baselines, over the
+built Storybook. It is a local check rather than a CI gate: the baselines are macOS and the runners
+are Ubuntu, where the same text does not render identically. Run it before merging anything that
+touches a token or a component stylesheet, review the diff, and use `npm run check:visual:update`
+to accept an intended change.
 
 `npm run storybook` opens the workbench. **Overview → Kit** is a single page showing everything the
 library currently ships, in either theme — the quickest way to see the whole kit at once.
