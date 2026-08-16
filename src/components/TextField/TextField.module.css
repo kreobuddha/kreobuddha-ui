@@ -1,6 +1,11 @@
 /* The shared field parts live in `../field/field.module.css` and are pulled in with `composes`.
    Only what is particular to a single-line field is written here. */
 
+/* The token dependency has to be declared in this file. It cannot be inherited through `composes`:
+   an `@import` in a composed file is not inlined and survives into the build as a literal rule
+   whose path no longer resolves. */
+@import '../../styles.css';
+
 .field {
   composes: field from '../field/field.module.css';
 }
