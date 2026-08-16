@@ -50,6 +50,11 @@ const PROTECTED = [
   { id: 'components-iconbutton--sizes', name: 'iconbutton-sizes' },
   { id: 'components-spinner--sizes', name: 'spinner-sizes' },
 
+  // `Skeleton` is drawn entirely by its fill and its radius, with no text and no border for any
+  // other check to notice a change by. The run is under `prefers-reduced-motion: reduce`, so this
+  // photographs the still state — which is the state a reader with that preference always sees.
+  { id: 'components-skeleton--card-placeholder', name: 'skeleton-card' },
+
   // `Tabs` is the first component whose selected state is carried by a moving indicator rather
   // than by a fill, and the first that has to survive more tabs than fit.
   { id: 'components-tabs--default', name: 'tabs-default' },

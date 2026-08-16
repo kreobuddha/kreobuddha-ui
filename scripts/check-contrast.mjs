@@ -101,6 +101,11 @@ const PAIRS = [
   ['control border', '--kreo-surface-page', '--kreo-border-control', NON_TEXT],
   ['control border on card', '--kreo-surface-card', '--kreo-border-control', NON_TEXT],
   ['danger border', '--kreo-surface-page', '--kreo-border-danger', NON_TEXT],
+  // `Skeleton` adds no pair. It is a fill with nothing on it: no text, and no boundary that
+  // identifies a control or carries a state, which is what 1.4.11 measures. It is `aria-hidden`
+  // and stands in for content that has not arrived, so a reader who cannot see it has lost
+  // nothing — WCAG excludes purely decorative content by the same reasoning. In forced-colors,
+  // where its fill is not painted at all, it draws a GrayText border the system guarantees.
   ['focus ring', '--kreo-surface-page', '--kreo-border-focus', NON_TEXT],
   ['focus ring on filled', '--kreo-accent-500', '--kreo-text-on-accent', NON_TEXT],
 ];

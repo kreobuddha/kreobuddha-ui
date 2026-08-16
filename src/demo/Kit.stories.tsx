@@ -8,6 +8,7 @@ import { Button } from '../components/Button/Button.js';
 import { FieldGroup } from '../components/FieldGroup/FieldGroup.js';
 import { IconButton } from '../components/IconButton/IconButton.js';
 import { Select } from '../components/Select/Select.js';
+import { Skeleton } from '../components/Skeleton/Skeleton.js';
 import { Spinner } from '../components/Spinner/Spinner.js';
 import { Switch } from '../components/Switch/Switch.js';
 import { Tabs } from '../components/Tabs/Tabs.js';
@@ -284,6 +285,25 @@ export const Kit: Story = {
           <Spinner size="md" />
           <Spinner size="lg" />
           <Spinner size="md" label="Loading" />
+        </div>
+      </Section>
+
+      <Section title="Skeleton — the shape of content that has not arrived">
+        <div style={{ display: 'flex', gap: 'var(--kreo-space-3)', alignItems: 'center' }}>
+          <Skeleton
+            style={{ width: 40, height: 40, borderRadius: 'var(--kreo-radius-full)', flex: 'none' }}
+          />
+          <div
+            style={{
+              display: 'flex',
+              flexDirection: 'column',
+              gap: 'var(--kreo-space-2)',
+              flex: 1,
+            }}
+          >
+            <Skeleton style={{ width: '55%' }} />
+            <Skeleton style={{ width: '35%' }} />
+          </div>
         </div>
       </Section>
 

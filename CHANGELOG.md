@@ -11,6 +11,14 @@ explicitly rather than treated as disposable.
 
 ### Added
 
+- `Skeleton` — a placeholder block that holds the shape of content while it loads. It has no props
+  of its own: the default is one line of text at the surrounding size, `1em` tall and as wide as
+  its container, and every other shape is the `style` or `className` you already write. It is
+  always hidden from assistive technology and cannot be unhidden, so the wait is announced once, by
+  the text or the `aria-busy` or the labelled `Spinner` around it, rather than twice. The pulse
+  stops completely under `prefers-reduced-motion`, and in forced-colors mode, where the fill is not
+  painted, it keeps its shape with a system-coloured outline.
+
 - A second Playwright project, `tests/browser/`, run by `npm run check:browser` and in CI. It sends
   real key presses to a real engine, which is the only way to check the things the story runner
   simulates rather than exercises: `Escape` on a modal `<dialog>`, the focus trap, and the inert

@@ -5,7 +5,7 @@ data-dense frontend applications.
 
 ## Status: early, but published
 
-**Fourteen components ship today: `Button`, `IconButton`, `TextField`, `Textarea`, `Select`, `Checkbox`, `Switch`, `FieldGroup`, `Tabs`, `Tooltip`, `Dialog`, `Badge`, `Spinner` and `Alert`.** Everything else in
+**Fifteen components ship today: `Button`, `IconButton`, `TextField`, `Textarea`, `Select`, `Checkbox`, `Switch`, `FieldGroup`, `Tabs`, `Tooltip`, `Dialog`, `Badge`, `Spinner`, `Skeleton` and `Alert`.** Everything else in
 [docs/ROADMAP.md](docs/ROADMAP.md) is a plan, not an available feature. The package is published so
 it can be consumed normally; treat the `0.x` line as a moving target and pin what you depend on.
 
@@ -542,6 +542,37 @@ thing twice, which is the usual failure when a spinner sits beside the word "Loa
 
 `Button` uses it internally for its own loading state, where the button already carries `aria-busy`
 and the spinner stays decorative.
+
+### `Skeleton`
+
+It has no props of its own. It renders a `<span>` and forwards `ref`, `className`, `style` and
+every other native span prop to it — except `children`, which it does not accept.
+
+```tsx
+import { Skeleton } from '@kreobuddha/ui';
+
+<Skeleton />
+<Skeleton style={{ width: '60%' }} />
+<Skeleton style={{ width: 40, height: 40, borderRadius: '50%' }} />;
+```
+
+A placeholder block that holds the shape of content while it loads. By default it is one line of
+text at the surrounding size — the full width of its container, and `1em` tall, so a placeholder
+inside a heading is taller than one inside body text without being told. **Every other shape is
+your own CSS**: a circle is a border radius, an avatar is a width and a height. There is no `width`
+prop, because `style` and `className` already say it, and better, inside a grid or a flex row.
+
+**It is always hidden from assistive technology**, and `aria-hidden` cannot be turned off through
+props. It announces nothing, so the loading state has to be carried by something else: visible
+text, a container with `aria-busy`, or a `Spinner` with a `label`. Two announcements of the same
+wait is the failure this prevents.
+
+The pulse stops entirely under `prefers-reduced-motion` — a still block says the same thing. In
+forced-colors mode its fill is not painted at all, so it draws a `GrayText` outline instead and
+keeps the shape it is holding open.
+
+`children` is removed from the type on purpose: content placed inside a hidden block is content
+nobody can reach.
 
 ## Theming
 

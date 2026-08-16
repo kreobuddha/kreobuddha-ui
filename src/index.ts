@@ -17,6 +17,8 @@ export type {
   IconButtonSize,
   IconButtonVariant,
 } from './components/IconButton/IconButton.js';
+export { Skeleton } from './components/Skeleton/Skeleton.js';
+export type { SkeletonProps } from './components/Skeleton/Skeleton.js';
 export { Spinner } from './components/Spinner/Spinner.js';
 export type { SpinnerProps, SpinnerSize } from './components/Spinner/Spinner.js';
 export { TextField } from './components/TextField/TextField.js';

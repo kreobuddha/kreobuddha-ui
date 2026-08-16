@@ -14,6 +14,7 @@ import {
   FieldGroup,
   IconButton,
   Select,
+  Skeleton,
   Spinner,
   Switch,
   Tabs,
@@ -54,6 +55,7 @@ export const App = (): React.ReactElement => (
       Live
     </Badge>
     <Spinner label="Loading the fixture" />
+    <Skeleton style={{ width: 200 }} />
 
     <Alert tone="danger" title="Save failed" live onDismiss={() => undefined}>
       The workspace was changed by someone else.
