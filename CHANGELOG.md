@@ -9,6 +9,8 @@ explicitly rather than treated as disposable.
 
 ## [Unreleased]
 
+## [0.13.0] — 2026-08-16
+
 ### Added
 
 - `Tabs` — a tab list and its panel, with the full WAI-ARIA keyboard model: arrows move and select,
@@ -181,7 +183,8 @@ from git for a single consumer.
   is public API.
 - Inter bundled as WOFF2 subsets, so no external font request is made at runtime.
 
-[unreleased]: https://github.com/kreobuddha/kreobuddha-ui/compare/v0.12.0...HEAD
+[unreleased]: https://github.com/kreobuddha/kreobuddha-ui/compare/v0.13.0...HEAD
+[0.13.0]: https://github.com/kreobuddha/kreobuddha-ui/compare/v0.12.0...v0.13.0
 [0.12.0]: https://github.com/kreobuddha/kreobuddha-ui/compare/v0.11.0...v0.12.0
 [0.11.0]: https://github.com/kreobuddha/kreobuddha-ui/compare/v0.10.0...v0.11.0
 [0.10.0]: https://github.com/kreobuddha/kreobuddha-ui/compare/v0.9.0...v0.10.0
