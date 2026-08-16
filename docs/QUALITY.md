@@ -227,8 +227,10 @@ is not cross-browser, and claiming otherwise would be unsupported.
 Do not create empty or permanently skipped CI jobs merely to match this list. A check becomes
 required when the feature it validates is real.
 
-GitHub Actions should use minimum permissions. Third-party actions should be pinned according to the
-accepted supply-chain policy. Publishing jobs must be isolated from ordinary pull-request checks.
+GitHub Actions should use minimum permissions. Third-party actions are pinned to a commit SHA with
+the corresponding version in a trailing comment: a tag can be repointed by whoever writes to the
+action's repository, and a commit cannot. Dependabot proposes the bumps, so the pins move
+deliberately rather than rotting. Publishing jobs must be isolated from ordinary pull-request checks.
 
 ## Coverage policy
 
