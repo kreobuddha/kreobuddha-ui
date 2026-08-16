@@ -48,8 +48,11 @@ checks. CI runs the same thing again independently, on Node 22 and 24.
 While working, the fast loop is:
 
 ```bash
-npm run test:one -- Name
+npm run verify:fast
 ```
+
+Format, lint, stylelint, types and the unit tests, in a few seconds. For one component alone,
+`npm run test:one -- Name`.
 
 Requirements that are easy to miss:
 

@@ -130,8 +130,13 @@ Rules:
 The run is `npm run check:visual`, driven by `playwright.config.ts` over the built Storybook, with
 `npm run check:visual:update` to rewrite baselines and `tests/visual/__screenshots__/` to review.
 
-**It is a local pre-merge check rather than a CI gate**, and that follows from the rule above about
-a single baseline environment. The committed baselines are macOS; the runners are Ubuntu, and the
+**It runs inside `npm run verify` and stands down on CI**, and that follows from the rule above
+about a single baseline environment. `scripts/check-visual.mjs` is the wrapper: locally it runs the
+comparison, on a runner it explains why it did not and exits zero.
+
+Being in the chain rather than beside it is the point. The baselines cannot be compared on CI, so
+the only thing standing between a token change and an unreviewed one is somebody remembering to run
+a separate command — and a check nobody is obliged to run is a check that quietly stops being run. The committed baselines are macOS; the runners are Ubuntu, and the
 same text does not render identically on both, so a CI job against these baselines would fail for a
 reason that has nothing to do with the change under review. The platform is part of the snapshot
 path, so a Linux set can be generated and committed beside the macOS one later — that, rather than
@@ -213,7 +218,7 @@ package build                         running
 Storybook build                       running
 package artifact checks               running
 consumer smoke build                  running — packed tarball in examples/react-vite
-visual regression for protected states local only — macOS baselines, not a CI gate
+visual regression for protected states in `verify`, skipped on CI — macOS baselines
 ```
 
 The story tests need a browser, so CI installs Chromium via Playwright. Only Chromium: the suite

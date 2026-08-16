@@ -635,10 +635,13 @@ not pull in the others, that React is not bundled, that the fonts are real files
 data, and that the package renders on a server with no DOM at all.
 
 `npm run check:visual` compares the protected visual states against committed baselines, over the
-built Storybook. It is a local check rather than a CI gate: the baselines are macOS and the runners
-are Ubuntu, where the same text does not render identically. Run it before merging anything that
-touches a token or a component stylesheet, review the diff, and use `npm run check:visual:update`
-to accept an intended change.
+built Storybook. It runs as part of `npm run verify` and stands down on CI, because the baselines
+are macOS and the runners are Ubuntu, where the same text does not render identically. Review the
+diff when it fails, and use `npm run check:visual:update` to accept an intended change.
+
+`npm run verify:fast` is the inner loop — format, lint, stylelint, types and the unit tests, a few
+seconds. `npm run verify` is the full gate and what CI runs; use it before opening a pull request,
+not after every edit.
 
 `npm run storybook` opens the workbench. **Overview → Kit** is a single page showing everything the
 library currently ships, in either theme — the quickest way to see the whole kit at once.
