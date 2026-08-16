@@ -188,6 +188,23 @@ Requirements are defined in `RELEASES.md`. Component count alone cannot trigger 
 A candidate enters active scope only when a real consumer scenario demonstrates the need and the
 project can support its semantic and keyboard contract.
 
+## Blocked on upstream
+
+Work that is decided and cannot proceed yet. Each entry names what has to happen elsewhere first,
+so it is picked up when that happens rather than rediscovered.
+
+- **TypeScript 7.** Wanted, and blocked by the linter: `typescript-eslint@8.67.0` declares
+  `peer typescript ">=4.8.4 <6.1.0"`, and that is the latest stable release — everything above it
+  on npm is an `8.67.1` alpha. Installing TypeScript 7 alongside it fails `npm ci` outright.
+
+  The only way through today is `--legacy-peer-deps`, which means accepting a resolution npm has
+  already called incorrect in order to get a green run — ruled out by `CLAUDE.md`, which says not
+  to weaken a check to make it pass.
+
+  Take it when `typescript-eslint` ships a release whose peer range admits TypeScript 7. Dependabot
+  will raise the pull request; it was closed once already, as
+  [#32](https://github.com/kreobuddha/kreobuddha-ui/pull/32).
+
 ## Explicitly deferred
 
 - backend and remote data;
