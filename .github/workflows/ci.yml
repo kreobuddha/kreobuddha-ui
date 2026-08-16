@@ -53,6 +53,11 @@ jobs:
       - run: npm run check:contrast
       - run: npm run build
       - run: npm run build-storybook
+
+      # Reads the built stylesheets and fails on an un-inlined `@import` or a missing token layer.
+      # It has to run after both builds, because both are what it inspects.
+      - run: npm run check:css
+
       - run: npm run check:package
 
       # The only check that crosses the package boundary: it packs the package, installs the

@@ -47,8 +47,8 @@
     "check:contrast": "node scripts/check-contrast.mjs",
     "check:css": "node scripts/check-css-artifacts.mjs",
     "check:package": "npm run build && publint && attw --pack --profile esm-only --exclude-entrypoints styles.css",
-    "check:visual": "playwright test",
-    "check:visual:update": "playwright test --update-snapshots",
+    "check:visual": "node scripts/check-visual.mjs",
+    "check:visual:update": "node scripts/check-visual.mjs --update-snapshots",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "lint": "eslint .",
@@ -59,7 +59,8 @@
     "test": "vitest run",
     "test:one": "vitest run --project unit",
     "typecheck": "tsc -p tsconfig.json",
-    "verify": "npm run format:check && npm run lint && npm run lint:css && npm run typecheck && npm test && npm run check:contrast && npm run build && npm run build-storybook && npm run check:css && npm run check:package && npm run check:consumer"
+    "verify": "npm run format:check && npm run lint && npm run lint:css && npm run typecheck && npm test && npm run check:contrast && npm run build && npm run build-storybook && npm run check:css && npm run check:package && npm run check:consumer && npm run check:visual",
+    "verify:fast": "npm run format:check && npm run lint && npm run lint:css && npm run typecheck && npm run test:one"
   },
   "peerDependencies": {
     "react": "^19.0.0",
