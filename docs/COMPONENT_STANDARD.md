@@ -118,7 +118,6 @@ excluded:
 - long content;
 - icon-only;
 - light and dark themes;
-- comfortable and compact density;
 - reduced motion;
 - forced colors;
 - RTL-sensitive layout.
@@ -132,7 +131,7 @@ Stories are English, deterministic, and focused on behavior. Include applicable 
 - meaningful states and edge cases;
 - composition with adjacent components;
 - keyboard or interaction flow via a `play` function;
-- themes and density after those foundations exist;
+- both themes;
 - long content and narrow viewport where layout risk exists.
 
 Do not duplicate a full Cartesian product of states if a smaller set proves the same contract.
@@ -164,7 +163,7 @@ A public component is done when:
 - automated accessibility checks pass for documented stories;
 - keyboard and focus behavior has been manually reviewed where applicable;
 - representative stories and English documentation exist;
-- visual behavior has been inspected in supported themes and densities that currently exist;
+- visual behavior has been inspected in both supported themes;
 - package build, declarations, and public exports pass;
 - the packed consumer still works when the public boundary changes;
 - limitations and unverified claims are stated honestly;

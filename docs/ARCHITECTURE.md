@@ -168,8 +168,9 @@ settled in [ADR-0001](adr/0001-token-prefix-theme-attribute-and-styling-model.md
 records that token values are adopted from the separate Claude Design project rather than invented
 here.
 
-Density is handled by tokens rather than per-component branches. It is introduced only after the
-first component validates both comfortable and compact modes.
+There is no density layer. Control sizing is per-component `sm`/`md`/`lg`, and no host-level
+attribute selects a `comfortable` or `compact` mode —
+[ADR-0012](adr/0012-density-is-dropped.md) records why the promised token layer was dropped.
 
 ## Component API
 

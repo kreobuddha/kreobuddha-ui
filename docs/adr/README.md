@@ -62,6 +62,7 @@ records it.
 | CSS Modules, semantic CSS variables, theme attribute, token prefix | ADR-0001 |
 | Primitive strategy for `Dialog`, `Tooltip` and composite widgets | ADR-0010 |
 | Who owns toast state, and how a toast is announced | ADR-0011 |
+| Comfortable and compact density | ADR-0012 — dropped, not deferred |
 | npm publication and release authentication | ADR-0006 |
 | Storybook and test-runner responsibilities | open — settled in practice, never written down |
 | Changesets instead of a hand-written changelog | open — decided in principle, not implemented |
