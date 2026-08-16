@@ -27,10 +27,18 @@ if (process.env['CI']) {
 }
 
 // `npx` rather than a bare binary name: this has to work from `npm run verify` and from a shell.
-const result = spawnSync('npx', ['playwright', 'test', ...process.argv.slice(2)], {
-  stdio: 'inherit',
-  shell: false,
-});
+//
+// `--project=visual` is not optional. The configuration also defines a `browser` project for
+// behaviour, and without the filter this wrapper would pull that in too — and drag it into the CI
+// skip above, where it does belong and where nothing about it is platform-dependent.
+const result = spawnSync(
+  'npx',
+  ['playwright', 'test', '--project=visual', ...process.argv.slice(2)],
+  {
+    stdio: 'inherit',
+    shell: false,
+  }
+);
 
 if (result.error) {
   process.stderr.write(`${result.error.message}\n`);

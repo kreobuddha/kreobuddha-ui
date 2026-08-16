@@ -9,6 +9,21 @@ explicitly rather than treated as disposable.
 
 ## [Unreleased]
 
+### Added
+
+- A second Playwright project, `tests/browser/`, run by `npm run check:browser` and in CI. It sends
+  real key presses to a real engine, which is the only way to check the things the story runner
+  simulates rather than exercises: `Escape` on a modal `<dialog>`, the focus trap, and the inert
+  page behind it. It also asserts that the `Dialog` panel and the `Tooltip` bubble still compute a
+  border under `forced-colors: active`, where no shadow is painted. This closes most of the
+  outstanding list in ADR-0010; the screen-reader check remains open.
+
+### Changed
+
+- `README.md` now states a `Dialog` limitation on WebKit: closing it does not return focus to the trigger, as it does on
+  Chromium and Firefox. The behaviour belongs to the engine and is stated rather than worked
+  around — see `README.md` and ADR-0010.
+
 ## [0.14.0] — 2026-08-16
 
 ### Added

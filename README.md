@@ -463,6 +463,13 @@ top layer and `Escape` are the browser's**, not a reimplementation — which is 
 [ADR-0010](docs/adr/0010-overlay-and-composite-strategy.md). Focus moves into the panel on open and
 returns to whatever opened it on close, and neither is done by hand.
 
+**One known limitation, and it follows from that.** On WebKit, closing the dialog does not return
+focus to the trigger — focus lands on the document instead, whether you close with `Escape` or with
+the button. Chromium and Firefox return it. This is the engine's behaviour and it is not worked
+around here, because the alternative is a focus-restoration path of our own to keep in agreement
+with the two engines that already get it right. It was observed in Playwright's WebKit build rather
+than in shipping Safari; ADR-0010 records what would reopen the decision.
+
 **`title` is required.** It becomes the accessible name through `aria-labelledby`, and a dialog
 without one leaves a screen reader announcing nothing but "dialog".
 

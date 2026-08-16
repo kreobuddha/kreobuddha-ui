@@ -1,5 +1,7 @@
 import { expect, test } from '@playwright/test';
 
+import { storyUrl } from '../story-url.js';
+
 /**
  * Visual checks protect intentional states, not every possible prop combination —
  * `docs/QUALITY.md` §6. The list below is therefore curated rather than generated from the story
@@ -10,10 +12,6 @@ import { expect, test } from '@playwright/test';
  * change: the whole kit in both themes, the focus ring, the invalid treatment, and the two shapes
  * that layout can break — long content and a full-width control.
  */
-
-/** Every story renders inside the preview iframe, which is what carries the theme decorator. */
-const storyUrl = (id: string, theme: 'light' | 'dark'): string =>
-  `/iframe.html?id=${id}&globals=theme:${theme}&viewMode=story`;
 
 const PROTECTED = [
   // The sweep: everything the library ships, on one page. A token change shows up here first.
