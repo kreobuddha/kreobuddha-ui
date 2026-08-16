@@ -101,6 +101,11 @@ const PAIRS = [
   ['control border', '--kreo-surface-page', '--kreo-border-control', NON_TEXT],
   ['control border on card', '--kreo-surface-card', '--kreo-border-control', NON_TEXT],
   ['danger border', '--kreo-surface-page', '--kreo-border-danger', NON_TEXT],
+  // `Accordion`: the heading of a section, which is the one place a hovered row puts primary text
+  // on the hover surface. The chevron is `--kreo-text-muted` on the page, already measured as
+  // 'select chevron' on a card and as a mark elsewhere; the rules between sections are the
+  // decorative divider, which separates content rather than identifying a control.
+  ['accordion heading hovered', '--kreo-surface-hover', '--kreo-text-primary', TEXT],
   // `Progress`: the fill against the track it sits in. The track's own edge is not a separate
   // entry — it is `--kreo-border-control` on the page or on a card, already measured as 'control
   // border' and 'control border on card'. It carries that token rather than a decorative divider

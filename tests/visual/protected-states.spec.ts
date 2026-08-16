@@ -50,6 +50,11 @@ const PROTECTED = [
   { id: 'components-iconbutton--sizes', name: 'iconbutton-sizes' },
   { id: 'components-spinner--sizes', name: 'spinner-sizes' },
 
+  // `Accordion` draws one open section beside two closed ones: the rules between sections, the
+  // turned chevron, and the padding that keeps a heading and its body on the same rhythm. All
+  // three are tokens, and none of them is checked anywhere else.
+  { id: 'components-accordion--open-from-the-start', name: 'accordion-open' },
+
   // `Progress` is geometry: an empty track, a partial fill, a full one, and the indeterminate
   // segment parked in the middle by the reduced-motion rule. Nothing else would notice the fill
   // spilling past the rounded end of its track, or a bar at 100% leaving a sliver of track behind.

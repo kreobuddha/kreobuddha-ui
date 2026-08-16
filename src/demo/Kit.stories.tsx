@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import type { CSSProperties, ReactElement, ReactNode } from 'react';
 
+import { Accordion } from '../components/Accordion/Accordion.js';
 import { Alert } from '../components/Alert/Alert.js';
 import { Badge } from '../components/Badge/Badge.js';
 import { Checkbox } from '../components/Checkbox/Checkbox.js';
@@ -439,6 +440,34 @@ export const Kit: Story = {
               label: 'Billing',
               content: 'Not reachable.',
               disabled: true,
+            },
+          ]}
+        />
+      </Section>
+
+      <Section title="Accordion — one open at a time, by the browser">
+        <Accordion
+          exclusive
+          items={[
+            {
+              id: 'general',
+              label: 'General',
+              content: 'The workspace name, its slug, and the region its data lives in.',
+              defaultOpen: true,
+            },
+            {
+              id: 'members',
+              label: (
+                <>
+                  Members <Badge tone="neutral">12</Badge>
+                </>
+              ),
+              content: 'Who can reach the workspace, and what each of them may change.',
+            },
+            {
+              id: 'billing',
+              label: 'Billing',
+              content: 'The plan, the seats in use, and where the invoices are sent.',
             },
           ]}
         />

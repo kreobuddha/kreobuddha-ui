@@ -11,6 +11,13 @@ explicitly rather than treated as disposable.
 
 ### Added
 
+- `Accordion` — sections that open and close, built on `<details>` and `<summary>`. The disclosure
+  button, the tab stop, Enter and Space, and the expanded/collapsed announcement are all the
+  platform's; the component adds no ARIA and no state. `exclusive` shares one `name` across the
+  sections, which is how the browser — not this library — keeps a single section open, and two
+  accordions on a page never close each other. `defaultOpen` is an initial value, so a parent
+  re-render cannot reopen a section the reader closed. There is no height animation: animating a
+  `<details>` means taking its state back from the browser.
 - `Progress` — a bar for work whose extent is known, and, with no `value`, for work whose extent is
   not. The indeterminate state reports no `aria-valuenow` at all, so nothing announces a percentage
   nobody measured; its segment travels the track, and stands still in the middle of it under

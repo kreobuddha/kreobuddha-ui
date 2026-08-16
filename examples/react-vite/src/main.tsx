@@ -6,6 +6,7 @@ import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 
 import {
+  Accordion,
   Alert,
   Badge,
   Button,
@@ -58,6 +59,14 @@ export const App = (): React.ReactElement => (
     <Spinner label="Loading the fixture" />
     <Skeleton style={{ width: 200 }} />
     <Progress label="Uploading files" value={40} />
+
+    <Accordion
+      exclusive
+      items={[
+        { id: 'general', label: 'General', content: 'Where the workspace lives.' },
+        { id: 'members', label: 'Members', content: 'Who can reach it.' },
+      ]}
+    />
 
     <Alert tone="danger" title="Save failed" live onDismiss={() => undefined}>
       The workspace was changed by someone else.

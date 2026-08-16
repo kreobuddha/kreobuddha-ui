@@ -5,7 +5,7 @@ data-dense frontend applications.
 
 ## Status: early, but published
 
-**Sixteen components ship today: `Button`, `IconButton`, `TextField`, `Textarea`, `Select`, `Checkbox`, `Switch`, `FieldGroup`, `Tabs`, `Tooltip`, `Dialog`, `Badge`, `Spinner`, `Skeleton`, `Progress` and `Alert`.** Everything else in
+**Seventeen components ship today: `Button`, `IconButton`, `TextField`, `Textarea`, `Select`, `Checkbox`, `Switch`, `FieldGroup`, `Tabs`, `Accordion`, `Tooltip`, `Dialog`, `Badge`, `Spinner`, `Skeleton`, `Progress` and `Alert`.** Everything else in
 [docs/ROADMAP.md](docs/ROADMAP.md) is a plan, not an available feature. The package is published so
 it can be consumed normally; treat the `0.x` line as a moving target and pin what you depend on.
 
@@ -542,6 +542,45 @@ thing twice, which is the usual failure when a spinner sits beside the word "Loa
 
 `Button` uses it internally for its own loading state, where the button already carries `aria-busy`
 and the spinner stays decorative.
+
+### `Accordion`
+
+| Prop        | Type              | Default    |
+| ----------- | ----------------- | ---------- |
+| `items`     | `AccordionItem[]` | — required |
+| `exclusive` | `boolean`         | `false`    |
+
+`AccordionItem` is `{ id: string; label: ReactNode; content: ReactNode; defaultOpen?: boolean }`.
+
+```tsx
+import { Accordion } from '@kreobuddha/ui';
+
+<Accordion
+  exclusive
+  items={[
+    { id: 'general', label: 'General', content: 'Where the workspace lives.', defaultOpen: true },
+    { id: 'members', label: 'Members', content: 'Who can reach it.' },
+  ]}
+/>;
+```
+
+Sections that open and close, built on `<details>` and `<summary>`. The platform supplies the
+disclosure button, the tab stop, Enter and Space, and the expanded/collapsed announcement, and this
+component adds no ARIA and no state of its own.
+
+`exclusive` gives the sections one shared `name`, which is how the **browser** keeps a single
+section open — no state, no effect, no click handler. Two accordions on a page get different group
+names and never close each other. Where `name` is not implemented the sections open independently:
+a weaker version of the same component rather than a broken one.
+
+**The open state belongs to the browser after the first render.** `defaultOpen` is an initial
+value, not a controlled one, and a parent re-render does not reopen a section the reader closed.
+Under `exclusive` the browser opens only the first section marked `defaultOpen`.
+
+`content` stays in the DOM while its section is closed, so it is found by in-page search and by
+`Cmd+F` — and so anything expensive to render should not be put there. There is **no height
+animation**: animating a `<details>` means taking its state back from the browser, which is the
+part worth having.
 
 ### `Progress`
 

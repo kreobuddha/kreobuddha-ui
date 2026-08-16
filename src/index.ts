@@ -5,6 +5,8 @@
 // imports in the declarations it emits, and a stylesheet is not a module it can resolve there, so
 // such an import would make the published types unresolvable. The stylesheet is a separate build
 // entry instead, and consumers link `@kreobuddha/ui/styles.css` themselves.
+export { Accordion } from './components/Accordion/Accordion.js';
+export type { AccordionItem, AccordionProps } from './components/Accordion/Accordion.js';
 export { Alert } from './components/Alert/Alert.js';
 export type { AlertProps, AlertTone } from './components/Alert/Alert.js';
 export { Badge } from './components/Badge/Badge.js';
