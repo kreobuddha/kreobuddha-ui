@@ -5,7 +5,7 @@ data-dense frontend applications.
 
 ## Status: early, but published
 
-**Twelve components ship today: `Button`, `IconButton`, `TextField`, `Textarea`, `Select`, `Checkbox`, `Switch`, `FieldGroup`, `Tabs`, `Badge`, `Spinner` and `Alert`.** Everything else in
+**Thirteen components ship today: `Button`, `IconButton`, `TextField`, `Textarea`, `Select`, `Checkbox`, `Switch`, `FieldGroup`, `Tabs`, `Tooltip`, `Badge`, `Spinner` and `Alert`.** Everything else in
 [docs/ROADMAP.md](docs/ROADMAP.md) is a plan, not an available feature. The package is published so
 it can be consumed normally; treat the `0.x` line as a moving target and pin what you depend on.
 
@@ -382,6 +382,46 @@ where form state belongs anyway.
 The tab list takes no label of its own. It usually sits under a heading that already names it, and
 adding one would have a screen reader say the same thing twice; pass `aria-label` or
 `aria-labelledby` through when there is no such heading. Tabs are horizontal only.
+
+### `Tooltip`
+
+| Prop        | Type                                     | Default |
+| ----------- | ---------------------------------------- | ------- |
+| `content`   | `ReactNode`                              | —       |
+| `children`  | `ReactElement`                           | —       |
+| `placement` | `'top' \| 'bottom' \| 'left' \| 'right'` | `'top'` |
+| `className` | `string`                                 | —       |
+
+```tsx
+<Tooltip content="Copies the link to your clipboard">
+  <IconButton label="Copy link" icon={<CopyIcon />} />
+</Tooltip>
+```
+
+> **A tooltip may only carry what the reader can do without.**
+>
+> It opens on hover and on focus, which means it **does not exist on a touchscreen** — there is no
+> hover there. This is inherent to the pattern, not a gap to be closed later. Anything a reader
+> needs belongs in a label, a hint, or visible text. See
+> [ADR-0010](docs/adr/0010-overlay-and-composite-strategy.md).
+
+`children` must be a single element that accepts a `ref` and DOM props. The tooltip's id is put on
+that element as `aria-describedby`, so the description is announced with the control rather than
+floating beside it.
+
+**Opening on hover waits about 400ms; focus opens at once.** A pointer crossing a row of buttons
+should not set off a chain of tooltips, and there is no such thing as a passing focus. Closing never
+waits — a tooltip that lingers after the pointer has left is in the way.
+
+`Escape` closes it without moving focus: the reader is still on the control.
+
+It enters the browser's top layer through the `popover` attribute, so nothing on the page can cover
+it, and no portal is involved. Placement is CSS anchor positioning — no measuring, no scroll
+listener, no runtime dependency. The browser flips it when there is no room; on Safari 18.2–18.3
+placement is correct but the flip does not happen.
+
+The tooltip never receives pointer events. Moving towards one is the most common way to lose the
+thing you were reading.
 
 ### `Badge`
 

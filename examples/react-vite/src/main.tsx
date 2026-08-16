@@ -17,6 +17,7 @@ import {
   Switch,
   Tabs,
   TextField,
+  Tooltip,
   Textarea,
 } from '@kreobuddha/ui';
 import type { ButtonProps, ButtonVariant } from '@kreobuddha/ui';
@@ -76,6 +77,10 @@ export const App = (): React.ReactElement => (
         { id: 'members', label: 'Members', content: 'Who can reach it.' },
       ]}
     />
+
+    <Tooltip content="Copies the link to your clipboard" placement="bottom">
+      <Button variant="outlined">Copy link</Button>
+    </Tooltip>
   </main>
 );
 

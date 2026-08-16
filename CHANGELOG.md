@@ -9,6 +9,20 @@ explicitly rather than treated as disposable.
 
 ## [Unreleased]
 
+### Added
+
+- `Tooltip` — a description that opens on hover and on focus and closes on `Escape` without moving
+  focus. It enters the browser's top layer through the `popover` attribute, so nothing on the page
+  can cover it and no portal is involved, and it is placed with CSS anchor positioning — no
+  measuring, no scroll listener, no runtime dependency. Hover waits about 400ms so a pointer
+  crossing a row of buttons sets off nothing; focus opens at once. **It may only carry what the
+  reader can do without: there is no hover on a touchscreen.**
+- `--kreo-shadow-overlay`, added in `0.5.0` and unused since, is finally applied. The tooltip keeps
+  a border as well, because forced-colors mode paints no shadow at all.
+- A contrast measurement for text on the overlay surface, and a visual baseline for the open
+  tooltip — the first state that lives in the top layer, and so the first that a screenshot of the
+  story root would have missed entirely.
+
 ## [0.13.0] — 2026-08-16
 
 ### Added
