@@ -97,7 +97,7 @@ them silently breaks the published package:
   instead.
 - **The `@font-face` rules are joined to the built stylesheet afterwards** by
   `scripts/bundle-fonts.mjs`. Library mode inlines every asset it resolves as a base64 data URI with
-  no opt-out, which would embed all eight font files and defeat their `unicode-range` split.
+  no opt-out, which would embed both font files and defeat their `unicode-range` split.
 
 That script is the only custom build machinery in the package, and it exists for a documented tool
 limitation rather than a preference.

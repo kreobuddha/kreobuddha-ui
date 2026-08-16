@@ -113,11 +113,41 @@ const contrast = (a, b) => {
   return (hi + 0.05) / (lo + 0.05);
 };
 
-/** Reads the declarations of one CSS block into a plain map. */
+/**
+ * Reads the declarations of one CSS block into a plain map.
+ *
+ * The body is found by matching braces rather than by taking everything up to the next `}`.
+ * The cheap version reads the same today, because the token blocks are flat — but the day one
+ * gains a nested rule, `@media (prefers-contrast: more)` or CSS nesting, it would silently stop
+ * at the inner brace and measure a truncated set of tokens. A check that quietly grades a
+ * fraction of its input is worse than one that fails, so a nested block throws instead.
+ */
 const blockOf = (css, selector) => {
   const start = css.indexOf(selector);
   if (start === -1) throw new Error(`Block not found: ${selector}`);
-  const body = css.slice(css.indexOf('{', start) + 1, css.indexOf('}', start));
+
+  const open = css.indexOf('{', start);
+  if (open === -1) throw new Error(`Block has no body: ${selector}`);
+
+  let depth = 1;
+  let end = open + 1;
+
+  for (; end < css.length && depth > 0; end += 1) {
+    if (css[end] === '{') depth += 1;
+    else if (css[end] === '}') depth -= 1;
+  }
+
+  if (depth !== 0) throw new Error(`Unterminated block: ${selector}`);
+
+  const body = css.slice(open + 1, end - 1);
+
+  if (body.includes('{')) {
+    throw new Error(
+      `Nested block inside ${selector}. The token blocks are expected to be flat; ` +
+        `teach this script how to read the nesting before adding it.`
+    );
+  }
+
   const map = new Map();
   for (const [, name, value] of body.matchAll(/(--[a-z0-9-]+)\s*:\s*([^;]+);/g)) {
     map.set(name, value.trim());
