@@ -524,8 +524,15 @@ npm test
 npm run check:contrast
 npm run build
 npm run check:package
+npm run check:consumer
 npm run storybook
 ```
+
+`npm run check:consumer` packs the package, installs the tarball into `examples/react-vite` — an
+independent application with its own lockfile and no alias back to `src` — and checks it there:
+that the published declarations type-check, that the build works, that importing one component does
+not pull in the others, that React is not bundled, that the fonts are real files rather than inlined
+data, and that the package renders on a server with no DOM at all.
 
 `npm run storybook` opens the workbench. **Overview → Kit** is a single page showing everything the
 library currently ships, in either theme — the quickest way to see the whole kit at once.

@@ -1,0 +1,21 @@
+{
+  "name": "kreobuddha-ui-consumer-fixture",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "description": "Installs the packed package and uses it the way a real application would. Not a workspace member, and never published.",
+  "scripts": {
+    "build": "vite build",
+    "typecheck": "tsc -p tsconfig.json",
+    "build:button-only": "vite build --config vite.button-only.config.ts"
+  },
+  "devDependencies": {
+    "@types/react": "^19.2.18",
+    "@types/react-dom": "^19.2.0",
+    "@vitejs/plugin-react": "^5.1.0",
+    "react": "^19.2.8",
+    "react-dom": "^19.2.8",
+    "typescript": "~6.0.3",
+    "vite": "^8.2.1"
+  }
+}

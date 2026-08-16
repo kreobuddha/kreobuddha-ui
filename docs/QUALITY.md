@@ -136,7 +136,7 @@ The public package is verified independently of workspace source:
 - create the tarball;
 - validate package metadata and declarations with agreed package-lint tools;
 - install the tarball into an independent, non-workspace React/Vite consumer with its own package
-  metadata and lockfile, or an equivalent temporary generated consumer;
+  metadata and lockfile;
 - build and run the consumer without source aliases;
 - verify React is not bundled;
 - verify one-component import does not execute or include the whole library unexpectedly.
@@ -146,8 +146,17 @@ The public package is verified independently of workspace source:
 failures it reports are the intended consequence of the ESM-only decision in `ARCHITECTURE.md`
 rather than defects.
 
-The consumer step is currently a temporary generated app rather than a committed fixture. It is a
-local step; CI does not run it yet.
+The consumer step is a committed fixture, `examples/react-vite`, driven by
+`scripts/check-consumer.mjs` under `npm run check:consumer`. It packs the package, installs the
+tarball rather than the directory — a directory install links to the source tree and would defeat
+the point — type-checks the fixture against the published declarations, builds it, renders it on
+the server, and asserts each property above by name. It runs in CI on every pull request.
+
+Two of its assertions are shaped by what a weaker version of them would have missed. The
+single-component entry is built in isolation rather than as a second entry of the main build,
+because entries in one build share their common code through a chunk belonging to neither; and it
+mounts what it imports, because an entry whose export nobody consumes is dead code that Rollup
+drops, leaving an empty bundle to pass the check for no reason.
 
 ### 8. Public documentation
 
@@ -182,7 +191,7 @@ contrast check                        running
 package build                         running
 Storybook build                       running
 package artifact checks               running
-consumer smoke build                  local only — no committed fixture yet
+consumer smoke build                  running — packed tarball in examples/react-vite
 visual regression for protected states not started
 ```
 

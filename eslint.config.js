@@ -3,7 +3,10 @@ import tseslint from 'typescript-eslint';
 
 export default tseslint.config(
   {
-    ignores: ['dist/', 'storybook-static/', 'coverage/'],
+    // The consumer fixture is a separate project with its own toolchain and its own tsconfig.
+    // Linting it from here would type-check it against this project's program, which does not
+    // contain it.
+    ignores: ['dist/', 'storybook-static/', 'coverage/', 'examples/'],
   },
   js.configs.recommended,
   {
