@@ -80,6 +80,18 @@ const PROTECTED = [
   // baseline is what would catch the shared file drifting under one of its two consumers.
   { id: 'components-toggletip--open', name: 'toggletip-open', topLayer: true },
 
+  // `Toast` draws its own markup on `Alert`'s tinted surfaces, which is the arrangement ADR-0011
+  // §8 chose over rendering `Alert` itself — so this is the baseline that shows the two drifting
+  // apart. It is also the only place the floating tinted surface, its shadow and the stack's
+  // spacing are photographed at all. Top layer, and the story keeps all four on screen.
+  { id: 'components-toast--tones', name: 'toast-tones', topLayer: true },
+
+  // And the claim in ADR-0011 §3 that no assertion can make: a toast raised while a modal dialog
+  // is open is *painted above* it. Hit-testing and the popover staying open are checked in
+  // `tests/browser/toast.spec.ts`; paint order is only visible in a picture, so this is the
+  // picture. If the stack ever ends up under the dialog panel, this baseline is what says so.
+  { id: 'components-toast--over-a-modal-dialog', name: 'toast-over-dialog', topLayer: true },
+
   // `Dialog` is the other top-layer component, and the only one with a backdrop — a surface that
   // exists nowhere else and that no contrast pair covers, since it sits over arbitrary content.
   { id: 'components-dialog--default', name: 'dialog-open', topLayer: true },

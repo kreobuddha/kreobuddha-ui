@@ -1,0 +1,138 @@
+/* Component styles depend on the token layer, and declaring that dependency in CSS rather than
+   from TypeScript keeps the stylesheet out of the emitted declarations, where a `.css` specifier
+   is not resolvable. Vite inlines this into the single published `styles.css`. */
+@import '../../styles.css';
+
+/* Nothing is composed from `../overlay/overlay.module.css` on purpose: that file places a bubble
+   against an anchor element, and this region is placed against the viewport. The two would have to
+   be kept in agreement for no shared behaviour at all. See ADR-0011. */
+.region {
+  /* Shown by this rule rather than hidden by the UA's `[popover]:not(:popover-open)`. The region
+     is open from the first render and stays open — a live region announces what changes inside it,
+     and one that appears with its first message announces nothing. Where the popover API is
+     missing the region is still drawn, simply outside the top layer. */
+  display: block;
+
+  /* The UA stylesheet centres a popover with `inset: 0; margin: auto` and gives it a border and
+     padding of its own. All of it has to go before the corner below can take effect. */
+  position: fixed;
+  inset: auto;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  z-index: 1;
+
+  /* Logical properties, so the stack sits in the corner that reads as "last" rather than the one
+     that is physically on the right. In a right-to-left document it moves with the text. */
+  inset-block-end: var(--kreo-space-4);
+  inset-inline-end: var(--kreo-space-4);
+
+  /* Wide enough for a sentence and a half, and never wider than the viewport it is pinned to. */
+  width: max-content;
+  max-width: min(24rem, calc(100vw - var(--kreo-space-8)));
+
+  /* The region covers a corner of the page whether or not it holds anything, so it must not take
+     the pointer. Each toast takes it back. */
+  pointer-events: none;
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--kreo-space-2);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.toast {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--kreo-space-3);
+  padding: var(--kreo-space-3);
+  border-radius: var(--kreo-radius-md);
+  font: var(--kreo-type-body);
+
+  /* This floats over arbitrary content, which is the difference from `Alert`: the shadow lifts it
+     off whatever it covers, and the border stays alongside because forced-colors mode paints no
+     shadow at all and a surface relying on one would lose its edge. See ADR-0007. */
+  border: var(--kreo-border-w) solid var(--kreo-border-default);
+  box-shadow: var(--kreo-shadow-overlay);
+  pointer-events: auto;
+
+  /* A fade, and nothing that slides or scales — `src/tokens/motion.css` keeps the whole library to
+     colour transitions and fades. The duration token is `0ms` under `prefers-reduced-motion`, so a
+     reader with that preference gets the toast with no transition rather than a faster one. */
+  animation: appear var(--kreo-duration-base) var(--kreo-ease);
+}
+
+@keyframes appear {
+  from {
+    opacity: 0;
+  }
+}
+
+.mark {
+  display: inline-flex;
+  flex: none;
+
+  /* Aligns the mark with the first line of text rather than the top of the box. */
+  margin-block-start: 2px;
+}
+
+.body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--kreo-space-1);
+  min-width: 0;
+  flex: 1;
+}
+
+.title {
+  margin: 0;
+  font-weight: var(--kreo-weight-semibold);
+}
+
+.message {
+  /* As on `Alert`: the tone colours the heading and the mark, and a whole paragraph in a status
+     colour is harder to read than it is informative. */
+  color: var(--kreo-text-body);
+}
+
+.dismiss {
+  flex: none;
+  margin-block-start: -2px;
+  margin-inline-end: -2px;
+}
+
+/* The four tinted surfaces are `Alert`'s, by the same token names. ADR-0011 §8: the two components
+   share their colour so that "something failed" looks the same everywhere in the library, and each
+   owns its own markup so that restyling one is not restyling the other. */
+.success {
+  background: var(--kreo-surface-success-soft);
+  color: var(--kreo-text-on-success-soft);
+}
+
+.warning {
+  background: var(--kreo-surface-warning-soft);
+  color: var(--kreo-text-on-warning-soft);
+}
+
+.danger {
+  background: var(--kreo-surface-danger-soft);
+  color: var(--kreo-text-on-danger-soft);
+}
+
+.info {
+  background: var(--kreo-surface-info-soft);
+  color: var(--kreo-text-on-info-soft);
+}
+
+@media (forced-colors: active) {
+  /* Neither the tint nor the shadow is painted here, so the border is the only thing separating a
+     toast from the content it floats over. */
+  .toast {
+    border-color: CanvasText;
+  }
+}

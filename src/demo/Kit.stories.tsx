@@ -18,6 +18,7 @@ import { Toggletip } from '../components/Toggletip/Toggletip.js';
 import { Tooltip } from '../components/Tooltip/Tooltip.js';
 
 import { DialogSection } from './DialogSection.js';
+import { ToastSection } from './ToastSection.js';
 import { Textarea } from '../components/Textarea/Textarea.js';
 import { TextField } from '../components/TextField/TextField.js';
 
@@ -516,6 +517,10 @@ export const Kit: Story = {
 
       <Section title="Dialog">
         <DialogSection />
+      </Section>
+
+      <Section title="Toast — raised from anywhere, drawn in the corner">
+        <ToastSection />
       </Section>
 
       <Section title="A field and a button sit level">

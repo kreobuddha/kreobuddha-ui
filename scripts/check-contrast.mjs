@@ -116,6 +116,13 @@ const PAIRS = [
   // and stands in for content that has not arrived, so a reader who cannot see it has lost
   // nothing — WCAG excludes purely decorative content by the same reasoning. In forced-colors,
   // where its fill is not painted at all, it draws a GrayText border the system guarantees.
+  // `Toast` adds no pair either, and for a reason worth writing down rather than inferring from
+  // the absence: ADR-0011 §8 has it draw its own markup on the same four tinted surfaces `Alert`
+  // uses, with the same text-on-tint tokens and the same ghost dismiss button. Every pairing it
+  // puts on screen is therefore one of the eight 'on tint' entries above, plus the four 'dismiss
+  // on … tint' ones. Its border is `--kreo-border-default`, the decorative divider, which
+  // separates the floating surface from the content under it rather than identifying a control —
+  // the same reasoning as the tooltip's edge. In forced-colors that border becomes CanvasText.
   ['focus ring', '--kreo-surface-page', '--kreo-border-focus', NON_TEXT],
   ['focus ring on filled', '--kreo-accent-500', '--kreo-text-on-accent', NON_TEXT],
 ];

@@ -43,6 +43,13 @@ export { FieldGroup } from './components/FieldGroup/FieldGroup.js';
 export type { FieldGroupProps } from './components/FieldGroup/FieldGroup.js';
 export { Tabs } from './components/Tabs/Tabs.js';
 export type { TabItem, TabsActivation, TabsProps } from './components/Tabs/Tabs.js';
+export { ToastProvider, useToast } from './components/Toast/Toast.js';
+export type {
+  ToastApi,
+  ToastOptions,
+  ToastProviderProps,
+  ToastTone,
+} from './components/Toast/Toast.js';
 export { Toggletip } from './components/Toggletip/Toggletip.js';
 export type { ToggletipPlacement, ToggletipProps } from './components/Toggletip/Toggletip.js';
 export { Tooltip } from './components/Tooltip/Tooltip.js';

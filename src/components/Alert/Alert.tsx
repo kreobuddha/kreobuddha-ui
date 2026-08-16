@@ -1,10 +1,10 @@
 import type { ComponentPropsWithRef, ReactElement, ReactNode } from 'react';
 
 import { cx } from '../../internal/cx.js';
+import { CloseMark, TONE_MARKS } from '../../internal/marks.js';
 
 import { IconButton } from '../IconButton/IconButton.js';
 
-import { DEFAULT_MARKS } from './icons.js';
 import styles from './Alert.module.css';
 
 export type AlertTone = 'success' | 'warning' | 'danger' | 'info';
@@ -34,12 +34,6 @@ export interface AlertProps extends ComponentPropsWithRef<'div'> {
   dismissLabel?: string;
 }
 
-const CloseMark = (): ReactElement => (
-  <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true">
-    <path d="M3 3l6 6M9 3l-6 6" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
-  </svg>
-);
-
 export const Alert = ({
   tone = 'info',
   title,
@@ -51,7 +45,7 @@ export const Alert = ({
   children,
   ...rest
 }: AlertProps): ReactElement => {
-  const Mark = DEFAULT_MARKS[tone];
+  const Mark = TONE_MARKS[tone];
 
   return (
     <div

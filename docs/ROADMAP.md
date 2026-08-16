@@ -9,15 +9,14 @@ verification quality.
 ## Status
 
 Phases 0 through 4 are complete. The repository is public at `kreobuddha/kreobuddha-ui` with CI
-green, and the package is published to npm as `@kreobuddha/ui` (ADR-0006). Eighteen components
+green, and the package is published to npm as `@kreobuddha/ui` (ADR-0006). Nineteen components
 ship: `Button`, `IconButton`, `Badge`, `Spinner`, `Alert`, `TextField`, `Textarea`, `Select`,
 `Checkbox`, `Switch`, `FieldGroup`, `Tabs`, `Tooltip`, `Dialog` — all released — and `Skeleton`,
-`Progress`, `Accordion` and `Toggletip`, which are unreleased and due in `0.15.0` with the rest of
-the batch below.
+`Progress`, `Accordion`, `Toggletip` and `Toast`, which are unreleased and due in `0.15.0`.
 
-A batch of five components is in progress ahead of Phase 5, by Rustam's decision rather than by
-the backlog rule; see "Component batch, released together as `0.15.0`". Phase 5 is next after it
-and not started.
+The batch of five below is complete and not yet released; preparing `0.15.0` is what remains of it.
+It entered scope ahead of Phase 5 by Rustam's decision rather than by the backlog rule; see
+"Component batch, released together as `0.15.0`". Phase 5 is next after it and not started.
 
 Phase 3 is complete: `TextField`, `Textarea`, `Select`, `Checkbox`, `Switch` and `FieldGroup` are
 done, and a settings form composes from them with no wrapper of its own.
@@ -200,8 +199,11 @@ they share only the release, which is the second deliberate exception, to
 - `Toggletip` — **done**, delivering what [ADR-0010](adr/0010-overlay-and-composite-strategy.md)
   promised. Its arrival is what justified extracting the shared overlay layer into
   `src/components/overlay/`, on the model of `src/components/field/`;
-- `Toast` — planned, and blocked on an accepted ADR-0011 first: it is the first component that
-  might require a provider, which is an architectural decision rather than a styling one.
+- `Toast` — **done**, on [ADR-0011](adr/0011-toast-ownership-and-announcement.md), accepted by
+  Rustam before implementation because a provider is an architectural decision rather than a
+  styling one. It is the library's first context, first hook and first component that renders
+  outside its own subtree. It draws its own markup on `Alert`'s tinted surfaces rather than
+  rendering `Alert`, by Rustam's decision: the colour is shared, the markup is not.
 
 ## Backlog candidates
 

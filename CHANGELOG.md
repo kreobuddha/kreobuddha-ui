@@ -11,6 +11,18 @@ explicitly rather than treated as disposable.
 
 ### Added
 
+- `Toast` — messages raised from anywhere and drawn in the corner of the viewport. This is the
+  library's first context, first hook and first component that renders outside its own subtree:
+  `ToastProvider` wraps your tree and `useToast()` gives you `toast(options)`, which returns an id,
+  and `dismiss(id)`. Outside a provider the hook throws rather than quietly doing nothing. Three are
+  on screen at once by default and the rest wait rather than being dropped; each leaves after five
+  seconds, `duration: 0` keeps one until it is dismissed, and both defaults are `ToastProvider`
+  props. The timer stops while a pointer is over the stack or focus is inside it and resumes where
+  it stopped, which is what makes the whole thing safe for a reader who is slower than five seconds.
+  One `aria-live="polite"` region, mounted from the start and never `assertive`. It lives in the top
+  layer, so a toast raised while a modal `Dialog` is open is painted above it — but it cannot be
+  clicked while that dialog is open, which is the platform being consistent about modality and is
+  documented rather than worked around. See ADR-0011.
 - `Toggletip` — the bubble `Tooltip` is not allowed to carry, opened on purpose. A tooltip opens on
   hover and on focus, so it does not exist on a touchscreen; anything the reader actually needs
   goes here instead, where a click, Enter, Space or a tap opens it. The trigger keeps its own

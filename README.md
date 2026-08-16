@@ -5,7 +5,7 @@ data-dense frontend applications.
 
 ## Status: early, but published
 
-**Eighteen components ship today: `Button`, `IconButton`, `TextField`, `Textarea`, `Select`, `Checkbox`, `Switch`, `FieldGroup`, `Tabs`, `Accordion`, `Tooltip`, `Toggletip`, `Dialog`, `Badge`, `Spinner`, `Skeleton`, `Progress` and `Alert`.** Everything else in
+**Nineteen components ship today: `Button`, `IconButton`, `TextField`, `Textarea`, `Select`, `Checkbox`, `Switch`, `FieldGroup`, `Tabs`, `Accordion`, `Tooltip`, `Toggletip`, `Dialog`, `Badge`, `Spinner`, `Skeleton`, `Progress`, `Toast` and `Alert`.** Everything else in
 [docs/ROADMAP.md](docs/ROADMAP.md) is a plan, not an available feature. The package is published so
 it can be consumed normally; treat the `0.x` line as a moving target and pin what you depend on.
 
@@ -683,6 +683,88 @@ keeps the shape it is holding open.
 
 `children` is removed from the type on purpose: content placed inside a hidden block is content
 nobody can reach.
+
+### `Toast`
+
+`ToastProvider` props:
+
+| Prop       | Type        | Default           |
+| ---------- | ----------- | ----------------- |
+| `children` | `ReactNode` | — required        |
+| `limit`    | `number`    | `3`               |
+| `duration` | `number`    | `5000`            |
+| `label`    | `string`    | `'Notifications'` |
+
+`useToast()` returns `{ toast, dismiss }`. `toast(options)` returns the id it assigned, and
+`dismiss(id)` removes that toast early.
+
+| `toast()` option | Type                                           | Default     |
+| ---------------- | ---------------------------------------------- | ----------- |
+| `tone`           | `'success' \| 'warning' \| 'danger' \| 'info'` | `'info'`    |
+| `title`          | `string`                                       | —           |
+| `children`       | `ReactNode`                                    | —           |
+| `duration`       | `number`                                       | provider's  |
+| `icon`           | `ReactNode`                                    | tone's mark |
+| `dismissLabel`   | `string`                                       | `'Dismiss'` |
+
+```tsx
+import { ToastProvider, useToast } from '@kreobuddha/ui';
+
+const App = (): ReactElement => (
+  <ToastProvider>
+    <Workspace />
+  </ToastProvider>
+);
+
+const Workspace = (): ReactElement => {
+  const { toast } = useToast();
+
+  const save = async (): Promise<void> => {
+    const response = await fetch('/workspace', { method: 'PUT' });
+
+    if (!response.ok) {
+      toast({ tone: 'danger', title: 'Save failed', children: 'The workspace was changed.' });
+    }
+  };
+
+  return <Button onClick={save}>Save</Button>;
+};
+```
+
+**This is the only component that needs a wrapper around your tree, and the only one with a hook.**
+A toast is raised where a save failed, not where a floating stack could sensibly be rendered, so the
+list has to live above both. The provider draws the region itself: there is no second component to
+place, and no way to forget to place it. `useToast()` outside a provider throws rather than
+returning a no-op — a `toast()` call that silently never appears is a bug that takes an afternoon to
+find.
+
+At most `limit` toasts are on screen and the rest **wait their turn rather than being dropped**,
+because a dropped toast is a message your application believed it had delivered. The newest is
+nearest the corner.
+
+Each toast leaves after `duration` milliseconds; `duration: 0` keeps it until it is dismissed. **The
+timer stops while a pointer is over the stack or focus is inside it**, and resumes where it stopped.
+Without that, a reader slower than five seconds — or one tabbing towards the close button — is
+chasing a message being taken away from them.
+
+Announcements are **always `aria-live="polite"`, and this is not configurable.** `assertive`
+interrupts whatever the reader is being told at that moment, and nothing that arrives in a corner
+and leaves by itself has earned that. A message urgent enough to interrupt belongs in an `Alert`
+with `live`, in the flow of the page, where it stays until it is dealt with.
+
+There is **no hotkey** to jump to the region. The WAI-ARIA Authoring Practices suggest `F6`, and
+claiming a keystroke from every application that embeds this library is not something a component
+should do unasked. The region is at the end of the document, so the keyboard route to it is long but
+real, and every toast carries a close button that is a normal tab stop.
+
+**A toast raised while a modal `Dialog` is open cannot be clicked.** It is painted above the dialog
+and it is announced, but everything outside a modal dialog is blocked from the pointer by it, the
+toast included — so it goes away on its own timer rather than by your reader's hand. That is the
+platform being consistent about what "modal" means, and it is stated here rather than worked around.
+Verified in Chromium 141 and asserted in `tests/browser/toast.spec.ts`.
+
+The region is pinned to the bottom inline-end corner with logical properties, so it follows the
+writing direction. That corner is not a prop.
 
 ## Theming
 
