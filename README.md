@@ -5,7 +5,7 @@ data-dense frontend applications.
 
 ## Status: early, but published
 
-**Fifteen components ship today: `Button`, `IconButton`, `TextField`, `Textarea`, `Select`, `Checkbox`, `Switch`, `FieldGroup`, `Tabs`, `Tooltip`, `Dialog`, `Badge`, `Spinner`, `Skeleton` and `Alert`.** Everything else in
+**Sixteen components ship today: `Button`, `IconButton`, `TextField`, `Textarea`, `Select`, `Checkbox`, `Switch`, `FieldGroup`, `Tabs`, `Tooltip`, `Dialog`, `Badge`, `Spinner`, `Skeleton`, `Progress` and `Alert`.** Everything else in
 [docs/ROADMAP.md](docs/ROADMAP.md) is a plan, not an available feature. The package is published so
 it can be consumed normally; treat the `0.x` line as a moving target and pin what you depend on.
 
@@ -542,6 +542,41 @@ thing twice, which is the usual failure when a spinner sits beside the word "Loa
 
 `Button` uses it internally for its own loading state, where the button already carries `aria-busy`
 and the spinner stays decorative.
+
+### `Progress`
+
+| Prop    | Type     | Default    |
+| ------- | -------- | ---------- |
+| `label` | `string` | — required |
+| `value` | `number` | —          |
+| `max`   | `number` | `100`      |
+
+```tsx
+import { Progress } from '@kreobuddha/ui';
+
+<Progress label="Uploading files" value={40} />
+<Progress label="Importing repositories" value={3} max={7} />
+<Progress label="Publishing the workspace" />;
+```
+
+A bar for work whose extent is known — and, with no `value`, for work whose extent is not. The
+indeterminate state reports no `aria-valuenow` at all, which is what stops a screen reader
+announcing a percentage nobody measured; its segment travels the track, and stops still in the
+middle of it under `prefers-reduced-motion`.
+
+`label` is required and becomes the accessible name: the role has no content of its own, so there
+is nowhere else a name could come from. **Nothing here draws a number.** Only you know whether
+"3 of 7 files" or "42%" is the honest way to put it, so the words are yours to place beside the
+bar.
+
+`value` is clamped to `0…max`, and a `max` that cannot be divided by falls back to `100`. It is not
+a `Spinner`: a spinner says that something is happening, this says how much of it has happened, and
+it is worth the space only when that number is real.
+
+**It is a `div` with `role="progressbar"`, not a native `<progress>`.** That is a deliberate
+departure from this project's rule of platform semantics first: one styling model instead of three
+vendor pseudo-element sets. The cost is that the semantics are the library's to keep right, so
+every attribute is asserted in the tests rather than inherited from the element.
 
 ### `Skeleton`
 

@@ -50,6 +50,11 @@ const PROTECTED = [
   { id: 'components-iconbutton--sizes', name: 'iconbutton-sizes' },
   { id: 'components-spinner--sizes', name: 'spinner-sizes' },
 
+  // `Progress` is geometry: an empty track, a partial fill, a full one, and the indeterminate
+  // segment parked in the middle by the reduced-motion rule. Nothing else would notice the fill
+  // spilling past the rounded end of its track, or a bar at 100% leaving a sliver of track behind.
+  { id: 'components-progress--states', name: 'progress-states' },
+
   // `Skeleton` is drawn entirely by its fill and its radius, with no text and no border for any
   // other check to notice a change by. The run is under `prefers-reduced-motion: reduce`, so this
   // photographs the still state — which is the state a reader with that preference always sees.

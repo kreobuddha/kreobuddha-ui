@@ -11,6 +11,15 @@ explicitly rather than treated as disposable.
 
 ### Added
 
+- `Progress` — a bar for work whose extent is known, and, with no `value`, for work whose extent is
+  not. The indeterminate state reports no `aria-valuenow` at all, so nothing announces a percentage
+  nobody measured; its segment travels the track, and stands still in the middle of it under
+  `prefers-reduced-motion`. `label` is required and becomes the accessible name. The component
+  draws no number of its own — only the consumer knows whether "3 of 7 files" or "42%" is the
+  honest wording. It is a `div` with `role="progressbar"` rather than a native `<progress>`, which
+  is a deliberate departure from platform-semantics-first, taken to keep one styling model instead
+  of three vendor pseudo-element sets, and paid for with tests that assert every attribute the
+  native element would have supplied.
 - `Skeleton` — a placeholder block that holds the shape of content while it loads. It has no props
   of its own: the default is one line of text at the surrounding size, `1em` tall and as wide as
   its container, and every other shape is the `style` or `className` you already write. It is

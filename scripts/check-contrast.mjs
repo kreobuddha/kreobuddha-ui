@@ -101,6 +101,11 @@ const PAIRS = [
   ['control border', '--kreo-surface-page', '--kreo-border-control', NON_TEXT],
   ['control border on card', '--kreo-surface-card', '--kreo-border-control', NON_TEXT],
   ['danger border', '--kreo-surface-page', '--kreo-border-danger', NON_TEXT],
+  // `Progress`: the fill against the track it sits in. The track's own edge is not a separate
+  // entry — it is `--kreo-border-control` on the page or on a card, already measured as 'control
+  // border' and 'control border on card'. It carries that token rather than a decorative divider
+  // on purpose: how far along the work is can only be read against the whole track.
+  ['progress fill', '--kreo-surface-active', '--kreo-accent-500', NON_TEXT],
   // `Skeleton` adds no pair. It is a fill with nothing on it: no text, and no boundary that
   // identifies a control or carries a state, which is what 1.4.11 measures. It is `aria-hidden`
   // and stands in for content that has not arrived, so a reader who cannot see it has lost

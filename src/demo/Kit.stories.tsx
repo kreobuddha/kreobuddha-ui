@@ -8,6 +8,7 @@ import { Button } from '../components/Button/Button.js';
 import { FieldGroup } from '../components/FieldGroup/FieldGroup.js';
 import { IconButton } from '../components/IconButton/IconButton.js';
 import { Select } from '../components/Select/Select.js';
+import { Progress } from '../components/Progress/Progress.js';
 import { Skeleton } from '../components/Skeleton/Skeleton.js';
 import { Spinner } from '../components/Spinner/Spinner.js';
 import { Switch } from '../components/Switch/Switch.js';
@@ -285,6 +286,15 @@ export const Kit: Story = {
           <Spinner size="md" />
           <Spinner size="lg" />
           <Spinner size="md" label="Loading" />
+        </div>
+      </Section>
+
+      <Section title="Progress — determinate, and not">
+        <div style={{ ...sectionStyle, maxWidth: 320 }}>
+          <Progress label="Nothing yet" value={0} />
+          <Progress label="Uploading files" value={40} />
+          <Progress label="Finished" value={100} />
+          <Progress label="Publishing the workspace" />
         </div>
       </Section>
 

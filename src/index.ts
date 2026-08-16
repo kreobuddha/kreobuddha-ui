@@ -17,6 +17,8 @@ export type {
   IconButtonSize,
   IconButtonVariant,
 } from './components/IconButton/IconButton.js';
+export { Progress } from './components/Progress/Progress.js';
+export type { ProgressProps } from './components/Progress/Progress.js';
 export { Skeleton } from './components/Skeleton/Skeleton.js';
 export type { SkeletonProps } from './components/Skeleton/Skeleton.js';
 export { Spinner } from './components/Spinner/Spinner.js';

@@ -13,6 +13,7 @@ import {
   Dialog,
   FieldGroup,
   IconButton,
+  Progress,
   Select,
   Skeleton,
   Spinner,
@@ -56,6 +57,7 @@ export const App = (): React.ReactElement => (
     </Badge>
     <Spinner label="Loading the fixture" />
     <Skeleton style={{ width: 200 }} />
+    <Progress label="Uploading files" value={40} />
 
     <Alert tone="danger" title="Save failed" live onDismiss={() => undefined}>
       The workspace was changed by someone else.

@@ -9,10 +9,11 @@ verification quality.
 ## Status
 
 Phases 0 through 4 are complete. The repository is public at `kreobuddha/kreobuddha-ui` with CI
-green, and the package is published to npm as `@kreobuddha/ui` (ADR-0006). Fifteen components
-ship: `Button`, `IconButton`, `Badge`, `Spinner`, `Skeleton`, `Alert`, `TextField`, `Textarea`,
-`Select`, `Checkbox`, `Switch`, `FieldGroup`, `Tabs`, `Tooltip` and `Dialog` — the last of them
-still unreleased, and due in `0.15.0` with the rest of the batch below.
+green, and the package is published to npm as `@kreobuddha/ui` (ADR-0006). Sixteen components
+ship: `Button`, `IconButton`, `Badge`, `Spinner`, `Alert`, `TextField`, `Textarea`, `Select`,
+`Checkbox`, `Switch`, `FieldGroup`, `Tabs`, `Tooltip`, `Dialog` — all released — and `Skeleton`
+and `Progress`, which are merged but unreleased, and due in `0.15.0` with the rest of the batch
+below.
 
 A batch of five components is in progress ahead of Phase 5, by Rustam's decision rather than by
 the backlog rule; see "Component batch, released together as `0.15.0`". Phase 5 is next after it
@@ -189,7 +190,9 @@ they share only the release, which is the second deliberate exception, to
 `COMPONENT_RECIPE.md` §8. Phase 5 remains the next phase after them.
 
 - `Skeleton` — **done**;
-- `Progress` — planned;
+- `Progress` — **done**, as a `div` with `role="progressbar"` by Rustam's decision rather than as a
+  native `<progress>`; the departure from platform-semantics-first and what it buys are stated in
+  the component, in `README.md` and in the changelog;
 - `Accordion` — planned;
 - `Toggletip` — planned, promised in [ADR-0010](adr/0010-overlay-and-composite-strategy.md);
 - `Toast` — planned, and blocked on an accepted ADR-0011 first: it is the first component that
