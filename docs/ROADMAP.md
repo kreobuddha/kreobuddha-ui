@@ -99,7 +99,7 @@ Exit criteria:
 Candidate components:
 
 - `Tabs` — **done**;
-- `Tooltip`;
+- `Tooltip` — **done**;
 - `Dialog`.
 
 Goal: demonstrate keyboard models, focus movement/restoration, portals, dismissal, layering, and

@@ -57,11 +57,19 @@ const PROTECTED = [
   { id: 'components-tabs--default', name: 'tabs-default' },
   { id: 'components-tabs--disabled-tab', name: 'tabs-disabled-tab' },
   { id: 'components-tabs--many-tabs', name: 'tabs-many-tabs' },
+
+  // `Tooltip` is the first component to float over the page, and so the first to use
+  // `--kreo-shadow-overlay` — a token nothing else would notice a change to. It lives in the top
+  // layer, which is outside the story root, so it needs the viewport rather than the root.
+  { id: 'components-tooltip--long-content', name: 'tooltip-open', topLayer: true },
 ] as const;
 
 for (const theme of ['light', 'dark'] as const) {
   test.describe(theme, () => {
-    for (const { id, name } of PROTECTED) {
+    for (const entry of PROTECTED) {
+      const { id, name } = entry;
+      const topLayer = 'topLayer' in entry && entry.topLayer;
+
       test(name, async ({ page }) => {
         await page.goto(storyUrl(id, theme));
 
@@ -80,7 +88,12 @@ for (const theme of ['light', 'dark'] as const) {
         // screenshot has to wait for the page to stop changing.
         await page.waitForLoadState('networkidle');
 
-        await expect(story).toHaveScreenshot(`${theme}-${name}.png`);
+        // The top layer is not a descendant of the story root, so a component that enters it is
+        // simply absent from a screenshot of the root. Photographing the viewport is the only way
+        // that baseline shows the thing it claims to protect.
+        const shot = topLayer ? page : story;
+
+        await expect(shot).toHaveScreenshot(`${theme}-${name}.png`);
       });
     }
   });

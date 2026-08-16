@@ -11,6 +11,7 @@ import { Select } from '../components/Select/Select.js';
 import { Spinner } from '../components/Spinner/Spinner.js';
 import { Switch } from '../components/Switch/Switch.js';
 import { Tabs } from '../components/Tabs/Tabs.js';
+import { Tooltip } from '../components/Tooltip/Tooltip.js';
 import { Textarea } from '../components/Textarea/Textarea.js';
 import { TextField } from '../components/TextField/TextField.js';
 
@@ -409,6 +410,17 @@ export const Kit: Story = {
             },
           ]}
         />
+      </Section>
+
+      <Section title="Tooltip">
+        <div style={row}>
+          <Tooltip content="Copies the link to your clipboard">
+            <Button variant="outlined">Hover or focus me</Button>
+          </Tooltip>
+          <Tooltip content="Only ever what the reader can do without" placement="right">
+            <IconButton label="Add a member" icon={<Mark />} variant="ghost" />
+          </Tooltip>
+        </div>
       </Section>
 
       <Section title="A field and a button sit level">
