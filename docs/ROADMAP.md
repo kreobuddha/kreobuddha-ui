@@ -14,9 +14,11 @@ ship: `Button`, `IconButton`, `Badge`, `Spinner`, `Alert`, `TextField`, `Textare
 `Checkbox`, `Switch`, `FieldGroup`, `Tabs`, `Tooltip`, `Dialog` — all released — and `Skeleton`,
 `Progress`, `Accordion`, `Toggletip` and `Toast`, which are unreleased and due in `0.15.0`.
 
-The batch of five below is complete and not yet released; preparing `0.15.0` is what remains of it.
-It entered scope ahead of Phase 5 by Rustam's decision rather than by the backlog rule; see
-"Component batch, released together as `0.15.0`". Phase 5 is next after it and not started.
+The batch of five below is complete and prepared for release: the changelog heading and the version
+in `package.json` are in place, so the release workflow can be run with `0.15.0` whenever Rustam
+asks for that exact action. Until that run, nothing of the five is on npm. The batch entered scope
+ahead of Phase 5 by Rustam's decision rather than by the backlog rule; see "Component batch,
+released together as `0.15.0`". Phase 5 is next after it and not started.
 
 Phase 3 is complete: `TextField`, `Textarea`, `Select`, `Checkbox`, `Switch` and `FieldGroup` are
 done, and a settings form composes from them with no wrapper of its own.
@@ -24,7 +26,9 @@ done, and a settings form composes from them with no wrapper of its own.
 Phase 4 is complete: `Tabs`, `Tooltip` and `Dialog` are done, on the platform primitives accepted
 in [ADR-0010](adr/0010-overlay-and-composite-strategy.md) and with no runtime dependency added.
 The keyboard and forced-colors checks that ADR requires are now automated in `tests/browser/` and
-run in CI under `npm run check:browser`. **The screen-reader check is still not done.** One
+run in CI under `npm run check:browser`. **The screen-reader check is not done and is parked by
+Rustam's decision** — see "Parked by decision" below; the phase is complete without it, and the
+library claims no screen-reader verification for these components until it is run. One
 cross-engine limitation is accepted and stated rather than worked around: WebKit does not return
 focus to the trigger when the dialog closes. Both are recorded in that ADR.
 
@@ -184,9 +188,13 @@ Five candidates entered active scope **by Rustam's decision**, not by the rule b
 consumer scenario has to demonstrate the need first. The exception is recorded here rather than
 left as a silent contradiction; the rule itself stands for everything else in the backlog.
 
-Each is a separate slice — its own branch, its own pull request, its own full verification — and
-they share only the release, which is the second deliberate exception, to
-`COMPONENT_RECIPE.md` §8. Phase 5 remains the next phase after them.
+Each is a separate slice — designed, built and fully verified on its own, one at a time, and each
+its own commit — and they share both the pull request and the release. The shared release is the
+second deliberate exception, to `COMPONENT_RECIPE.md` §8, now written down there. The shared pull
+request is Rustam's call on how to land the batch, taken once the five were done: five reviews of
+one branch that was built in order would have been five readings of the same history. What is not
+relaxed is the verification — `npm run verify` ran green for each component before the next was
+started. Phase 5 remains the next phase after them.
 
 - `Skeleton` — **done**;
 - `Progress` — **done**, as a `div` with `role="progressbar"` by Rustam's decision rather than as a
@@ -235,6 +243,22 @@ so it is picked up when that happens rather than rediscovered.
   Take it when `typescript-eslint` ships a release whose peer range admits TypeScript 7. Dependabot
   will raise the pull request; it was closed once already, as
   [#32](https://github.com/kreobuddha/kreobuddha-ui/pull/32).
+
+## Parked by decision
+
+Work that was specified, is not blocked by anything technical, and is deliberately not being done
+now. Each entry names what would restart it, so it is picked up as a decision rather than found as
+an oversight.
+
+- **The screen-reader pass over `Dialog`, `Tabs` and `Tooltip`.** The manual checks
+  [ADR-0010](adr/0010-overlay-and-composite-strategy.md) asked for; the exact VoiceOver script is
+  written there, under "The screen-reader script", and stays valid. Everything else on that
+  ADR's outstanding list has since been automated in `tests/browser/`; this is what is left,
+  because it needs a real assistive technology driven by a person and no check in this repository
+  can stand in for it. Parked by Rustam on 2026-08-16. It restarts when he runs the script, or when
+  a component's semantics change in a way that makes the answer matter. Until then the project
+  claims no screen-reader conformance for these three — `CLAUDE.md` forbids claiming what was not
+  observed.
 
 ## Explicitly deferred
 

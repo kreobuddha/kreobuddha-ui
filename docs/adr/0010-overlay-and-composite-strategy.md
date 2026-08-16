@@ -152,7 +152,7 @@ remembered.
 | `Dialog` — the page behind is inert | done, automated: a script cannot move focus to the trigger while the modal is open |
 | `Dialog` — `Escape` closes | done, automated. The earlier note stands as history: the browser pane available then produced `keydown` and no `cancel`. A real press in a real engine does fire `cancel`, and `onClose` runs |
 | forced-colors mode | done for the overlays, automated: with `forced-colors: active` emulated, the `Dialog` panel and the `Tooltip` bubble each still compute a non-zero border, which is what ADR-0007 asked for and what a shadow-only overlay would fail. Asserted on computed style rather than on a screenshot, because the forced-colors palette is the operating system's and a baseline would not survive the move from macOS to Ubuntu |
-| Screen reader, all three components | **not done.** Needs a real assistive technology on a real machine. The script is below |
+| Screen reader, all three components | **not done, and parked by Rustam's decision** rather than pending. It needs a real assistive technology on a real machine; the script is below and stays here so the check can be picked up unchanged. Recorded in `ROADMAP.md` under "Parked by decision" so it is not rediscovered as an oversight |
 
 ### The one cross-engine run
 

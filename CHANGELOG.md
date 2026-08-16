@@ -9,6 +9,8 @@ explicitly rather than treated as disposable.
 
 ## [Unreleased]
 
+## [0.15.0] — 2026-08-16
+
 ### Added
 
 - `Toast` — messages raised from anywhere and drawn in the corner of the viewport. This is the
@@ -291,7 +293,8 @@ from git for a single consumer.
   is public API.
 - Inter bundled as WOFF2 subsets, so no external font request is made at runtime.
 
-[unreleased]: https://github.com/kreobuddha/kreobuddha-ui/compare/v0.14.0...HEAD
+[unreleased]: https://github.com/kreobuddha/kreobuddha-ui/compare/v0.15.0...HEAD
+[0.15.0]: https://github.com/kreobuddha/kreobuddha-ui/compare/v0.14.0...v0.15.0
 [0.14.0]: https://github.com/kreobuddha/kreobuddha-ui/compare/v0.13.0...v0.14.0
 [0.13.0]: https://github.com/kreobuddha/kreobuddha-ui/compare/v0.12.0...v0.13.0
 [0.12.0]: https://github.com/kreobuddha/kreobuddha-ui/compare/v0.11.0...v0.12.0
