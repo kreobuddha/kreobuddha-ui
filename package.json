@@ -44,6 +44,7 @@
     "build": "vite build && node scripts/bundle-fonts.mjs && tsc -p tsconfig.build.json",
     "build-storybook": "storybook build",
     "check:contrast": "node scripts/check-contrast.mjs",
+    "check:css": "node scripts/check-css-artifacts.mjs",
     "check:package": "npm run build && publint && attw --pack --profile esm-only --exclude-entrypoints styles.css",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
@@ -55,7 +56,7 @@
     "test": "vitest run",
     "test:one": "vitest run --project unit",
     "typecheck": "tsc -p tsconfig.json",
-    "verify": "npm run format:check && npm run lint && npm run lint:css && npm run typecheck && npm test && npm run check:contrast && npm run build && npm run build-storybook && npm run check:package"
+    "verify": "npm run format:check && npm run lint && npm run lint:css && npm run typecheck && npm test && npm run check:contrast && npm run build && npm run build-storybook && npm run check:css && npm run check:package"
   },
   "peerDependencies": {
     "react": "^19.0.0",
