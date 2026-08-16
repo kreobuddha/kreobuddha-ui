@@ -1,5 +1,7 @@
 node_modules/
 dist/
+# The consumer fixture's second build output, which does not match the `dist/` pattern above.
+dist-button-only/
 storybook-static/
 coverage/
 *.tgz

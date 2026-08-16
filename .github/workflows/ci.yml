@@ -54,3 +54,7 @@ jobs:
       - run: npm run build
       - run: npm run build-storybook
       - run: npm run check:package
+
+      # The only check that crosses the package boundary: it packs the package, installs the
+      # tarball into an independent application and uses it there.
+      - run: npm run check:consumer

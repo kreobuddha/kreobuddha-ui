@@ -17,7 +17,7 @@ kreobuddha-ui/
 ├── docs/
 │   └── adr/
 ├── examples/
-│   └── react-vite/          # added when packed-package smoke testing is introduced
+│   └── react-vite/          # consumer fixture: installs the packed tarball
 ├── src/
 │   ├── components/
 │   ├── styles/
@@ -33,8 +33,10 @@ kreobuddha-ui/
 ```
 
 `examples/react-vite` is an isolated, non-workspace consumer fixture with its own package metadata
-and lockfile, or a temporary generated project if that proves simpler. It exists only to install the
-packed tarball and must not become a second published package.
+and lockfile. It exists only to install the packed tarball and must not become a second published
+package. `@kreobuddha/ui` is deliberately absent from its manifest: the package under test is
+installed unsaved from a tarball whose name carries the current version, so the fixture's lockfile
+pins the environment and does not have to be edited on every release.
 
 Do not introduce workspaces, Turborepo, a separate tokens package, or a documentation application
 until a real limitation of the one-publishable-package structure is demonstrated.
