@@ -1,0 +1,44 @@
+# Dependency updates arrive as pull requests, which means CI judges them: every update runs the
+# full gate, including the story tests in a real browser and the contrast measurement. An update
+# that breaks something is therefore a red pull request rather than a surprise during a release.
+#
+# Updates are grouped, because a dozen separate pull requests for one toolchain is a queue nobody
+# reads, and a toolchain is upgraded as a set anyway.
+
+version: 2
+
+updates:
+  # The actions matter most: `docs/QUALITY.md` asks for third-party actions to be pinned, and
+  # floating major tags are what this repository currently uses. Dependabot is what makes moving
+  # to pinned SHAs maintainable rather than a chore that rots.
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+    commit-message:
+      prefix: 'chore'
+    groups:
+      actions:
+        patterns: ['*']
+
+  # This package ships no runtime dependencies, so everything here is a devDependency and none of
+  # it reaches a consumer. Patch and minor updates are grouped; a major arrives on its own, because
+  # a major in the build, test or Storybook toolchain is a decision rather than an upgrade.
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 5
+    commit-message:
+      prefix: 'chore'
+    groups:
+      dev-dependencies:
+        patterns: ['*']
+        update-types: ['minor', 'patch']
+    ignore:
+      # React is a peer dependency with a deliberately chosen range. Moving it is an ADR, not a
+      # dependency bump.
+      - dependency-name: react
+        update-types: ['version-update:semver-major']
+      - dependency-name: react-dom
+        update-types: ['version-update:semver-major']

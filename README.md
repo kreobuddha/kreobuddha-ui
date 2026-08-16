@@ -530,6 +530,15 @@ npm run storybook
 `npm run storybook` opens the workbench. **Overview → Kit** is a single page showing everything the
 library currently ships, in either theme — the quickest way to see the whole kit at once.
 
+[CONTRIBUTING.md](CONTRIBUTING.md) describes how a change gets in and what it has to clear.
+Note that components land one at a time as agreed slices, so an unsolicited pull request adding one
+is likely to be declined — open an issue first.
+
+## Security
+
+Report a vulnerability privately rather than in a public issue; [SECURITY.md](SECURITY.md) explains
+how and what is in scope.
+
 ## License
 
 [MIT](LICENSE)
