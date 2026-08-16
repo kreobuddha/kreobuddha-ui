@@ -1,0 +1,79 @@
+/* Component styles depend on the token layer, and declaring that dependency in CSS rather than
+   from TypeScript keeps the stylesheet out of the emitted declarations, where a `.css` specifier
+   is not resolvable. Vite inlines this into the single published `styles.css`. */
+@import '../../styles.css';
+
+.accordion {
+  min-inline-size: 0;
+  border-block-start: var(--kreo-border-w) solid var(--kreo-border-default);
+}
+
+.section {
+  border-block-end: var(--kreo-border-w) solid var(--kreo-border-default);
+}
+
+.summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--kreo-space-3);
+  padding: var(--kreo-space-3) var(--kreo-space-2);
+  color: var(--kreo-text-primary);
+  font: var(--kreo-type-button);
+  cursor: pointer;
+  transition: var(--kreo-transition-color);
+
+  /* Both spellings are needed to drop the platform triangle: `list-style` is what the current
+     specification uses, and the pseudo-element is what WebKit still reads. The drawn chevron
+     replaces it, so leaving either in place would show two markers. */
+  list-style: none;
+}
+
+.summary::-webkit-details-marker {
+  display: none;
+}
+
+/* Drawn inside the box, matching every other control here, so gaining focus never reflows. */
+.summary:focus-visible {
+  outline: none;
+  box-shadow: var(--kreo-focus-ring);
+}
+
+.summary:hover {
+  background: var(--kreo-surface-hover);
+}
+
+.label {
+  min-inline-size: 0;
+}
+
+.chevron {
+  flex: none;
+  color: var(--kreo-text-muted);
+  transition: transform var(--kreo-duration-fast) var(--kreo-ease);
+}
+
+/* `--kreo-duration-fast` is already 0ms under reduced motion, so the mark still turns — it just
+   arrives instead of sweeping. */
+.section[open] .chevron {
+  transform: rotate(180deg);
+}
+
+.content {
+  padding: 0 var(--kreo-space-2) var(--kreo-space-4);
+  color: var(--kreo-text-body);
+  font: var(--kreo-type-body);
+  min-inline-size: 0;
+}
+
+@media (forced-colors: active) {
+  /* `box-shadow` is not painted in this mode, so focus falls back to a real outline. */
+  .summary:focus-visible {
+    outline: var(--kreo-border-w-focus) solid CanvasText;
+    outline-offset: -2px;
+  }
+
+  .chevron {
+    color: CanvasText;
+  }
+}

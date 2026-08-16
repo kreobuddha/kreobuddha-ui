@@ -3,17 +3,17 @@
    whose path no longer resolves. */
 @import '../../styles.css';
 
-/* Positioning, sizing and the raised surface are shared with `Toggletip` — see
-   `../overlay/overlay.module.css`. What is left here is what makes this a tooltip. */
-.tooltip {
+/* Positioning, sizing and the raised surface are shared with `Tooltip` — see
+   `../overlay/overlay.module.css`. What is left here is what makes this a toggletip: room for a
+   sentence or two, and a pointer that may reach it. */
+.bubble {
   composes: floating surface from '../overlay/overlay.module.css';
-  padding: var(--kreo-space-2) var(--kreo-space-3);
+  padding: var(--kreo-space-3);
   font: var(--kreo-type-body);
-  font-size: var(--kreo-text-13);
 
-  /* The pointer must never reach the tooltip. Hovering it would keep it open over whatever is
-     underneath, and moving towards it is the most common way to lose the thing you were reading. */
-  pointer-events: none;
+  /* The opposite of `Tooltip`, deliberately. This bubble is opened on purpose and may hold text
+     worth selecting or a link worth following, so the pointer has to be able to get to it. */
+  pointer-events: auto;
 }
 
 .top {

@@ -5,7 +5,7 @@ data-dense frontend applications.
 
 ## Status: early, but published
 
-**Fourteen components ship today: `Button`, `IconButton`, `TextField`, `Textarea`, `Select`, `Checkbox`, `Switch`, `FieldGroup`, `Tabs`, `Tooltip`, `Dialog`, `Badge`, `Spinner` and `Alert`.** Everything else in
+**Nineteen components ship today: `Button`, `IconButton`, `TextField`, `Textarea`, `Select`, `Checkbox`, `Switch`, `FieldGroup`, `Tabs`, `Accordion`, `Tooltip`, `Toggletip`, `Dialog`, `Badge`, `Spinner`, `Skeleton`, `Progress`, `Toast` and `Alert`.** Everything else in
 [docs/ROADMAP.md](docs/ROADMAP.md) is a plan, not an available feature. The package is published so
 it can be consumed normally; treat the `0.x` line as a moving target and pin what you depend on.
 
@@ -402,7 +402,8 @@ adding one would have a screen reader say the same thing twice; pass `aria-label
 >
 > It opens on hover and on focus, which means it **does not exist on a touchscreen** — there is no
 > hover there. This is inherent to the pattern, not a gap to be closed later. Anything a reader
-> needs belongs in a label, a hint, or visible text. See
+> needs belongs in a label, a hint, visible text — or a [`Toggletip`](#toggletip), which is the same
+> bubble opened on purpose. See
 > [ADR-0010](docs/adr/0010-overlay-and-composite-strategy.md).
 
 `children` must be a single element that accepts a `ref` and DOM props. The tooltip's id is put on
@@ -542,6 +543,228 @@ thing twice, which is the usual failure when a spinner sits beside the word "Loa
 
 `Button` uses it internally for its own loading state, where the button already carries `aria-busy`
 and the spinner stays decorative.
+
+### `Accordion`
+
+| Prop        | Type              | Default    |
+| ----------- | ----------------- | ---------- |
+| `items`     | `AccordionItem[]` | — required |
+| `exclusive` | `boolean`         | `false`    |
+
+`AccordionItem` is `{ id: string; label: ReactNode; content: ReactNode; defaultOpen?: boolean }`.
+
+```tsx
+import { Accordion } from '@kreobuddha/ui';
+
+<Accordion
+  exclusive
+  items={[
+    { id: 'general', label: 'General', content: 'Where the workspace lives.', defaultOpen: true },
+    { id: 'members', label: 'Members', content: 'Who can reach it.' },
+  ]}
+/>;
+```
+
+Sections that open and close, built on `<details>` and `<summary>`. The platform supplies the
+disclosure button, the tab stop, Enter and Space, and the expanded/collapsed announcement, and this
+component adds no ARIA and no state of its own.
+
+`exclusive` gives the sections one shared `name`, which is how the **browser** keeps a single
+section open — no state, no effect, no click handler. Two accordions on a page get different group
+names and never close each other. Where `name` is not implemented the sections open independently:
+a weaker version of the same component rather than a broken one.
+
+**The open state belongs to the browser after the first render.** `defaultOpen` is an initial
+value, not a controlled one, and a parent re-render does not reopen a section the reader closed.
+Under `exclusive` the browser opens only the first section marked `defaultOpen`.
+
+`content` stays in the DOM while its section is closed, so it is found by in-page search and by
+`Cmd+F` — and so anything expensive to render should not be put there. There is **no height
+animation**: animating a `<details>` means taking its state back from the browser, which is the
+part worth having.
+
+### `Toggletip`
+
+| Prop        | Type                                     | Default    |
+| ----------- | ---------------------------------------- | ---------- |
+| `content`   | `ReactNode`                              | — required |
+| `children`  | `ReactElement`                           | — required |
+| `placement` | `'top' \| 'bottom' \| 'left' \| 'right'` | `'top'`    |
+| `className` | `string`                                 | —          |
+
+```tsx
+import { Toggletip } from '@kreobuddha/ui';
+
+<Toggletip content="Seats are counted at the end of the month." placement="bottom">
+  <IconButton label="About seats" icon={<HelpIcon />} variant="ghost" size="xs" />
+</Toggletip>;
+```
+
+**Use this whenever the text matters, and `Tooltip` only when it does not.** A tooltip opens on
+hover and on focus, and there is no hover on a touchscreen — anything a reader needs would simply
+not exist there. A toggletip is opened deliberately, from the keyboard or from a touchscreen, so it
+is where the explanation belongs.
+
+`children` must be a single element that accepts a `ref` and DOM props, and it has to be a button:
+`aria-expanded` is put on it, and focus returns to it when the toggletip closes. Its own `onClick`
+and its own `ref` keep working — call `preventDefault()` in your handler to stop the bubble
+opening.
+
+The content sits in a `role="status"` region and is **mounted only while the toggletip is open**,
+because a live region announces what changes inside it; content that was there all along and was
+merely revealed is announced by nothing.
+
+Escape closes it and returns focus to the trigger. A pointer going down anywhere outside closes it
+too — but a pointer inside does not, so the text can be selected and a link inside it followed.
+It shares the top layer, the anchor positioning and the raised surface with `Tooltip`.
+
+### `Progress`
+
+| Prop    | Type     | Default    |
+| ------- | -------- | ---------- |
+| `label` | `string` | — required |
+| `value` | `number` | —          |
+| `max`   | `number` | `100`      |
+
+```tsx
+import { Progress } from '@kreobuddha/ui';
+
+<Progress label="Uploading files" value={40} />
+<Progress label="Importing repositories" value={3} max={7} />
+<Progress label="Publishing the workspace" />;
+```
+
+A bar for work whose extent is known — and, with no `value`, for work whose extent is not. The
+indeterminate state reports no `aria-valuenow` at all, which is what stops a screen reader
+announcing a percentage nobody measured; its segment travels the track, and stops still in the
+middle of it under `prefers-reduced-motion`.
+
+`label` is required and becomes the accessible name: the role has no content of its own, so there
+is nowhere else a name could come from. **Nothing here draws a number.** Only you know whether
+"3 of 7 files" or "42%" is the honest way to put it, so the words are yours to place beside the
+bar.
+
+`value` is clamped to `0…max`, and a `max` that cannot be divided by falls back to `100`. It is not
+a `Spinner`: a spinner says that something is happening, this says how much of it has happened, and
+it is worth the space only when that number is real.
+
+**It is a `div` with `role="progressbar"`, not a native `<progress>`.** That is a deliberate
+departure from this project's rule of platform semantics first: one styling model instead of three
+vendor pseudo-element sets. The cost is that the semantics are the library's to keep right, so
+every attribute is asserted in the tests rather than inherited from the element.
+
+### `Skeleton`
+
+It has no props of its own. It renders a `<span>` and forwards `ref`, `className`, `style` and
+every other native span prop to it — except `children`, which it does not accept.
+
+```tsx
+import { Skeleton } from '@kreobuddha/ui';
+
+<Skeleton />
+<Skeleton style={{ width: '60%' }} />
+<Skeleton style={{ width: 40, height: 40, borderRadius: '50%' }} />;
+```
+
+A placeholder block that holds the shape of content while it loads. By default it is one line of
+text at the surrounding size — the full width of its container, and `1em` tall, so a placeholder
+inside a heading is taller than one inside body text without being told. **Every other shape is
+your own CSS**: a circle is a border radius, an avatar is a width and a height. There is no `width`
+prop, because `style` and `className` already say it, and better, inside a grid or a flex row.
+
+**It is always hidden from assistive technology**, and `aria-hidden` cannot be turned off through
+props. It announces nothing, so the loading state has to be carried by something else: visible
+text, a container with `aria-busy`, or a `Spinner` with a `label`. Two announcements of the same
+wait is the failure this prevents.
+
+The pulse stops entirely under `prefers-reduced-motion` — a still block says the same thing. In
+forced-colors mode its fill is not painted at all, so it draws a `GrayText` outline instead and
+keeps the shape it is holding open.
+
+`children` is removed from the type on purpose: content placed inside a hidden block is content
+nobody can reach.
+
+### `Toast`
+
+`ToastProvider` props:
+
+| Prop       | Type        | Default           |
+| ---------- | ----------- | ----------------- |
+| `children` | `ReactNode` | — required        |
+| `limit`    | `number`    | `3`               |
+| `duration` | `number`    | `5000`            |
+| `label`    | `string`    | `'Notifications'` |
+
+`useToast()` returns `{ toast, dismiss }`. `toast(options)` returns the id it assigned, and
+`dismiss(id)` removes that toast early.
+
+| `toast()` option | Type                                           | Default     |
+| ---------------- | ---------------------------------------------- | ----------- |
+| `tone`           | `'success' \| 'warning' \| 'danger' \| 'info'` | `'info'`    |
+| `title`          | `string`                                       | —           |
+| `children`       | `ReactNode`                                    | —           |
+| `duration`       | `number`                                       | provider's  |
+| `icon`           | `ReactNode`                                    | tone's mark |
+| `dismissLabel`   | `string`                                       | `'Dismiss'` |
+
+```tsx
+import { ToastProvider, useToast } from '@kreobuddha/ui';
+
+const App = (): ReactElement => (
+  <ToastProvider>
+    <Workspace />
+  </ToastProvider>
+);
+
+const Workspace = (): ReactElement => {
+  const { toast } = useToast();
+
+  const save = async (): Promise<void> => {
+    const response = await fetch('/workspace', { method: 'PUT' });
+
+    if (!response.ok) {
+      toast({ tone: 'danger', title: 'Save failed', children: 'The workspace was changed.' });
+    }
+  };
+
+  return <Button onClick={save}>Save</Button>;
+};
+```
+
+**This is the only component that needs a wrapper around your tree, and the only one with a hook.**
+A toast is raised where a save failed, not where a floating stack could sensibly be rendered, so the
+list has to live above both. The provider draws the region itself: there is no second component to
+place, and no way to forget to place it. `useToast()` outside a provider throws rather than
+returning a no-op — a `toast()` call that silently never appears is a bug that takes an afternoon to
+find.
+
+At most `limit` toasts are on screen and the rest **wait their turn rather than being dropped**,
+because a dropped toast is a message your application believed it had delivered. The newest is
+nearest the corner.
+
+Each toast leaves after `duration` milliseconds; `duration: 0` keeps it until it is dismissed. **The
+timer stops while a pointer is over the stack or focus is inside it**, and resumes where it stopped.
+Without that, a reader slower than five seconds — or one tabbing towards the close button — is
+chasing a message being taken away from them.
+
+Announcements are **always `aria-live="polite"`, and this is not configurable.** `assertive`
+interrupts whatever the reader is being told at that moment, and nothing that arrives in a corner
+and leaves by itself has earned that. A message urgent enough to interrupt belongs in an `Alert`
+with `live`, in the flow of the page, where it stays until it is dealt with.
+
+There is **no hotkey** to jump to the region. The WAI-ARIA Authoring Practices suggest `F6`, and
+claiming a keystroke from every application that embeds this library is not something a component
+should do unasked. The region is at the end of the document, so the keyboard route to it is long but
+real, and every toast carries a close button that is a normal tab stop.
+
+**A toast raised while a modal `Dialog` is open cannot be clicked.** It is painted above the dialog
+and it is announced, but everything outside a modal dialog is blocked from the pointer by it, the
+toast included — so it goes away on its own timer rather than by your reader's hand. That is the
+platform being consistent about what "modal" means, and it is stated here rather than worked around.
+Verified in Chromium 141 and asserted in `tests/browser/toast.spec.ts`.
+
+The region is pinned to the bottom inline-end corner with logical properties, so it follows the
+writing direction. That corner is not a prop.
 
 ## Theming
 

@@ -1,0 +1,81 @@
+/* Component styles depend on the token layer, and declaring that dependency in CSS rather than
+   from TypeScript keeps the stylesheet out of the emitted declarations, where a `.css` specifier
+   is not resolvable. Vite inlines this into the single published `styles.css`. */
+@import '../../styles.css';
+
+.track {
+  display: block;
+  box-sizing: border-box;
+  inline-size: 100%;
+  block-size: var(--kreo-space-2);
+
+  /* The fill is clipped to the rounded track rather than rounded itself, so a bar at 2% is a
+     sliver of the track's own shape instead of a pill floating inside it. */
+  overflow: hidden;
+  border-radius: var(--kreo-radius-full);
+  background: var(--kreo-surface-active);
+
+  /* The edge is `--kreo-border-control`, not a decorative divider: how far along the work is can
+     only be read against the whole track, so the track's extent is information, and 1.4.11 asks
+     for 3:1 on information carried by a graphic. A pale fill on a pale page cannot supply that. */
+  border: var(--kreo-border-w) solid var(--kreo-border-control);
+}
+
+.indicator {
+  display: block;
+  block-size: 100%;
+  background: var(--kreo-accent-500);
+
+  /* The width is set inline from `value`, so the transition is what stops a jump between two
+     measurements. `--kreo-duration-base` is already 0ms under reduced motion. */
+  transition: inline-size var(--kreo-duration-base) var(--kreo-ease);
+}
+
+.indeterminate .indicator {
+  inline-size: 40%;
+
+  /* A literal rather than a motion token, for the same reason as `Spinner`: the scale holds
+     transition durations, and a looping travel is a kind of value no shipped token expresses. */
+  animation: travel 1600ms ease-in-out infinite;
+}
+
+/* `translateX` is physical, so the segment would travel against the reading direction in an RTL
+   document. Reversing the animation there costs one rule and keeps the bar moving the way the
+   text does. */
+[dir='rtl'] .indeterminate .indicator {
+  animation-direction: reverse;
+}
+
+@keyframes travel {
+  from {
+    transform: translateX(-100%);
+  }
+
+  to {
+    transform: translateX(250%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .indeterminate .indicator {
+    animation: none;
+
+    /* A still segment, centred. It says "under way, extent unknown" without claiming a
+       percentage — and nothing announces one either, since the indeterminate state reports no
+       `aria-valuenow`. */
+    transform: translateX(75%);
+  }
+}
+
+@media (forced-colors: active) {
+  /* Neither background is painted in this mode. The border is restated in a system colour so the
+     track keeps its extent, and the fill is drawn in `Highlight`, which is what a native
+     `<progress>` uses for the same job. */
+  .track {
+    border-color: CanvasText;
+  }
+
+  .indicator {
+    background: Highlight;
+  }
+}

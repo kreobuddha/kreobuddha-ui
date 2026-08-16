@@ -50,6 +50,21 @@ const PROTECTED = [
   { id: 'components-iconbutton--sizes', name: 'iconbutton-sizes' },
   { id: 'components-spinner--sizes', name: 'spinner-sizes' },
 
+  // `Accordion` draws one open section beside two closed ones: the rules between sections, the
+  // turned chevron, and the padding that keeps a heading and its body on the same rhythm. All
+  // three are tokens, and none of them is checked anywhere else.
+  { id: 'components-accordion--open-from-the-start', name: 'accordion-open' },
+
+  // `Progress` is geometry: an empty track, a partial fill, a full one, and the indeterminate
+  // segment parked in the middle by the reduced-motion rule. Nothing else would notice the fill
+  // spilling past the rounded end of its track, or a bar at 100% leaving a sliver of track behind.
+  { id: 'components-progress--states', name: 'progress-states' },
+
+  // `Skeleton` is drawn entirely by its fill and its radius, with no text and no border for any
+  // other check to notice a change by. The run is under `prefers-reduced-motion: reduce`, so this
+  // photographs the still state — which is the state a reader with that preference always sees.
+  { id: 'components-skeleton--card-placeholder', name: 'skeleton-card' },
+
   // `Tabs` is the first component whose selected state is carried by a moving indicator rather
   // than by a fill, and the first that has to survive more tabs than fit.
   { id: 'components-tabs--default', name: 'tabs-default' },
@@ -60,6 +75,22 @@ const PROTECTED = [
   // `--kreo-shadow-overlay` — a token nothing else would notice a change to. It lives in the top
   // layer, which is outside the story root, so it needs the viewport rather than the root.
   { id: 'components-tooltip--long-content', name: 'tooltip-open', topLayer: true },
+
+  // `Toggletip` shares that surface and those placements through `components/overlay`, so this
+  // baseline is what would catch the shared file drifting under one of its two consumers.
+  { id: 'components-toggletip--open', name: 'toggletip-open', topLayer: true },
+
+  // `Toast` draws its own markup on `Alert`'s tinted surfaces, which is the arrangement ADR-0011
+  // §8 chose over rendering `Alert` itself — so this is the baseline that shows the two drifting
+  // apart. It is also the only place the floating tinted surface, its shadow and the stack's
+  // spacing are photographed at all. Top layer, and the story keeps all four on screen.
+  { id: 'components-toast--tones', name: 'toast-tones', topLayer: true },
+
+  // And the claim in ADR-0011 §3 that no assertion can make: a toast raised while a modal dialog
+  // is open is *painted above* it. Hit-testing and the popover staying open are checked in
+  // `tests/browser/toast.spec.ts`; paint order is only visible in a picture, so this is the
+  // picture. If the stack ever ends up under the dialog panel, this baseline is what says so.
+  { id: 'components-toast--over-a-modal-dialog', name: 'toast-over-dialog', topLayer: true },
 
   // `Dialog` is the other top-layer component, and the only one with a backdrop — a surface that
   // exists nowhere else and that no contrast pair covers, since it sits over arbitrary content.

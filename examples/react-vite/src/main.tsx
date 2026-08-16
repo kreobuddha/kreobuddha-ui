@@ -6,6 +6,7 @@ import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 
 import {
+  Accordion,
   Alert,
   Badge,
   Button,
@@ -13,15 +14,20 @@ import {
   Dialog,
   FieldGroup,
   IconButton,
+  Progress,
   Select,
+  Skeleton,
   Spinner,
   Switch,
   Tabs,
   TextField,
+  ToastProvider,
+  Toggletip,
   Tooltip,
   Textarea,
+  useToast,
 } from '@kreobuddha/ui';
-import type { ButtonProps, ButtonVariant } from '@kreobuddha/ui';
+import type { ButtonProps, ButtonVariant, ToastTone } from '@kreobuddha/ui';
 
 import '@kreobuddha/ui/styles.css';
 
@@ -36,6 +42,22 @@ const CloseMark = (): React.ReactElement => (
 );
 
 const Action = (props: ButtonProps): React.ReactElement => <Button {...props} />;
+
+// The hook has to resolve through the package boundary too, and the context it reads has to be the
+// one `ToastProvider` publishes from the same build. A provider and a hook that each resolve but to
+// different module instances is exactly the failure this fixture exists to catch.
+const RaiseToast = ({ tone }: { tone: ToastTone }): React.ReactElement => {
+  const { toast, dismiss } = useToast();
+
+  return (
+    <Button
+      variant="outlined"
+      onClick={(): void => dismiss(toast({ tone, title: 'Save failed', children: 'Try again.' }))}
+    >
+      Raise and withdraw a toast
+    </Button>
+  );
+};
 
 export const App = (): React.ReactElement => (
   <main>
@@ -54,6 +76,16 @@ export const App = (): React.ReactElement => (
       Live
     </Badge>
     <Spinner label="Loading the fixture" />
+    <Skeleton style={{ width: 200 }} />
+    <Progress label="Uploading files" value={40} />
+
+    <Accordion
+      exclusive
+      items={[
+        { id: 'general', label: 'General', content: 'Where the workspace lives.' },
+        { id: 'members', label: 'Members', content: 'Who can reach it.' },
+      ]}
+    />
 
     <Alert tone="danger" title="Save failed" live onDismiss={() => undefined}>
       The workspace was changed by someone else.
@@ -82,6 +114,14 @@ export const App = (): React.ReactElement => (
     <Tooltip content="Copies the link to your clipboard" placement="bottom">
       <Button variant="outlined">Copy link</Button>
     </Tooltip>
+
+    <Toggletip content="Seats are counted at the end of the month." placement="bottom">
+      <Button variant="outlined">Why is this billed?</Button>
+    </Toggletip>
+
+    <ToastProvider limit={3} duration={5000} label="Notifications">
+      <RaiseToast tone="danger" />
+    </ToastProvider>
 
     <Dialog
       open={false}

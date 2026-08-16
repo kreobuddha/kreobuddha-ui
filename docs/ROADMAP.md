@@ -9,11 +9,16 @@ verification quality.
 ## Status
 
 Phases 0 through 4 are complete. The repository is public at `kreobuddha/kreobuddha-ui` with CI
-green, and the package is published to npm as `@kreobuddha/ui` (ADR-0006). Fourteen components
+green, and the package is published to npm as `@kreobuddha/ui` (ADR-0006). Nineteen components
 ship: `Button`, `IconButton`, `Badge`, `Spinner`, `Alert`, `TextField`, `Textarea`, `Select`,
-`Checkbox`, `Switch`, `FieldGroup`, `Tabs`, `Tooltip` and `Dialog`.
+`Checkbox`, `Switch`, `FieldGroup`, `Tabs`, `Tooltip`, `Dialog` — all released — and `Skeleton`,
+`Progress`, `Accordion`, `Toggletip` and `Toast`, which are unreleased and due in `0.15.0`.
 
-Phase 5 is next and not started.
+The batch of five below is complete and prepared for release: the changelog heading and the version
+in `package.json` are in place, so the release workflow can be run with `0.15.0` whenever Rustam
+asks for that exact action. Until that run, nothing of the five is on npm. The batch entered scope
+ahead of Phase 5 by Rustam's decision rather than by the backlog rule; see "Component batch,
+released together as `0.15.0`". Phase 5 is next after it and not started.
 
 Phase 3 is complete: `TextField`, `Textarea`, `Select`, `Checkbox`, `Switch` and `FieldGroup` are
 done, and a settings form composes from them with no wrapper of its own.
@@ -21,7 +26,9 @@ done, and a settings form composes from them with no wrapper of its own.
 Phase 4 is complete: `Tabs`, `Tooltip` and `Dialog` are done, on the platform primitives accepted
 in [ADR-0010](adr/0010-overlay-and-composite-strategy.md) and with no runtime dependency added.
 The keyboard and forced-colors checks that ADR requires are now automated in `tests/browser/` and
-run in CI under `npm run check:browser`. **The screen-reader check is still not done.** One
+run in CI under `npm run check:browser`. **The screen-reader check is not done and is parked by
+Rustam's decision** — see "Parked by decision" below; the phase is complete without it, and the
+library claims no screen-reader verification for these components until it is run. One
 cross-engine limitation is accepted and stated rather than worked around: WebKit does not return
 focus to the trigger when the dialog closes. Both are recorded in that ADR.
 
@@ -175,15 +182,42 @@ Goal: stabilize evidence-backed public contracts.
 
 Requirements are defined in `RELEASES.md`. Component count alone cannot trigger `1.0.0`.
 
+## Component batch, released together as `0.15.0`
+
+Five candidates entered active scope **by Rustam's decision**, not by the rule below that a real
+consumer scenario has to demonstrate the need first. The exception is recorded here rather than
+left as a silent contradiction; the rule itself stands for everything else in the backlog.
+
+Each is a separate slice — designed, built and fully verified on its own, one at a time, and each
+its own commit — and they share both the pull request and the release. The shared release is the
+second deliberate exception, to `COMPONENT_RECIPE.md` §8, now written down there. The shared pull
+request is Rustam's call on how to land the batch, taken once the five were done: five reviews of
+one branch that was built in order would have been five readings of the same history. What is not
+relaxed is the verification — `npm run verify` ran green for each component before the next was
+started. Phase 5 remains the next phase after them.
+
+- `Skeleton` — **done**;
+- `Progress` — **done**, as a `div` with `role="progressbar"` by Rustam's decision rather than as a
+  native `<progress>`; the departure from platform-semantics-first and what it buys are stated in
+  the component, in `README.md` and in the changelog;
+- `Accordion` — **done**, on `<details>`/`<summary>` with the `name` attribute for exclusive
+  opening. Support checked before implementation rather than remembered: Chrome and Edge 120,
+  Firefox 130, Safari 17.2, ~90% of users (caniuse, `mdn-html_elements_details_name`, checked
+  2026-08-16). Where it is missing, sections open independently;
+- `Toggletip` — **done**, delivering what [ADR-0010](adr/0010-overlay-and-composite-strategy.md)
+  promised. Its arrival is what justified extracting the shared overlay layer into
+  `src/components/overlay/`, on the model of `src/components/field/`;
+- `Toast` — **done**, on [ADR-0011](adr/0011-toast-ownership-and-announcement.md), accepted by
+  Rustam before implementation because a provider is an architectural decision rather than a
+  styling one. It is the library's first context, first hook and first component that renders
+  outside its own subtree. It draws its own markup on `Alert`'s tinted surfaces rather than
+  rendering `Alert`, by Rustam's decision: the colour is shared, the markup is not.
+
 ## Backlog candidates
 
-- `Toast`
 - `Popover`
 - `Combobox`
 - `Menu`
-- `Accordion`
-- `Progress`
-- `Skeleton`
 - `EmptyState`
 - `Table`
 - `Pagination`
@@ -209,6 +243,22 @@ so it is picked up when that happens rather than rediscovered.
   Take it when `typescript-eslint` ships a release whose peer range admits TypeScript 7. Dependabot
   will raise the pull request; it was closed once already, as
   [#32](https://github.com/kreobuddha/kreobuddha-ui/pull/32).
+
+## Parked by decision
+
+Work that was specified, is not blocked by anything technical, and is deliberately not being done
+now. Each entry names what would restart it, so it is picked up as a decision rather than found as
+an oversight.
+
+- **The screen-reader pass over `Dialog`, `Tabs` and `Tooltip`.** The manual checks
+  [ADR-0010](adr/0010-overlay-and-composite-strategy.md) asked for; the exact VoiceOver script is
+  written there, under "The screen-reader script", and stays valid. Everything else on that
+  ADR's outstanding list has since been automated in `tests/browser/`; this is what is left,
+  because it needs a real assistive technology driven by a person and no check in this repository
+  can stand in for it. Parked by Rustam on 2026-08-16. It restarts when he runs the script, or when
+  a component's semantics change in a way that makes the answer matter. Until then the project
+  claims no screen-reader conformance for these three — `CLAUDE.md` forbids claiming what was not
+  observed.
 
 ## Explicitly deferred
 

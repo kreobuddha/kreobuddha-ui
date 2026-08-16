@@ -101,6 +101,28 @@ const PAIRS = [
   ['control border', '--kreo-surface-page', '--kreo-border-control', NON_TEXT],
   ['control border on card', '--kreo-surface-card', '--kreo-border-control', NON_TEXT],
   ['danger border', '--kreo-surface-page', '--kreo-border-danger', NON_TEXT],
+  // `Accordion`: the heading of a section, which is the one place a hovered row puts primary text
+  // on the hover surface. The chevron is `--kreo-text-muted` on the page, already measured as
+  // 'select chevron' on a card and as a mark elsewhere; the rules between sections are the
+  // decorative divider, which separates content rather than identifying a control.
+  ['accordion heading hovered', '--kreo-surface-hover', '--kreo-text-primary', TEXT],
+  // `Progress`: the fill against the track it sits in. The track's own edge is not a separate
+  // entry — it is `--kreo-border-control` on the page or on a card, already measured as 'control
+  // border' and 'control border on card'. It carries that token rather than a decorative divider
+  // on purpose: how far along the work is can only be read against the whole track.
+  ['progress fill', '--kreo-surface-active', '--kreo-accent-500', NON_TEXT],
+  // `Skeleton` adds no pair. It is a fill with nothing on it: no text, and no boundary that
+  // identifies a control or carries a state, which is what 1.4.11 measures. It is `aria-hidden`
+  // and stands in for content that has not arrived, so a reader who cannot see it has lost
+  // nothing — WCAG excludes purely decorative content by the same reasoning. In forced-colors,
+  // where its fill is not painted at all, it draws a GrayText border the system guarantees.
+  // `Toast` adds no pair either, and for a reason worth writing down rather than inferring from
+  // the absence: ADR-0011 §8 has it draw its own markup on the same four tinted surfaces `Alert`
+  // uses, with the same text-on-tint tokens and the same ghost dismiss button. Every pairing it
+  // puts on screen is therefore one of the eight 'on tint' entries above, plus the four 'dismiss
+  // on … tint' ones. Its border is `--kreo-border-default`, the decorative divider, which
+  // separates the floating surface from the content under it rather than identifying a control —
+  // the same reasoning as the tooltip's edge. In forced-colors that border becomes CanvasText.
   ['focus ring', '--kreo-surface-page', '--kreo-border-focus', NON_TEXT],
   ['focus ring on filled', '--kreo-accent-500', '--kreo-text-on-accent', NON_TEXT],
 ];

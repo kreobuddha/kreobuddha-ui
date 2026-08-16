@@ -114,3 +114,12 @@ above catches a component that passes every check and looks wrong.
 One component, one release. Version bump, a new heading in the changelog, merge, then run the
 release workflow with that version. It publishes, tags the commit and writes the GitHub release
 from the changelog heading — so the heading has to be there before the run, not after.
+
+**The one exception: a batch that closes a phase may share a release.** When several components are
+approved together as the remainder of a phase, their entries collect under `## [Unreleased]` and the
+version is raised once, at the end, for all of them. What does not relax is the work itself: each
+component is still designed, built and fully verified on its own, one at a time, before the next is
+started. The batch is named in `docs/ROADMAP.md`, so the exception is written down rather than
+inferred from a changelog with several components under one heading, and how the batch lands — one
+pull request or one each — is decided there too. `0.15.0` — `Skeleton`, `Progress`, `Accordion`,
+`Toggletip`, `Toast`, landed as a single pull request — was the first.

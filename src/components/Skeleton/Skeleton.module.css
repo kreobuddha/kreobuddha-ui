@@ -1,0 +1,46 @@
+/* Component styles depend on the token layer, and declaring that dependency in CSS rather than
+   from TypeScript keeps the stylesheet out of the emitted declarations, where a `.css` specifier
+   is not resolvable. Vite inlines this into the single published `styles.css`. */
+@import '../../styles.css';
+
+.skeleton {
+  /* A `<span>` so the block is valid inside a paragraph or a label, laid out as a block so it
+     behaves like the content it replaces. */
+  display: block;
+
+  /* The default is one line of text at the surrounding size: `1em` follows the font it sits in,
+     and the full width of whatever box it is in. Any other shape is the consumer's `style` or
+     `className` — a circle is `border-radius: 50%` and a square width and height. */
+  width: 100%;
+  height: 1em;
+  border-radius: var(--kreo-radius-sm);
+  background: var(--kreo-surface-active);
+
+  /* Literals rather than tokens: the motion scale holds transition durations, and a looping pulse
+     is a different kind of value that no shipped token expresses. `ease-in-out` rather than
+     `--kreo-ease`, which is asymmetric by design and would make the pulse snap on the way back. */
+  animation: pulse 1400ms ease-in-out infinite;
+}
+
+@keyframes pulse {
+  50% {
+    opacity: 0.5;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  /* A still block is the whole component: nothing here is carried by the movement, so the pulse
+     is dropped rather than slowed. */
+  .skeleton {
+    animation: none;
+  }
+}
+
+@media (forced-colors: active) {
+  /* The fill is not painted in this mode, so the block would vanish; an outline keeps the shape it
+     is holding open visible. `border-box` so the outline does not grow a size the consumer set. */
+  .skeleton {
+    box-sizing: border-box;
+    border: var(--kreo-border-w) solid GrayText;
+  }
+}

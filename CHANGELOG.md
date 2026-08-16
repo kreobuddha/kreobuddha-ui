@@ -9,7 +9,55 @@ explicitly rather than treated as disposable.
 
 ## [Unreleased]
 
+## [0.15.0] — 2026-08-16
+
 ### Added
+
+- `Toast` — messages raised from anywhere and drawn in the corner of the viewport. This is the
+  library's first context, first hook and first component that renders outside its own subtree:
+  `ToastProvider` wraps your tree and `useToast()` gives you `toast(options)`, which returns an id,
+  and `dismiss(id)`. Outside a provider the hook throws rather than quietly doing nothing. Three are
+  on screen at once by default and the rest wait rather than being dropped; each leaves after five
+  seconds, `duration: 0` keeps one until it is dismissed, and both defaults are `ToastProvider`
+  props. The timer stops while a pointer is over the stack or focus is inside it and resumes where
+  it stopped, which is what makes the whole thing safe for a reader who is slower than five seconds.
+  One `aria-live="polite"` region, mounted from the start and never `assertive`. It lives in the top
+  layer, so a toast raised while a modal `Dialog` is open is painted above it — but it cannot be
+  clicked while that dialog is open, which is the platform being consistent about modality and is
+  documented rather than worked around. See ADR-0011.
+- `Toggletip` — the bubble `Tooltip` is not allowed to carry, opened on purpose. A tooltip opens on
+  hover and on focus, so it does not exist on a touchscreen; anything the reader actually needs
+  goes here instead, where a click, Enter, Space or a tap opens it. The trigger keeps its own
+  `onClick` and `ref` and gains `aria-expanded`; Escape closes and returns focus to it; a pointer
+  outside closes it and a pointer inside does not, so the text can be selected and a link inside
+  followed. The content is mounted only while open, because a `role="status"` region announces what
+  changes inside it and text that was merely revealed changes nothing.
+- The top layer, the anchor positioning and the raised overlay surface now live in one internal
+  stylesheet shared by `Tooltip` and `Toggletip`. No public API changed; `Tooltip` looks and
+  behaves exactly as it did.
+- `Accordion` — sections that open and close, built on `<details>` and `<summary>`. The disclosure
+  button, the tab stop, Enter and Space, and the expanded/collapsed announcement are all the
+  platform's; the component adds no ARIA and no state. `exclusive` shares one `name` across the
+  sections, which is how the browser — not this library — keeps a single section open, and two
+  accordions on a page never close each other. `defaultOpen` is an initial value, so a parent
+  re-render cannot reopen a section the reader closed. There is no height animation: animating a
+  `<details>` means taking its state back from the browser.
+- `Progress` — a bar for work whose extent is known, and, with no `value`, for work whose extent is
+  not. The indeterminate state reports no `aria-valuenow` at all, so nothing announces a percentage
+  nobody measured; its segment travels the track, and stands still in the middle of it under
+  `prefers-reduced-motion`. `label` is required and becomes the accessible name. The component
+  draws no number of its own — only the consumer knows whether "3 of 7 files" or "42%" is the
+  honest wording. It is a `div` with `role="progressbar"` rather than a native `<progress>`, which
+  is a deliberate departure from platform-semantics-first, taken to keep one styling model instead
+  of three vendor pseudo-element sets, and paid for with tests that assert every attribute the
+  native element would have supplied.
+- `Skeleton` — a placeholder block that holds the shape of content while it loads. It has no props
+  of its own: the default is one line of text at the surrounding size, `1em` tall and as wide as
+  its container, and every other shape is the `style` or `className` you already write. It is
+  always hidden from assistive technology and cannot be unhidden, so the wait is announced once, by
+  the text or the `aria-busy` or the labelled `Spinner` around it, rather than twice. The pulse
+  stops completely under `prefers-reduced-motion`, and in forced-colors mode, where the fill is not
+  painted, it keeps its shape with a system-coloured outline.
 
 - A second Playwright project, `tests/browser/`, run by `npm run check:browser` and in CI. It sends
   real key presses to a real engine, which is the only way to check the things the story runner
@@ -245,7 +293,8 @@ from git for a single consumer.
   is public API.
 - Inter bundled as WOFF2 subsets, so no external font request is made at runtime.
 
-[unreleased]: https://github.com/kreobuddha/kreobuddha-ui/compare/v0.14.0...HEAD
+[unreleased]: https://github.com/kreobuddha/kreobuddha-ui/compare/v0.15.0...HEAD
+[0.15.0]: https://github.com/kreobuddha/kreobuddha-ui/compare/v0.14.0...v0.15.0
 [0.14.0]: https://github.com/kreobuddha/kreobuddha-ui/compare/v0.13.0...v0.14.0
 [0.13.0]: https://github.com/kreobuddha/kreobuddha-ui/compare/v0.12.0...v0.13.0
 [0.12.0]: https://github.com/kreobuddha/kreobuddha-ui/compare/v0.11.0...v0.12.0

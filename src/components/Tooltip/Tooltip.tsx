@@ -2,6 +2,7 @@ import { cloneElement, useEffect, useId, useRef, useState } from 'react';
 import type { ReactElement, ReactNode } from 'react';
 
 import { cx } from '../../internal/cx.js';
+import { anchorName } from '../overlay/anchorName.js';
 
 import styles from './Tooltip.module.css';
 
@@ -48,8 +49,7 @@ export const Tooltip = ({
 }: TooltipProps): ReactElement => {
   const raw = useId();
 
-  // `useId` produces colons, which are not valid in a dashed-ident. The anchor name has to be one.
-  const anchor = `--kreo-anchor-${raw.replace(/:/g, '')}`;
+  const anchor = anchorName(raw);
   const tooltipId = `${raw}-tooltip`;
 
   const tooltip = useRef<HTMLDivElement>(null);

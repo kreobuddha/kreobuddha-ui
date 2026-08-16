@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import type { CSSProperties, ReactElement, ReactNode } from 'react';
 
+import { Accordion } from '../components/Accordion/Accordion.js';
 import { Alert } from '../components/Alert/Alert.js';
 import { Badge } from '../components/Badge/Badge.js';
 import { Checkbox } from '../components/Checkbox/Checkbox.js';
@@ -8,12 +9,16 @@ import { Button } from '../components/Button/Button.js';
 import { FieldGroup } from '../components/FieldGroup/FieldGroup.js';
 import { IconButton } from '../components/IconButton/IconButton.js';
 import { Select } from '../components/Select/Select.js';
+import { Progress } from '../components/Progress/Progress.js';
+import { Skeleton } from '../components/Skeleton/Skeleton.js';
 import { Spinner } from '../components/Spinner/Spinner.js';
 import { Switch } from '../components/Switch/Switch.js';
 import { Tabs } from '../components/Tabs/Tabs.js';
+import { Toggletip } from '../components/Toggletip/Toggletip.js';
 import { Tooltip } from '../components/Tooltip/Tooltip.js';
 
 import { DialogSection } from './DialogSection.js';
+import { ToastSection } from './ToastSection.js';
 import { Textarea } from '../components/Textarea/Textarea.js';
 import { TextField } from '../components/TextField/TextField.js';
 
@@ -287,6 +292,34 @@ export const Kit: Story = {
         </div>
       </Section>
 
+      <Section title="Progress — determinate, and not">
+        <div style={{ ...sectionStyle, maxWidth: 320 }}>
+          <Progress label="Nothing yet" value={0} />
+          <Progress label="Uploading files" value={40} />
+          <Progress label="Finished" value={100} />
+          <Progress label="Publishing the workspace" />
+        </div>
+      </Section>
+
+      <Section title="Skeleton — the shape of content that has not arrived">
+        <div style={{ display: 'flex', gap: 'var(--kreo-space-3)', alignItems: 'center' }}>
+          <Skeleton
+            style={{ width: 40, height: 40, borderRadius: 'var(--kreo-radius-full)', flex: 'none' }}
+          />
+          <div
+            style={{
+              display: 'flex',
+              flexDirection: 'column',
+              gap: 'var(--kreo-space-2)',
+              flex: 1,
+            }}
+          >
+            <Skeleton style={{ width: '55%' }} />
+            <Skeleton style={{ width: '35%' }} />
+          </div>
+        </div>
+      </Section>
+
       <Section title="Alert — tones">
         <Alert tone="success">Changes saved.</Alert>
         <Alert tone="warning">The invitation expires today.</Alert>
@@ -414,6 +447,34 @@ export const Kit: Story = {
         />
       </Section>
 
+      <Section title="Accordion — one open at a time, by the browser">
+        <Accordion
+          exclusive
+          items={[
+            {
+              id: 'general',
+              label: 'General',
+              content: 'The workspace name, its slug, and the region its data lives in.',
+              defaultOpen: true,
+            },
+            {
+              id: 'members',
+              label: (
+                <>
+                  Members <Badge tone="neutral">12</Badge>
+                </>
+              ),
+              content: 'Who can reach the workspace, and what each of them may change.',
+            },
+            {
+              id: 'billing',
+              label: 'Billing',
+              content: 'The plan, the seats in use, and where the invoices are sent.',
+            },
+          ]}
+        />
+      </Section>
+
       <Section title="Tooltip">
         <div style={row}>
           <Tooltip content="Copies the link to your clipboard">
@@ -425,8 +486,41 @@ export const Kit: Story = {
         </div>
       </Section>
 
+      <Section title="Toggletip — what a tooltip is not allowed to carry">
+        <div style={row}>
+          <span
+            style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: 'var(--kreo-space-2)',
+              font: 'var(--kreo-type-body)',
+              color: 'var(--kreo-text-body)',
+            }}
+          >
+            Seats in use
+            <Toggletip
+              placement="bottom"
+              content="Seats are counted at the end of the month, so removing someone today still bills."
+            >
+              <IconButton label="About seats" icon={<Mark />} variant="ghost" size="xs" />
+            </Toggletip>
+          </span>
+
+          <Toggletip
+            placement="bottom"
+            content="Opened on purpose, and reachable on a touchscreen."
+          >
+            <Button variant="outlined">Why is this billed?</Button>
+          </Toggletip>
+        </div>
+      </Section>
+
       <Section title="Dialog">
         <DialogSection />
+      </Section>
+
+      <Section title="Toast — raised from anywhere, drawn in the corner">
+        <ToastSection />
       </Section>
 
       <Section title="A field and a button sit level">
