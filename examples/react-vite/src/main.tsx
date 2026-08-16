@@ -21,6 +21,7 @@ import {
   Switch,
   Tabs,
   TextField,
+  Toggletip,
   Tooltip,
   Textarea,
 } from '@kreobuddha/ui';
@@ -95,6 +96,10 @@ export const App = (): React.ReactElement => (
     <Tooltip content="Copies the link to your clipboard" placement="bottom">
       <Button variant="outlined">Copy link</Button>
     </Tooltip>
+
+    <Toggletip content="Seats are counted at the end of the month." placement="bottom">
+      <Button variant="outlined">Why is this billed?</Button>
+    </Toggletip>
 
     <Dialog
       open={false}

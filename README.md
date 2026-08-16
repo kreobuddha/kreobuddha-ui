@@ -5,7 +5,7 @@ data-dense frontend applications.
 
 ## Status: early, but published
 
-**Seventeen components ship today: `Button`, `IconButton`, `TextField`, `Textarea`, `Select`, `Checkbox`, `Switch`, `FieldGroup`, `Tabs`, `Accordion`, `Tooltip`, `Dialog`, `Badge`, `Spinner`, `Skeleton`, `Progress` and `Alert`.** Everything else in
+**Eighteen components ship today: `Button`, `IconButton`, `TextField`, `Textarea`, `Select`, `Checkbox`, `Switch`, `FieldGroup`, `Tabs`, `Accordion`, `Tooltip`, `Toggletip`, `Dialog`, `Badge`, `Spinner`, `Skeleton`, `Progress` and `Alert`.** Everything else in
 [docs/ROADMAP.md](docs/ROADMAP.md) is a plan, not an available feature. The package is published so
 it can be consumed normally; treat the `0.x` line as a moving target and pin what you depend on.
 
@@ -402,7 +402,8 @@ adding one would have a screen reader say the same thing twice; pass `aria-label
 >
 > It opens on hover and on focus, which means it **does not exist on a touchscreen** — there is no
 > hover there. This is inherent to the pattern, not a gap to be closed later. Anything a reader
-> needs belongs in a label, a hint, or visible text. See
+> needs belongs in a label, a hint, visible text — or a [`Toggletip`](#toggletip), which is the same
+> bubble opened on purpose. See
 > [ADR-0010](docs/adr/0010-overlay-and-composite-strategy.md).
 
 `children` must be a single element that accepts a `ref` and DOM props. The tooltip's id is put on
@@ -581,6 +582,41 @@ Under `exclusive` the browser opens only the first section marked `defaultOpen`.
 `Cmd+F` — and so anything expensive to render should not be put there. There is **no height
 animation**: animating a `<details>` means taking its state back from the browser, which is the
 part worth having.
+
+### `Toggletip`
+
+| Prop        | Type                                     | Default    |
+| ----------- | ---------------------------------------- | ---------- |
+| `content`   | `ReactNode`                              | — required |
+| `children`  | `ReactElement`                           | — required |
+| `placement` | `'top' \| 'bottom' \| 'left' \| 'right'` | `'top'`    |
+| `className` | `string`                                 | —          |
+
+```tsx
+import { Toggletip } from '@kreobuddha/ui';
+
+<Toggletip content="Seats are counted at the end of the month." placement="bottom">
+  <IconButton label="About seats" icon={<HelpIcon />} variant="ghost" size="xs" />
+</Toggletip>;
+```
+
+**Use this whenever the text matters, and `Tooltip` only when it does not.** A tooltip opens on
+hover and on focus, and there is no hover on a touchscreen — anything a reader needs would simply
+not exist there. A toggletip is opened deliberately, from the keyboard or from a touchscreen, so it
+is where the explanation belongs.
+
+`children` must be a single element that accepts a `ref` and DOM props, and it has to be a button:
+`aria-expanded` is put on it, and focus returns to it when the toggletip closes. Its own `onClick`
+and its own `ref` keep working — call `preventDefault()` in your handler to stop the bubble
+opening.
+
+The content sits in a `role="status"` region and is **mounted only while the toggletip is open**,
+because a live region announces what changes inside it; content that was there all along and was
+merely revealed is announced by nothing.
+
+Escape closes it and returns focus to the trigger. A pointer going down anywhere outside closes it
+too — but a pointer inside does not, so the text can be selected and a link inside it followed.
+It shares the top layer, the anchor positioning and the raised surface with `Tooltip`.
 
 ### `Progress`
 

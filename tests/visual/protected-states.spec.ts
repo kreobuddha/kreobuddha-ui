@@ -76,6 +76,10 @@ const PROTECTED = [
   // layer, which is outside the story root, so it needs the viewport rather than the root.
   { id: 'components-tooltip--long-content', name: 'tooltip-open', topLayer: true },
 
+  // `Toggletip` shares that surface and those placements through `components/overlay`, so this
+  // baseline is what would catch the shared file drifting under one of its two consumers.
+  { id: 'components-toggletip--open', name: 'toggletip-open', topLayer: true },
+
   // `Dialog` is the other top-layer component, and the only one with a backdrop — a surface that
   // exists nowhere else and that no contrast pair covers, since it sits over arbitrary content.
   { id: 'components-dialog--default', name: 'dialog-open', topLayer: true },

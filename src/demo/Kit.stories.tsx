@@ -14,6 +14,7 @@ import { Skeleton } from '../components/Skeleton/Skeleton.js';
 import { Spinner } from '../components/Spinner/Spinner.js';
 import { Switch } from '../components/Switch/Switch.js';
 import { Tabs } from '../components/Tabs/Tabs.js';
+import { Toggletip } from '../components/Toggletip/Toggletip.js';
 import { Tooltip } from '../components/Tooltip/Tooltip.js';
 
 import { DialogSection } from './DialogSection.js';
@@ -481,6 +482,35 @@ export const Kit: Story = {
           <Tooltip content="Only ever what the reader can do without" placement="right">
             <IconButton label="Add a member" icon={<Mark />} variant="ghost" />
           </Tooltip>
+        </div>
+      </Section>
+
+      <Section title="Toggletip — what a tooltip is not allowed to carry">
+        <div style={row}>
+          <span
+            style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: 'var(--kreo-space-2)',
+              font: 'var(--kreo-type-body)',
+              color: 'var(--kreo-text-body)',
+            }}
+          >
+            Seats in use
+            <Toggletip
+              placement="bottom"
+              content="Seats are counted at the end of the month, so removing someone today still bills."
+            >
+              <IconButton label="About seats" icon={<Mark />} variant="ghost" size="xs" />
+            </Toggletip>
+          </span>
+
+          <Toggletip
+            placement="bottom"
+            content="Opened on purpose, and reachable on a touchscreen."
+          >
+            <Button variant="outlined">Why is this billed?</Button>
+          </Toggletip>
         </div>
       </Section>
 

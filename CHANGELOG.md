@@ -11,6 +11,16 @@ explicitly rather than treated as disposable.
 
 ### Added
 
+- `Toggletip` — the bubble `Tooltip` is not allowed to carry, opened on purpose. A tooltip opens on
+  hover and on focus, so it does not exist on a touchscreen; anything the reader actually needs
+  goes here instead, where a click, Enter, Space or a tap opens it. The trigger keeps its own
+  `onClick` and `ref` and gains `aria-expanded`; Escape closes and returns focus to it; a pointer
+  outside closes it and a pointer inside does not, so the text can be selected and a link inside
+  followed. The content is mounted only while open, because a `role="status"` region announces what
+  changes inside it and text that was merely revealed changes nothing.
+- The top layer, the anchor positioning and the raised overlay surface now live in one internal
+  stylesheet shared by `Tooltip` and `Toggletip`. No public API changed; `Tooltip` looks and
+  behaves exactly as it did.
 - `Accordion` — sections that open and close, built on `<details>` and `<summary>`. The disclosure
   button, the tab stop, Enter and Space, and the expanded/collapsed announcement are all the
   platform's; the component adds no ARIA and no state. `exclusive` shares one `name` across the

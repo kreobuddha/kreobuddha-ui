@@ -9,11 +9,11 @@ verification quality.
 ## Status
 
 Phases 0 through 4 are complete. The repository is public at `kreobuddha/kreobuddha-ui` with CI
-green, and the package is published to npm as `@kreobuddha/ui` (ADR-0006). Seventeen components
+green, and the package is published to npm as `@kreobuddha/ui` (ADR-0006). Eighteen components
 ship: `Button`, `IconButton`, `Badge`, `Spinner`, `Alert`, `TextField`, `Textarea`, `Select`,
 `Checkbox`, `Switch`, `FieldGroup`, `Tabs`, `Tooltip`, `Dialog` — all released — and `Skeleton`,
-`Progress` and `Accordion`, which are unreleased and due in `0.15.0` with the rest of the batch
-below.
+`Progress`, `Accordion` and `Toggletip`, which are unreleased and due in `0.15.0` with the rest of
+the batch below.
 
 A batch of five components is in progress ahead of Phase 5, by Rustam's decision rather than by
 the backlog rule; see "Component batch, released together as `0.15.0`". Phase 5 is next after it
@@ -197,7 +197,9 @@ they share only the release, which is the second deliberate exception, to
   opening. Support checked before implementation rather than remembered: Chrome and Edge 120,
   Firefox 130, Safari 17.2, ~90% of users (caniuse, `mdn-html_elements_details_name`, checked
   2026-08-16). Where it is missing, sections open independently;
-- `Toggletip` — planned, promised in [ADR-0010](adr/0010-overlay-and-composite-strategy.md);
+- `Toggletip` — **done**, delivering what [ADR-0010](adr/0010-overlay-and-composite-strategy.md)
+  promised. Its arrival is what justified extracting the shared overlay layer into
+  `src/components/overlay/`, on the model of `src/components/field/`;
 - `Toast` — planned, and blocked on an accepted ADR-0011 first: it is the first component that
   might require a provider, which is an architectural decision rather than a styling one.
 

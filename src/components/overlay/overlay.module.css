@@ -1,0 +1,82 @@
+/* The parts every anchored overlay in this library draws identically: escaping the UA's centring
+   of a popover, the sizing that keeps a bubble readable, the raised surface, and the four
+   placements with their flip fallbacks.
+
+   Extracted once `Tooltip` and `Toggletip` were two components repeating it — the second consumer
+   is what made the extraction real rather than anticipated. Consumed through `composes`, so each
+   component keeps its own class names and can still add to them; nothing here is a public class,
+   and the customization boundary remains the `--kreo-*` tokens.
+
+   This file deliberately does **not** import the token layer. An `@import` in a file reached
+   through `composes` is not inlined by the bundler — it survives into the built stylesheet as a
+   literal rule with a path that no longer resolves. Every component composing from here declares
+   the token dependency itself. */
+
+.floating {
+  /* Hidden by this rule rather than by the UA's `[popover]:not(:popover-open)`. Where the popover
+     attribute is unsupported it is inert, not hiding — an overlay relying on it would be visible
+     permanently instead of never. */
+  display: none;
+
+  /* The UA stylesheet centres a popover in the viewport with `inset: 0; margin: auto`. Both have to
+     go before anchor positioning can place it. */
+  position: fixed;
+  inset: auto;
+  margin: 0;
+  z-index: 1;
+
+  /* `position-area` puts the overlay in a grid cell as wide as the anchor, and a box with no
+     intrinsic width fills that cell — a bubble on a narrow button would be one word per line.
+     `max-content` sizes it to its text instead, and the cap keeps a long sentence readable. */
+  width: max-content;
+  max-width: 22rem;
+}
+
+.floating[data-open] {
+  display: block;
+}
+
+.surface {
+  background: var(--kreo-surface-raised);
+  color: var(--kreo-text-primary);
+  border: var(--kreo-border-w) solid var(--kreo-border-default);
+  border-radius: var(--kreo-radius-md);
+
+  /* The border stays alongside the shadow: forced-colors mode paints no shadow at all, and a panel
+     relying on one would lose its edge entirely. See ADR-0007. */
+  box-shadow: var(--kreo-shadow-overlay);
+}
+
+/* Placement is CSS, with no measuring and no JavaScript. `position-try-fallbacks` flips the overlay
+   when there is no room; Safari 18.2–18.3 places correctly but does not flip. See ADR-0010. */
+.top {
+  position-area: block-start center;
+  position-try-fallbacks: flip-block;
+  margin-block-end: var(--kreo-space-2);
+}
+
+.bottom {
+  position-area: block-end center;
+  position-try-fallbacks: flip-block;
+  margin-block-start: var(--kreo-space-2);
+}
+
+.left {
+  position-area: inline-start center;
+  position-try-fallbacks: flip-inline;
+  margin-inline-end: var(--kreo-space-2);
+}
+
+.right {
+  position-area: inline-end center;
+  position-try-fallbacks: flip-inline;
+  margin-inline-start: var(--kreo-space-2);
+}
+
+@media (forced-colors: active) {
+  /* No shadow is painted here, so the border is the only thing separating the overlay from what it
+     covers. */
+  .surface {
+    border-color: CanvasText;
+  }
+}
