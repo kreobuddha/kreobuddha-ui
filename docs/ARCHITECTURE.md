@@ -2,9 +2,9 @@
 
 ## Decision status
 
-This document defines the intended architecture. During initialization, Claude must validate tool
-compatibility and turn decisions that materially affect public API or repository structure into
-accepted ADRs. It must not silently replace these constraints with a larger scaffold.
+This document describes the architecture the repository has. Where a constraint below was settled
+by verification or by an accepted ADR, it is recorded as settled; the rest is intent, and a change
+to it needs an ADR rather than a commit.
 
 ## Repository shape
 
@@ -18,14 +18,14 @@ kreobuddha-ui/
 │   └── adr/
 ├── examples/
 │   └── react-vite/          # consumer fixture: installs the packed tarball
+├── scripts/                 # build, measurement and generation, no runtime code
 ├── src/
 │   ├── components/
-│   ├── styles/
+│   ├── internal/            # shared primitives, not exported from the package
 │   ├── tokens/
 │   └── index.ts
-├── tests/                   # cross-component/package tests only
+├── tests/                   # cross-component/package tests, and the visual baselines
 ├── CLAUDE.md
-├── INIT_PROMPT.md
 ├── README.md
 ├── package.json
 ├── tsconfig.json
@@ -78,11 +78,12 @@ Package rules:
 - ESM-only unless consumer evidence requires another format.
 - Named exports only.
 - `react` and `react-dom` are peer dependencies and are externalized from the bundle.
-- The final React peer range is decided during initialization after compatibility verification.
+- The React peer range is `^19.0.0`, settled after compatibility verification.
 - JavaScript should remain side-effect-free; emitted CSS must be declared intentionally.
 - Published files are allowlisted.
 - `dist` is generated and should not be committed unless an accepted ADR changes that policy.
-- Package metadata remains private until publication is explicitly approved.
+- The package is published, under npm trusted publishing (ADR-0006). A version number can never
+  be reused, so a release is only ever run for a version Rustam has asked for.
 
 ## Build
 
@@ -186,16 +187,20 @@ first component validates both comfortable and compact modes.
 
 ## Complex components
 
-`Dialog`, `Tooltip`, and future composite widgets require a separate decision between:
+Settled in [ADR-0010](adr/0010-overlay-and-composite-strategy.md) and already shipped in `Dialog`
+and `Tooltip`: **platform primitives, no runtime dependency.** `<dialog>` for the modal, the
+`popover` attribute for the tooltip's layer, CSS anchor positioning for placement. `dependencies`
+stays empty.
 
-- native platform behavior;
-- an established accessible primitive library;
-- a custom implementation.
+The reasoning is not bundle size. A focus trap written here is a focus trap that can be got wrong,
+and the failure is silent — it looks correct while trapping a screen-reader user or letting `Tab`
+escape behind the backdrop. The browser's version cannot be got wrong by us.
 
-Do not hand-roll focus trapping, dismissal layers, collision positioning, or composite keyboard
-navigation merely to avoid a dependency. Equally, do not add a primitive library before a planned
-component requires it. Record the decision and its effect on bundle size, public types, styling,
-SSR, and accessibility testing in an ADR.
+The rule that survives for the next composite widget: do not hand-roll focus trapping, dismissal
+layers, collision positioning or composite keyboard navigation merely to avoid a dependency, and do
+not add a primitive library before a planned component requires it. Reopening either half of that
+means a new ADR recording the effect on bundle size, public types, styling, SSR and accessibility
+testing.
 
 ## Storybook and examples
 

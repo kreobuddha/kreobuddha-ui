@@ -10,20 +10,14 @@ production-ready, published, standards-compliant, or adopted by real consumers w
 
 ## Communication
 
-- Discuss requirements, questions, assumptions, alternatives, plans, trade-offs, progress, review
-  findings, and final results with Rustam in Russian by default.
-- Keep source code, identifiers, filenames, commands, terminal output, errors, code comments, test
-  names, commit messages, changesets, changelogs, Storybook content, and all public repository
-  documentation in English.
-- Do not switch the conversation to English merely because a prompt, source file, or official
-  document is in English.
-- Do not translate error messages, API names, library names, or established technical terms when
-  translation would reduce precision. Explain unfamiliar terms in Russian when useful.
-- If ambiguity can materially change the public API, architecture, dependencies, repository state,
-  or result, explain it in Russian and ask one focused question. Otherwise, state a reasonable
-  assumption in Russian and continue.
-- Before a complex implementation, briefly restate the intended outcome and important constraints
-  in Russian.
+- **Talk to Rustam in Russian. Write the repository in English** — code, identifiers, filenames,
+  commands, comments, test names, commit messages, changelog, Storybook, and every public document.
+  An English prompt or source file does not switch the conversation.
+- Do not translate error messages, API or library names, or established terms when translating
+  would cost precision. Explain an unfamiliar term in Russian when it helps.
+- Ambiguity that could change the public API, architecture, dependencies or repository state: one
+  focused question. Anything else: state the assumption and continue.
+- Before a complex implementation, restate the intended outcome and constraints briefly.
 
 ## Clean-room and confidentiality rules
 
@@ -76,18 +70,15 @@ of those values to close a perceived gap.
 
 ## Scope
 
-- Keep Kreobuddha UI frontend-only.
-- In scope: a distributable React package, CSS design tokens, component styles, Storybook, static
-  examples, tests, package-consumer fixtures, and public documentation.
-- Out of scope unless Rustam explicitly approves it: backend services, authentication, databases,
-  remote persistence, analytics, server-side product features, a component generator, a CLI, a
-  Figma integration, or a full application suite.
-- Stories and examples must use deterministic local fixtures. Do not introduce a backend to make a
-  demo appear more substantial.
-- Keep the repository single-package until a real consumer proves that another package boundary is
-  necessary. Do not add a monorepo or task orchestrator speculatively.
-- Do not attempt to compete with exhaustive UI frameworks. Build a small, coherent set of components
-  driven by real consumer needs.
+`docs/PROJECT_BRIEF.md` lists what is in and out of scope; `docs/ROADMAP.md` holds the deferred
+list. The rules that decide day-to-day questions:
+
+- Frontend-only. Anything Rustam has not approved — a backend, auth, analytics, a CLI, a Figma
+  integration — is out, and a demo is never a reason to add one.
+- Stories and examples use deterministic local fixtures.
+- Single package until a real consumer proves another boundary is necessary. No monorepo or task
+  orchestrator on speculation.
+- A small coherent set driven by real needs, not coverage of an exhaustive framework.
 
 ## Evidence and assumptions
 
@@ -102,67 +93,55 @@ of those values to close a perceived gap.
 
 ## Working method
 
-- For unfamiliar, architectural, dependency-heavy, public-API, or multi-file work, explore first
-  and propose a concise plan before editing.
-- Preserve existing user changes and avoid unrelated refactoring, dependency upgrades, formatting,
-  and generated-file churn.
-- Work in small vertical slices. Complete and verify the current slice before proposing the next.
-- Build one component at a time. Do not generate the planned component catalogue in one pass.
-- Do not implement the next roadmap component or phase without explicit approval.
-- Prefer the smallest design that satisfies current requirements. A hypothetical future use is not
-  sufficient justification for an abstraction.
-- Treat exported components, types, CSS variables, DOM semantics, keyboard behavior, package
-  exports, and defaults as compatibility-sensitive public API.
-- Explain the concrete need and trade-offs before adding a runtime dependency.
+- Explore and propose a plan before editing anything unfamiliar, architectural, dependency-heavy,
+  public-API or multi-file.
+- Preserve Rustam's uncommitted changes. No unrelated refactoring, upgrades, reformatting or
+  generated-file churn.
+- One small vertical slice at a time, verified before the next is proposed. One component at a
+  time, and never the next roadmap item without explicit approval.
+- Smallest design that satisfies the requirement now. A hypothetical future use does not justify an
+  abstraction.
+- Exported components, types, `--kreo-` variables, DOM semantics, keyboard behaviour, package
+  exports and defaults are compatibility-sensitive public API.
+- A runtime dependency needs its concrete need and trade-offs stated first. There are none today.
 
 ## Component workflow
 
-For each component:
+`docs/COMPONENT_STANDARD.md` says what a good component is; `docs/COMPONENT_RECIPE.md` says what to
+type, step by step, and `npm run new:component Name` prints the checklist. Follow the recipe rather
+than reconstructing it.
 
-1. Define its purpose, non-goals, public API, supported states, and composition model.
-2. Define semantic HTML, accessible naming, keyboard interaction, focus behavior, and disabled,
-   read-only, loading, or invalid behavior where applicable.
-3. Identify the existing tokens and primitives it needs. Do not expand the token system merely for
-   symmetry.
-4. Implement the smallest complete version.
-5. Add focused behavior, interaction, and accessibility checks.
-6. Add deterministic English stories for representative states, edge cases, and composition.
-7. Add concise English public documentation and intentional exports.
-8. Run relevant verification and report exact evidence in Russian.
+Two rules the recipe does not carry:
 
-Do not batch-create placeholder components, stories, tests, or docs merely to increase component
-count.
+- Design before code — purpose, non-goals, public API, states, and the semantics, keyboard and
+  focus behaviour — and do not expand the token system for symmetry.
+- Do not batch-create placeholder components, stories, tests or docs to raise the component count.
 
 ## Architecture guardrails
 
-- Prefer native HTML semantics and platform behavior before ARIA or custom interaction models.
-- Prefer composition and readable APIs over configuration-heavy components.
-- Do not introduce a custom styling engine, token compiler, plugin system, schema language,
-  polymorphic `as` API, or generic wrapper hierarchy without a current documented need.
-- CSS class names are implementation details. Documented semantic CSS custom properties are public
-  API and follow SemVer.
-- Do not hand-roll complex focus management for overlays or composite widgets without an accepted
-  ADR and focused keyboard/focus tests.
-- Avoid `any`, broad assertions, ignored errors, disabled lint rules, and unexplained test skips.
-- Accessibility is not equivalent to an automated axe result. Verify semantics, accessible names,
-  keyboard behavior, focus, visible states, contrast, reduced motion, and forced-colors behavior as
-  applicable.
+`docs/ARCHITECTURE.md` holds the package boundary, the styling model and the token layers, and
+ADR-0010 settles overlays and composite widgets. What is easiest to get wrong:
+
+- Native HTML semantics and platform behaviour before ARIA or a custom interaction model.
+- Composition and readable APIs over configuration-heavy components.
+- No styling engine, token compiler, plugin system, schema language, polymorphic `as` API or
+  generic wrapper hierarchy without a documented need now.
+- Class names are implementation details; documented `--kreo-` custom properties are public API
+  under SemVer.
+- No `any`, broad assertions, swallowed errors, disabled lint rules or unexplained skips.
+- **Accessibility is not an axe result.** Verify semantics, accessible names, keyboard behaviour,
+  focus, visible states, contrast, reduced motion and forced-colors where they apply.
 
 ## Verification
 
-Use the scripts that actually exist in `package.json`. For implementation changes, normally verify:
+Use the scripts that exist in `package.json`. `docs/QUALITY.md` holds the change-to-check matrix —
+which kind of change owes which evidence — and the CI stage list.
 
-- type checking;
-- non-mutating lint and format checks;
-- focused unit and interaction tests;
-- package build and declaration output;
-- Storybook build;
-- package artifact and consumer smoke test when public exports change;
-- visual inspection for UI changes;
-- keyboard and accessibility behavior for interactive components.
+Rules:
 
-Additional rules:
-
+- **Cheap check first.** `verify:fast` is ~10s, `verify` is ~70s and rebuilds, packs and
+  screenshots everything. Use `verify:fast` while working and `verify` once, before the pull
+  request. After a failure, re-run the check that failed — not the whole chain.
 - Check whether a command mutates files before running it. Do not run repo-wide autofix or formatting
   over unrelated files.
 - Do not weaken types, tests, lint rules, accessibility checks, or acceptance criteria to make a
@@ -175,11 +154,12 @@ Additional rules:
 
 - The local repository directory and GitHub repository name are `kreobuddha-ui`.
 - Do not create commits, branches, tags, remotes, pushes, pull requests, releases, deployments, or
-  npm publications unless Rustam explicitly requests the exact action or approves the corresponding
-  initialization gate in `INIT_PROMPT.md`.
+  npm publications unless Rustam explicitly requests the exact action.
 - Never rewrite history, discard local changes, or use destructive Git commands.
 - Before changing a lockfile or generated file, verify that the change is expected and scoped.
-- Keep the package private until Rustam explicitly approves publication readiness.
+- The package is published. A version number on npm can never be reused, which makes publishing the
+  one action here that cannot be undone: releases, tags and `npm publish` happen only when Rustam
+  asks for that exact release.
 - Do not upload repository content or private reference material to an external service without
   explicit permission.
 

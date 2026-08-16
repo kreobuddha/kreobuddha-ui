@@ -104,12 +104,18 @@ Cross-folder imports use relative paths with an explicit `.js` extension. A path
 to survive into the emitted declarations, where consumers cannot resolve it, and the `.js`
 extension is what makes those declarations resolve under Node16 module resolution.
 
-### A local helper instead of `clsx`
+### An internal helper instead of `clsx`
 
 `clsx` would be this package's **first runtime dependency**, which `ARCHITECTURE.md` puts behind an
-ADR. The behaviour needed here is three lines, so the rule's intent — never interpolate class names
+ADR. The behaviour needed here is two lines, so the rule's intent — never interpolate class names
 into a template literal — is satisfied without adding a dependency to every consumer's bundle.
-Revisit if the composition logic ever grows past trivial.
+
+It lives in `src/internal/cx.ts` and is imported, not redeclared. It was copied into each component
+for a while, and the copy count tracked the component count rather than settling anywhere.
+
+The signature admits strings and the `false` an unmet condition yields, and nothing else. A
+component needing objects or arrays is a component doing something the others are not — worth
+noticing rather than absorbing, and the point at which reaching for `clsx` becomes a real question.
 
 ### `I`-prefixed interfaces: not applicable yet
 

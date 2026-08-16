@@ -50,17 +50,23 @@ List credible alternatives and why they were not chosen now.
 State what new evidence would justify revisiting the decision.
 ```
 
-## Initial decision queue
+## Decision queue
 
-Create these ADRs only when the corresponding decision is actively reviewed:
+What the queue was opened with, and where each item stands. An entry leaves the list when an ADR
+records it.
 
-1. Single-package repository, npm, and package naming.
-2. ESM build, declarations, package exports, and React peer range.
-3. CSS Modules, semantic CSS variables, theme attribute, and token prefix.
-4. Storybook and test-runner responsibilities.
-5. Primitive strategy for Dialog, Tooltip, and composite widgets.
-6. Changesets and npm publication strategy.
-7. Hosted documentation and visual-regression services.
+| Decision | Status |
+| --- | --- |
+| Single-package repository, npm, and package naming | ADR-0001 |
+| ESM build, declarations, package exports, React peer range | ADR-0001, ADR-0006 |
+| CSS Modules, semantic CSS variables, theme attribute, token prefix | ADR-0001 |
+| Primitive strategy for `Dialog`, `Tooltip` and composite widgets | ADR-0010 |
+| npm publication and release authentication | ADR-0006 |
+| Storybook and test-runner responsibilities | open — settled in practice, never written down |
+| Changesets instead of a hand-written changelog | open — decided in principle, not implemented |
+| Hosted documentation and visual-regression services | open — visual regression runs locally against committed baselines; adopting a hosted service would need this ADR |
 
-Do not create empty ADRs merely to populate the directory.
+Do not create empty ADRs merely to populate the directory. The two "settled in practice" entries
+are honest rather than tidy: the arrangement works and nobody has had to defend it, which is
+precisely when an ADR is cheap to write and expensive to skip.
 

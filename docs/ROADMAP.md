@@ -8,9 +8,12 @@ verification quality.
 
 ## Status
 
-Phase 0 and Phase 1 are complete. The repository is public at `kreobuddha/kreobuddha-ui` with CI
-green; the package is published to npm as `@kreobuddha/ui` (ADR-0006). Phase 2 is complete: `Badge`, `Spinner`, `IconButton`
-and `Alert` are done.
+Phases 0 through 4 are complete. The repository is public at `kreobuddha/kreobuddha-ui` with CI
+green, and the package is published to npm as `@kreobuddha/ui` (ADR-0006). Fourteen components
+ship: `Button`, `IconButton`, `Badge`, `Spinner`, `Alert`, `TextField`, `Textarea`, `Select`,
+`Checkbox`, `Switch`, `FieldGroup`, `Tabs`, `Tooltip` and `Dialog`.
+
+Phase 5 is next and not started.
 
 Phase 3 is complete: `TextField`, `Textarea`, `Select`, `Checkbox`, `Switch` and `FieldGroup` are
 done, and a settings form composes from them with no wrapper of its own.
@@ -68,7 +71,7 @@ Exit criteria:
 - the packed consumer works;
 - the next component is not started automatically.
 
-## Phase 2 — Simple actions and feedback
+## Phase 2 — Simple actions and feedback — **done**
 
 Candidate components:
 

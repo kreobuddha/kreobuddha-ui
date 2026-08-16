@@ -5,7 +5,7 @@
 - Product name: Kreobuddha UI
 - Local directory: `kreobuddha-ui`
 - GitHub repository name: `kreobuddha-ui`
-- npm package name: `@kreobuddha/ui`, accepted in ADR-0001; scope ownership not yet verified
+- npm package name: `@kreobuddha/ui`, accepted in ADR-0001; published, so the scope is owned
 - Product type: frontend-only React component library and design system
 - Public repository language: English
 - Working conversation language: Russian
