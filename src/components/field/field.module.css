@@ -3,9 +3,12 @@
 
    Extracted once `TextField`, `Textarea` and `Select` were three components repeating it. Consumed
    through `composes`, so each component keeps its own class names and can still add to them —
-   nothing here is a public class, and the customization boundary remains the `--kreo-*` tokens. */
+   nothing here is a public class, and the customization boundary remains the `--kreo-*` tokens.
 
-@import '../../styles.css';
+   This file deliberately does **not** import the token layer. An `@import` in a file reached
+   through `composes` is not inlined by the bundler — it survives into the built stylesheet as a
+   literal rule with a path that no longer resolves. Every component composing from here declares
+   the token dependency itself. */
 
 .field {
   display: inline-flex;

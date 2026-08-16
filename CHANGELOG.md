@@ -9,6 +9,17 @@ explicitly rather than treated as disposable.
 
 ## [Unreleased]
 
+### Fixed
+
+- The published stylesheet no longer carries six literal `@import "../../styles.css"` rules, and
+  the six field-family stylesheets in a Storybook build no longer fail to load. An `@import` in a
+  CSS module reached through `composes` is not inlined by the bundler: it survives into the build
+  as a rule whose path resolves to nothing. Each component now declares the token dependency
+  itself, and `field.module.css` — which is only ever reached through `composes` — declares none.
+- `npm run check:css` reads the built stylesheets and fails on an un-inlined `@import` or a missing
+  token layer. Nothing looked inside a CSS artifact before: `publint` and `attw` check shape and
+  types, and `build-storybook` exits 0 whether or not what it wrote can load.
+
 ## [0.12.0] — 2026-08-16
 
 ### Added
