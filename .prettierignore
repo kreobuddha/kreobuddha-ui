@@ -6,5 +6,4 @@ package-lock.json
 # Planning documents authored outside the toolchain. They are already formatted deliberately;
 # reformatting them would create churn unrelated to any code change.
 CLAUDE.md
-INIT_PROMPT.md
 docs/
