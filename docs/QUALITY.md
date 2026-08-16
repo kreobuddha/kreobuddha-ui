@@ -127,6 +127,27 @@ Rules:
 - meaningful theme, density, focus, invalid, and long-content states receive priority;
 - platform rendering differences are controlled by using the same baseline environment.
 
+The run is `npm run check:visual`, driven by `playwright.config.ts` over the built Storybook, with
+`npm run check:visual:update` to rewrite baselines and `tests/visual/__screenshots__/` to review.
+
+**It is a local pre-merge check rather than a CI gate**, and that follows from the rule above about
+a single baseline environment. The committed baselines are macOS; the runners are Ubuntu, and the
+same text does not render identically on both, so a CI job against these baselines would fail for a
+reason that has nothing to do with the change under review. The platform is part of the snapshot
+path, so a Linux set can be generated and committed beside the macOS one later — that, rather than
+loosening the comparison, is what would turn this into a CI gate.
+
+Determinism comes from the components more than from the runner. `Spinner` disables its rotation
+under `prefers-reduced-motion`, which the config requests, so a spinner screenshot is reproducible
+without masking anything; the run waits on `document.fonts.ready` because Inter loads with
+`font-display: swap`, and a screenshot taken before it arrives photographs the fallback family.
+
+The comparison budget is a pixel count rather than a ratio. A ratio that sounds strict is not: a
+few tenths of a percent of a screenshot is hundreds of pixels, and the geometry changes worth
+catching are smaller than that — changing `--kreo-radius-md` from 4px to 10px moves 82 pixels in
+one screenshot. The budget is verified the same way any other check here is: by making that change
+and confirming the run fails, then running it unchanged and confirming it does not.
+
 ### 7. Package contract
 
 The public package is verified independently of workspace source:
@@ -192,7 +213,7 @@ package build                         running
 Storybook build                       running
 package artifact checks               running
 consumer smoke build                  running — packed tarball in examples/react-vite
-visual regression for protected states not started
+visual regression for protected states local only — macOS baselines, not a CI gate
 ```
 
 The story tests need a browser, so CI installs Chromium via Playwright. Only Chromium: the suite

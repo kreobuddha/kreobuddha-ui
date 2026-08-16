@@ -525,6 +525,7 @@ npm run check:contrast
 npm run build
 npm run check:package
 npm run check:consumer
+npm run check:visual
 npm run storybook
 ```
 
@@ -533,6 +534,12 @@ independent application with its own lockfile and no alias back to `src` — and
 that the published declarations type-check, that the build works, that importing one component does
 not pull in the others, that React is not bundled, that the fonts are real files rather than inlined
 data, and that the package renders on a server with no DOM at all.
+
+`npm run check:visual` compares the protected visual states against committed baselines, over the
+built Storybook. It is a local check rather than a CI gate: the baselines are macOS and the runners
+are Ubuntu, where the same text does not render identically. Run it before merging anything that
+touches a token or a component stylesheet, review the diff, and use `npm run check:visual:update`
+to accept an intended change.
 
 `npm run storybook` opens the workbench. **Overview → Kit** is a single page showing everything the
 library currently ships, in either theme — the quickest way to see the whole kit at once.
