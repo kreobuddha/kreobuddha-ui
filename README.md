@@ -5,7 +5,7 @@ data-dense frontend applications.
 
 ## Status: early, but published
 
-**Eleven components ship today: `Button`, `IconButton`, `TextField`, `Textarea`, `Select`, `Checkbox`, `Switch`, `FieldGroup`, `Badge`, `Spinner` and `Alert`.** Everything else in
+**Twelve components ship today: `Button`, `IconButton`, `TextField`, `Textarea`, `Select`, `Checkbox`, `Switch`, `FieldGroup`, `Tabs`, `Badge`, `Spinner` and `Alert`.** Everything else in
 [docs/ROADMAP.md](docs/ROADMAP.md) is a plan, not an available feature. The package is published so
 it can be consumed normally; treat the `0.x` line as a moving target and pin what you depend on.
 
@@ -327,6 +327,61 @@ what matches.
 
 The default fieldset border, padding and margin are cleared. Drawing a box around every set would
 make a settings page look like a stack of panels.
+
+### `Tabs`
+
+| Prop           | Type                      | Default       |
+| -------------- | ------------------------- | ------------- |
+| `items`        | `TabItem[]`               | —             |
+| `value`        | `string`                  | —             |
+| `defaultValue` | `string`                  | first enabled |
+| `onChange`     | `(id: string) => void`    | —             |
+| `activation`   | `'automatic' \| 'manual'` | `'automatic'` |
+
+`TabItem` is `{ id, label, content, disabled? }`. `label` and `content` are both `ReactNode`, so a
+count or a `Badge` can sit beside the word.
+
+```tsx
+<Tabs
+  items={[
+    { id: 'overview', label: 'Overview', content: <Overview /> },
+    {
+      id: 'members',
+      label: (
+        <>
+          Members <Badge>12</Badge>
+        </>
+      ),
+      content: <Members />,
+    },
+    { id: 'billing', label: 'Billing', content: <Billing />, disabled: !paid },
+  ]}
+/>
+```
+
+Tabs take an array rather than compound children — `<Tabs.List>`, `<Tabs.Panel>` and so on. Only the
+selected panel is mounted, so the component owns panel rendering either way, and every other
+component here owns its own anatomy for the same reason.
+
+**Arrows select as they move.** That is the WAI-ARIA recommendation when panels are cheap, and it is
+fewer keystrokes. Set `activation="manual"` when a panel is expensive enough that arrowing past four
+of them would fire four requests: arrows then move focus only, and `Enter` or `Space` selects.
+`Home` and `End` jump to the ends, and the list wraps at both.
+
+**The list is one tab stop.** `Tab` moves past it into the panel rather than walking through every
+tab. The panel itself is focusable, so a panel with no focusable content can still be scrolled from
+the keyboard.
+
+**A disabled tab is still reachable.** It reports `aria-disabled` rather than being removed from the
+sequence, so a keyboard user finds it, is told it is unavailable, and is not left with an
+unexplained gap. Arrows land on it; nothing selects it.
+
+**Hidden panels unmount.** State that must survive a switch belongs outside the panel — which is
+where form state belongs anyway.
+
+The tab list takes no label of its own. It usually sits under a heading that already names it, and
+adding one would have a screen reader say the same thing twice; pass `aria-label` or
+`aria-labelledby` through when there is no such heading. Tabs are horizontal only.
 
 ### `Badge`
 

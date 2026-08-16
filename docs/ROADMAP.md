@@ -98,7 +98,7 @@ Exit criteria:
 
 Candidate components:
 
-- `Tabs`;
+- `Tabs` — **done**;
 - `Tooltip`;
 - `Dialog`.
 

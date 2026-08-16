@@ -35,3 +35,5 @@ export { Switch } from './components/Switch/Switch.js';
 export type { SwitchProps } from './components/Switch/Switch.js';
 export { FieldGroup } from './components/FieldGroup/FieldGroup.js';
 export type { FieldGroupProps } from './components/FieldGroup/FieldGroup.js';
+export { Tabs } from './components/Tabs/Tabs.js';
+export type { TabItem, TabsActivation, TabsProps } from './components/Tabs/Tabs.js';

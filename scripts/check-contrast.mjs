@@ -66,6 +66,14 @@ const PAIRS = [
   // The checked box's mark is `--kreo-text-on-accent` on `--kreo-accent-500`, already measured
   // above as 'focus ring on filled'. The label is 'ghost label'. Neither is repeated here.
   ['checkbox box edge', '--kreo-surface-page', '--kreo-border-control', NON_TEXT],
+  // Tabs: the rest label and the selected indicator. The selected label is '--kreo-text-accent' on
+  // the page, already measured as 'outlined label'; the rest label is 'muted text'.
+  ['tab disabled label', '--kreo-surface-page', '--kreo-text-subtle', TEXT],
+  ['tab indicator', '--kreo-surface-page', '--kreo-accent-500', NON_TEXT],
+  // The rule under the tab list is not measured. It is `--kreo-border-default`, the decorative
+  // divider token, which is deliberately below 3:1 — that is why `--kreo-border-control` exists
+  // separately. Which tab is selected is carried by the indicator above and by the label colour,
+  // both of which are measured, so the rule identifies nothing and 1.4.11 does not reach it.
   ['switch track off', '--kreo-surface-page', '--kreo-border-control', NON_TEXT],
   ['switch thumb off', '--kreo-surface-hover', '--kreo-text-muted', NON_TEXT],
   ['switch thumb on', '--kreo-accent-500', '--kreo-text-on-accent', NON_TEXT],

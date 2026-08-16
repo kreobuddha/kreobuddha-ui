@@ -10,6 +10,7 @@ import { IconButton } from '../components/IconButton/IconButton.js';
 import { Select } from '../components/Select/Select.js';
 import { Spinner } from '../components/Spinner/Spinner.js';
 import { Switch } from '../components/Switch/Switch.js';
+import { Tabs } from '../components/Tabs/Tabs.js';
 import { Textarea } from '../components/Textarea/Textarea.js';
 import { TextField } from '../components/TextField/TextField.js';
 
@@ -381,6 +382,33 @@ export const Kit: Story = {
         <FieldGroup legend="Workspace security" error="Turn on two-factor before inviting anyone.">
           <Switch label="Require two-factor authentication" />
         </FieldGroup>
+      </Section>
+
+      <Section title="Tabs">
+        <Tabs
+          items={[
+            {
+              id: 'overview',
+              label: 'Overview',
+              content: 'Arrows select as they move; the whole list is one tab stop.',
+            },
+            {
+              id: 'members',
+              label: (
+                <>
+                  Members <Badge tone="neutral">12</Badge>
+                </>
+              ),
+              content: 'A label is a ReactNode, so a count can sit beside the word.',
+            },
+            {
+              id: 'billing',
+              label: 'Billing',
+              content: 'Not reachable.',
+              disabled: true,
+            },
+          ]}
+        />
       </Section>
 
       <Section title="A field and a button sit level">
