@@ -129,6 +129,24 @@ Required by the Phase 4 gate, and recorded here so they are not renegotiated per
 - Both themes, and forced-colors mode — the last is where a shadow-only overlay disappears.
 - `prefers-reduced-motion`: no entrance animation, and the component still opens.
 
+## Outstanding checks
+
+Phase 4 shipped with part of the list above unperformed. Recorded here rather than in a pull
+request body, because a pull request is read once and this is not done.
+
+| Check | State |
+|---|---|
+| `Tabs` keyboard — arrows, `Home`/`End`, one tab stop | done, real key presses in a browser |
+| `Tooltip` — focus opens, placement, top layer | done, measured in a browser |
+| `Dialog` — focus into the panel, return to the trigger | done, real interaction |
+| `Dialog` — `Tab` never leaves the panel | done, six real `Tab` presses, focus never left |
+| `Dialog` — `Escape` closes | **not done.** The available browser pane produces `keydown` and no `cancel` on a dialog that `:modal` matches. The wiring from `cancel` to `onClose` is covered by a unit test that dispatches the event; whether the browser fires it was not observed here |
+| forced-colors mode, all three components | **not done.** The mode cannot be emulated from the available tooling |
+| Screen reader, all three components | **not done.** Needs a real assistive technology on a real machine |
+
+None of these is blocked by anything in the code. They need an environment this work did not have,
+and they should be run before the library claims conformance anywhere.
+
 ## Alternatives considered
 
 - **A headless library — Base UI, Radix, Ark.** Battle-tested accessibility and uniform behaviour
