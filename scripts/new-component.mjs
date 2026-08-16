@@ -122,7 +122,10 @@ process.stdout.write(
   `Created ${dir} with four files.\n\n` +
     `Next, from docs/COMPONENT_RECIPE.md:\n` +
     `  1. export ${name} from src/index.ts\n` +
-    `  2. add its contrast pairs to scripts/check-contrast.mjs\n` +
-    `  3. update README.md, CHANGELOG.md and docs/ROADMAP.md\n` +
-    `  4. npm run test:one -- ${name}\n`
+    `  2. use it in examples/react-vite/src/main.tsx — check:consumer fails without it\n` +
+    `  3. add its contrast pairs to scripts/check-contrast.mjs\n` +
+    `  4. add one or two states to tests/visual/protected-states.spec.ts,\n` +
+    `     then npm run check:visual:update\n` +
+    `  5. update README.md, CHANGELOG.md and docs/ROADMAP.md\n` +
+    `  6. npm run test:one -- ${name}\n`
 );

@@ -34,6 +34,11 @@ export { Name } from './components/Name/Name.js';
 export type { NameProps, NameTone } from './components/Name/Name.js';
 ```
 
+Then use it in the consumer fixture, `examples/react-vite/src/main.tsx`. That file is not a demo:
+`npm run check:consumer` compares its imports against the published `dist/index.d.ts` and fails
+with the missing name, because a component that ships without ever being used through the package
+boundary is a component nobody has proven resolves there.
+
 ## 3. Contrast pairs
 
 Every foreground/background pairing the component puts on screen goes into the `PAIRS` list in
@@ -73,6 +78,15 @@ Every story becomes a test in the browser run, and every story is scanned by axe
 - a `play` function for anything needing real layout: focus rings, truncation, measured width;
 - long content and a narrow container wherever layout could break.
 
+Then pick **one or two** of those stories for `tests/visual/protected-states.spec.ts` and run
+`npm run check:visual:update` to record their baselines. One or two, not the matrix: a snapshot per
+story would be hundreds of baselines, most re-photographing the same pixels, and a baseline nobody
+reads is a baseline nobody reviews.
+
+What earns a place is a state where the tokens do the work and no other check would notice a
+change — the focus ring, the invalid treatment, a size scale, or whatever this component draws that
+the others do not. Review the new baselines like code before committing them.
+
 ## 6. The three documents that must move
 
 - **`README.md`** — the prop table and the paragraphs describing behaviour a consumer cannot guess.
@@ -85,8 +99,12 @@ Every story becomes a test in the browser run, and every story is scanned by axe
 `npm run test:one -- Name` while working: the unit project alone, under a second.
 
 `npm run verify` before opening the pull request: format, lint, stylelint, types, all tests
-including the browser run, contrast, build, Storybook build and the package contract. It must pass
-before merge, and CI runs it again independently.
+including the browser run, contrast, build, Storybook build, the package contract and the consumer
+fixture. It must pass before merge, and CI runs it again independently.
+
+`npm run check:visual` compares the protected states against their baselines. It is the one check
+CI cannot run for you — the baselines are macOS and the runners are Ubuntu — so a change to a token
+or a component stylesheet that nobody runs it against is a change nobody has looked at.
 
 Look at the component in Storybook in **both themes** before calling it done. Nothing in the list
 above catches a component that passes every check and looks wrong.
