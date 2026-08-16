@@ -105,11 +105,13 @@ Candidate components:
 Goal: demonstrate keyboard models, focus movement/restoration, portals, dismissal, layering, and
 overlay testing.
 
-Before implementation:
+Before implementation — **satisfied by [ADR-0010](adr/0010-overlay-and-composite-strategy.md)**:
 
-- accept an ADR for native/custom/third-party primitive strategy;
-- evaluate runtime dependency and bundle implications;
-- define manual keyboard and screen-reader checks.
+- ~~accept an ADR for native/custom/third-party primitive strategy~~ — platform primitives:
+  `<dialog>`, the `popover` attribute, CSS anchor positioning;
+- ~~evaluate runtime dependency and bundle implications~~ — none added, `dependencies` stays empty;
+- ~~define manual keyboard and screen-reader checks~~ — listed in the ADR, and part of each
+  component's definition of done.
 
 Do not implement all three as one slice.
 
