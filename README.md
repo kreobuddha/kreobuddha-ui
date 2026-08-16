@@ -5,7 +5,7 @@ data-dense frontend applications.
 
 ## Status: early, but published
 
-**Thirteen components ship today: `Button`, `IconButton`, `TextField`, `Textarea`, `Select`, `Checkbox`, `Switch`, `FieldGroup`, `Tabs`, `Tooltip`, `Badge`, `Spinner` and `Alert`.** Everything else in
+**Fourteen components ship today: `Button`, `IconButton`, `TextField`, `Textarea`, `Select`, `Checkbox`, `Switch`, `FieldGroup`, `Tabs`, `Tooltip`, `Dialog`, `Badge`, `Spinner` and `Alert`.** Everything else in
 [docs/ROADMAP.md](docs/ROADMAP.md) is a plan, not an available feature. The package is published so
 it can be consumed normally; treat the `0.x` line as a moving target and pin what you depend on.
 
@@ -422,6 +422,65 @@ placement is correct but the flip does not happen.
 
 The tooltip never receives pointer events. Moving towards one is the most common way to lose the
 thing you were reading.
+
+### `Dialog`
+
+| Prop                | Type                   | Default |
+| ------------------- | ---------------------- | ------- |
+| `open`              | `boolean`              | —       |
+| `onClose`           | `() => void`           | —       |
+| `title`             | `string`               | —       |
+| `size`              | `'sm' \| 'md' \| 'lg'` | `'md'`  |
+| `description`       | `ReactNode`            | —       |
+| `footer`            | `ReactNode`            | —       |
+| `dismissible`       | `boolean`              | `true`  |
+| `dismissLabel`      | `string`               | `Close` |
+| `dismissOnBackdrop` | `boolean`              | `true`  |
+
+```tsx
+<Dialog
+  open={open}
+  onClose={() => setOpen(false)}
+  title="Delete workspace"
+  description="Everything in it goes with it, including the audit log."
+  footer={
+    <>
+      <Button variant="outlined" onClick={() => setOpen(false)}>
+        Keep it
+      </Button>
+      <Button danger onClick={remove}>
+        Delete
+      </Button>
+    </>
+  }
+>
+  This cannot be undone.
+</Dialog>
+```
+
+It is a real `<dialog>`, opened with `showModal()`. **The focus trap, the inert page behind, the
+top layer and `Escape` are the browser's**, not a reimplementation — which is the point of
+[ADR-0010](docs/adr/0010-overlay-and-composite-strategy.md). Focus moves into the panel on open and
+returns to whatever opened it on close, and neither is done by hand.
+
+**`title` is required.** It becomes the accessible name through `aria-labelledby`, and a dialog
+without one leaves a screen reader announcing nothing but "dialog".
+
+**It is controlled.** `open` and `onClose`, like everything else here. Every way of closing —
+`Escape`, the close button, the backdrop — calls `onClose` rather than closing on its own, so the
+element and your state can never disagree about what is on screen.
+
+**A click on the backdrop closes it, by default.** That is what people expect from a modal on the
+web, and it is the most common way to lose something typed. Set `dismissOnBackdrop={false}` on any
+dialog holding a form; nothing warns first otherwise.
+
+Only the body scrolls when the content is taller than the viewport, so the heading and the actions
+never scroll away from a reader who needs them.
+
+In a test environment without the `<dialog>` methods — jsdom has neither, as of version 30 — the
+`open` attribute is set directly instead, so the dialog is still present and queryable in your own
+tests. The top layer, the backdrop and the focus trap are absent there, because jsdom has no notion
+of any of them.
 
 ### `Badge`
 

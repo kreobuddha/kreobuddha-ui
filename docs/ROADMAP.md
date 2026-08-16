@@ -10,8 +10,15 @@ verification quality.
 
 Phase 0 and Phase 1 are complete. The repository is public at `kreobuddha/kreobuddha-ui` with CI
 green; the package is published to npm as `@kreobuddha/ui` (ADR-0006). Phase 2 is complete: `Badge`, `Spinner`, `IconButton`
-and `Alert` are done. Phase 3 is complete: `TextField`, `Textarea`, `Select`, `Checkbox`, `Switch` and `FieldGroup` are
+and `Alert` are done.
+
+Phase 3 is complete: `TextField`, `Textarea`, `Select`, `Checkbox`, `Switch` and `FieldGroup` are
 done, and a settings form composes from them with no wrapper of its own.
+
+Phase 4 is complete: `Tabs`, `Tooltip` and `Dialog` are done, on the platform primitives accepted
+in [ADR-0010](adr/0010-overlay-and-composite-strategy.md) and with no runtime dependency added.
+The manual keyboard and screen-reader checks that ADR requires are **not all done** — see the
+outstanding list there.
 
 ## Phase 0 — Local repository and package foundation — **done**
 
@@ -94,13 +101,13 @@ Exit criteria:
 - field associations and keyboard behavior are covered;
 - form-state or schema libraries remain consumer concerns.
 
-## Phase 4 — Composite navigation and overlays
+## Phase 4 — Composite navigation and overlays — **done**
 
 Candidate components:
 
 - `Tabs` — **done**;
 - `Tooltip` — **done**;
-- `Dialog`.
+- `Dialog` — **done**.
 
 Goal: demonstrate keyboard models, focus movement/restoration, portals, dismissal, layering, and
 overlay testing.

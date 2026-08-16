@@ -12,6 +12,8 @@ import { Spinner } from '../components/Spinner/Spinner.js';
 import { Switch } from '../components/Switch/Switch.js';
 import { Tabs } from '../components/Tabs/Tabs.js';
 import { Tooltip } from '../components/Tooltip/Tooltip.js';
+
+import { DialogSection } from './DialogSection.js';
 import { Textarea } from '../components/Textarea/Textarea.js';
 import { TextField } from '../components/TextField/TextField.js';
 
@@ -421,6 +423,10 @@ export const Kit: Story = {
             <IconButton label="Add a member" icon={<Mark />} variant="ghost" />
           </Tooltip>
         </div>
+      </Section>
+
+      <Section title="Dialog">
+        <DialogSection />
       </Section>
 
       <Section title="A field and a button sit level">

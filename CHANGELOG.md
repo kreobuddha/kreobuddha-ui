@@ -11,6 +11,16 @@ explicitly rather than treated as disposable.
 
 ### Added
 
+- `Dialog` — a real `<dialog>` opened with `showModal()`, so the focus trap, the inert page behind,
+  the top layer and `Escape` are the browser's rather than a reimplementation. Controlled through
+  `open` and `onClose`: every way of closing calls back rather than closing on its own, so the
+  element and the consumer's state cannot disagree. `title` is required and becomes the accessible
+  name. A backdrop click closes by default; `dismissOnBackdrop={false}` is for a dialog holding a
+  form. Only the body scrolls, so the heading and the actions stay reachable.
+- Contrast measurements for the panel's title, body, description and close button.
+
+### Added
+
 - `Tooltip` — a description that opens on hover and on focus and closes on `Escape` without moving
   focus. It enters the browser's top layer through the `popover` attribute, so nothing on the page
   can cover it and no portal is involved, and it is placed with CSS anchor positioning — no

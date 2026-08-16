@@ -1,0 +1,119 @@
+/* The token dependency has to be declared in this file. It cannot be inherited through `composes`:
+   an `@import` in a composed file is not inlined and survives into the build as a literal rule
+   whose path no longer resolves. */
+@import '../../styles.css';
+
+/* The dialog element is the backdrop's own box, so it fills the viewport and centres the panel.
+   The UA stylesheet's `margin: auto` is replaced by flex centring, which is what lets a click on
+   the empty space around the panel land on the dialog itself. */
+.dialog {
+  max-width: none;
+  max-height: none;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: var(--kreo-space-4);
+  background: none;
+  border: none;
+  overflow: auto;
+}
+
+.dialog:not([open]) {
+  display: none;
+}
+
+.dialog[open] {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.dialog::backdrop {
+  background: rgb(0 0 0 / 45%);
+}
+
+.panel {
+  display: flex;
+  flex-direction: column;
+  gap: var(--kreo-space-3);
+  width: 100%;
+  max-height: 100%;
+  padding: var(--kreo-space-5);
+  background: var(--kreo-surface-raised);
+  color: var(--kreo-text-body);
+  border: var(--kreo-border-w) solid var(--kreo-border-default);
+  border-radius: var(--kreo-radius-lg);
+  overflow: auto;
+
+  /* The border stays alongside the shadow: forced-colors mode paints no shadow at all, and a panel
+     relying on one would lose its edge entirely. See ADR-0007. */
+  box-shadow: var(--kreo-shadow-overlay);
+}
+
+.sm .panel {
+  max-width: 24rem;
+}
+
+.md .panel {
+  max-width: 32rem;
+}
+
+.lg .panel {
+  max-width: 48rem;
+}
+
+.heading {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--kreo-space-3);
+}
+
+.title {
+  flex: 1;
+  min-width: 0;
+  margin: 0;
+  font: var(--kreo-type-heading);
+  color: var(--kreo-text-primary);
+}
+
+.dismiss {
+  flex: none;
+  margin-block-start: -2px;
+  margin-inline-end: -2px;
+}
+
+.description {
+  margin: 0;
+  font: var(--kreo-type-body);
+  color: var(--kreo-text-muted);
+}
+
+/* Only the body scrolls when the content is taller than the viewport, so the heading and the
+   actions stay reachable rather than scrolling away from a reader who needs them. */
+.body {
+  min-height: 0;
+  overflow: auto;
+}
+
+.footer {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: var(--kreo-space-2);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  /* There is no entrance animation to disable — the panel appears. This block is here so the
+     absence is deliberate rather than forgotten. */
+  .panel {
+    animation: none;
+  }
+}
+
+@media (forced-colors: active) {
+  /* No shadow is painted here, so the border is the only thing separating the panel from the page
+     behind it. */
+  .panel {
+    border-color: CanvasText;
+  }
+}

@@ -10,6 +10,7 @@ import {
   Badge,
   Button,
   Checkbox,
+  Dialog,
   FieldGroup,
   IconButton,
   Select,
@@ -81,6 +82,16 @@ export const App = (): React.ReactElement => (
     <Tooltip content="Copies the link to your clipboard" placement="bottom">
       <Button variant="outlined">Copy link</Button>
     </Tooltip>
+
+    <Dialog
+      open={false}
+      onClose={(): void => undefined}
+      title="Delete workspace"
+      description="Everything in it goes with it."
+      footer={<Button danger>Delete</Button>}
+    >
+      This cannot be undone.
+    </Dialog>
   </main>
 );
 
