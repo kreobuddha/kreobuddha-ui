@@ -2,8 +2,8 @@
 //
 // Vite's library mode inlines every asset it resolves as a base64 data URI, with no opt-out, so
 // `src/fonts.css` is kept out of the module graph and joined to the output here instead. That
-// keeps the eight font files as real files — which is what lets `unicode-range` skip the Cyrillic
-// subsets on a Latin-only page — while consumers still link a single stylesheet.
+// keeps both font files as real files — which is what lets `unicode-range` skip the Cyrillic
+// subset on a Latin-only page — while consumers still link a single stylesheet.
 
 import { cp, readFile, writeFile } from 'node:fs/promises';
 

@@ -51,7 +51,7 @@
     "lint": "eslint .",
     "lint:css": "stylelint \"src/**/*.css\"",
     "new:component": "node scripts/new-component.mjs",
-    "prepare": "npm run build",
+    "prepack": "npm run build",
     "storybook": "storybook dev -p 6006",
     "test": "vitest run",
     "test:one": "vitest run --project unit",
