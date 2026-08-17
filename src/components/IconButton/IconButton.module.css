@@ -141,8 +141,12 @@
   opacity: 0.45;
 }
 
+/* 0.65 rather than the 0.45 of `dimmed`, for the reason measured in ADR-0014: `opacity` composites
+   the control and its spinner over the page as one group, and below this the spinner stops meeting
+   the 3:1 the library asks of a status mark. */
 .loading {
   cursor: progress;
+  opacity: 0.65;
 }
 
 /* The mark keeps its box while hidden, so the control never changes size. */
@@ -170,5 +174,10 @@
     opacity: 1;
     color: GrayText;
     border-color: GrayText;
+  }
+
+  /* As in `Button`: full strength here, and the spinner carries the state. */
+  .loading {
+    opacity: 1;
   }
 }

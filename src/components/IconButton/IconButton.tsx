@@ -31,8 +31,8 @@ export interface IconButtonProps extends Omit<
   /** Swaps the accent for the danger hue. For destructive confirmations only. */
   danger?: boolean;
   /**
-   * Marks the action as in flight. The button stays focusable, reports `aria-busy`, keeps its
-   * exact size, and shows a spinner in place of the icon until loading ends.
+   * Marks the action as in flight. The button dims, stays focusable, reports `aria-busy`, keeps
+   * its exact size, and shows a spinner in place of the icon until loading ends.
    */
   loading?: boolean;
   /** Defaults to `button` so a button inside a form never submits it by accident. */
