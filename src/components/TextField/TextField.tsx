@@ -34,6 +34,22 @@ export interface TextFieldProps extends Omit<ComponentPropsWithRef<'input'>, 'si
   className?: string;
 }
 
+/**
+ * One line of text, with the label, hint and error that make it usable wired up.
+ *
+ * The component exists for the wiring rather than for the box. Associating a label, a hint and an
+ * error message with an input means generating ids and threading `aria-describedby` and
+ * `aria-invalid`; done by hand, per field, it is forgotten roughly as often as it is written. Here it
+ * is not optional.
+ *
+ * `label` is required for that reason: a field without one is unusable by anybody not looking at it.
+ * And `error` is the invalid state — there is no separate `invalid` prop, because a field marked
+ * invalid without saying why is a dead end for the reader.
+ *
+ * Two native attributes are replaced rather than shadowed. `size` here means the control scale that
+ * matches `Button`, not the native width in characters, and `prefix` is content inside the border
+ * rather than the RDFa attribute nobody reaches for.
+ */
 export const TextField = ({
   label,
   size = 'md',

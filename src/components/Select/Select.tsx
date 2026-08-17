@@ -55,6 +55,21 @@ const Chevron = (): ReactElement => (
   </svg>
 );
 
+/**
+ * A choice from a list, as a real `<select>`.
+ *
+ * The native element is chosen over a custom listbox on purpose, and the trade is worth knowing: it
+ * brings the platform's keyboard behaviour, type-ahead, form participation and — on a phone — the
+ * operating system's own picker, which no custom widget matches. What it gives up is control over
+ * how the open list looks. Only the closed control is styled here; the chevron is drawn by the
+ * component because the platform paints a different arrow on every OS.
+ *
+ * Use it when one answer comes from a list too long to show as radios. For a handful of options a
+ * reader should be able to compare at a glance, `Radio` inside a `FieldGroup` is the better shape.
+ *
+ * `placeholder` becomes a disabled first option rather than a nullable value, so nothing is
+ * selectable that is not a real answer — which is what lets native `required` mean what it says.
+ */
 export const Select = ({
   label,
   size = 'md',

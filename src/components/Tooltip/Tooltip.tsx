@@ -41,6 +41,19 @@ interface TriggerProps {
   onBlur?: () => void;
 }
 
+/**
+ * A short label for a control whose purpose is not written on it, shown on hover and on focus.
+ *
+ * **It may only carry what the reader can do without.** A tooltip opens on hover, and there is no
+ * hover on a touchscreen, so on a phone it effectively does not exist. ADR-0010 accepted that as a
+ * property of the pattern rather than a defect to work around — which makes the rule simple: anything
+ * a reader actually needs belongs in a label, a hint, or visible text. When the content matters, the
+ * component you want is `Toggletip`, which is a button the reader presses.
+ *
+ * Opening is delayed and closing is not, so a pointer crossing a row of buttons does not set off a
+ * chain of tooltips, while one that lingers after the pointer has left is never in the way. Positioning
+ * uses CSS anchor positioning, so the browser flips the placement when there is no room.
+ */
 export const Tooltip = ({
   content,
   children,

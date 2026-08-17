@@ -37,8 +37,25 @@ export interface IconButtonProps extends Omit<
   loading?: boolean;
   /** Defaults to `button` so a button inside a form never submits it by accident. */
   type?: 'button' | 'submit' | 'reset';
+  /**
+   * Natively disabled: dimmed, removed from the tab order and inert. Use it for an action that is
+   * unavailable, and `loading` for one that is already under way.
+   */
+  disabled?: boolean;
 }
 
+/**
+ * A button whose whole content is a mark — close, remove, expand — where a word would not fit.
+ *
+ * It is a separate component rather than a `Button` with an icon and no label, because the thing
+ * that makes it dangerous is exactly what a shared component could not enforce: an icon carries no
+ * text, so there is nowhere for an accessible name to come from. `label` is therefore required and
+ * checked by the compiler, and it is also used as the hover tooltip — a symbol without a name is a
+ * guess for sighted readers too.
+ *
+ * The control is square at four sizes, one of them (`xs`) small enough to sit inside another control,
+ * which is how `Alert` and `Dialog` get their close buttons.
+ */
 export const IconButton = ({
   label,
   icon,

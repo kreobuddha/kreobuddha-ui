@@ -45,6 +45,24 @@ const CloseMark = (): ReactElement => (
   </svg>
 );
 
+/**
+ * A modal built on the native `<dialog>` element, for the one question that has to be answered
+ * before anything else continues.
+ *
+ * The element is the reason this component is small. The browser owns the top layer, the backdrop,
+ * the focus trap, the inertness of the page behind it and `Escape` — none of which is reimplemented
+ * here. That is the line ADR-0010 drew: take the platform's overlay behaviour, and add only what it
+ * has no opinion about.
+ *
+ * `open` and `onClose` belong to the host; the dialog never closes itself, so the decision to lose
+ * what a reader typed always sits in application code. `dismissOnBackdrop` exists for that same
+ * reason — turn it off for a dialog holding anything typed, where a stray click beside a half-filled
+ * form would otherwise throw the form away with no warning.
+ *
+ * `title` is required because it becomes the accessible name; a dialog without one announces nothing
+ * but "dialog". One limitation is stated rather than patched: on WebKit, closing does not return
+ * focus to the trigger — see the Accessibility page.
+ */
 export const Dialog = ({
   open,
   onClose,
