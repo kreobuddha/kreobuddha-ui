@@ -183,17 +183,30 @@ exports, and a real consumer without requiring secrets or a backend.
 
 ## Success criteria
 
-The project becomes a credible public beta when:
+The project becomes a credible public beta when the nine conditions below hold. Reviewed in Phase 7
+at `0.18.0`, each one names what shows it, so the list can be re-checked rather than re-argued:
 
-- a clean checkout follows documented install and verification steps;
-- the package emits intentional ESM, CSS, and declaration artifacts;
-- a consumer fixture installs the packed artifact rather than workspace source;
-- every shipped component meets `docs/COMPONENT_STANDARD.md`;
-- public Storybook documentation is complete for shipped components;
-- automated and manual checks provide evidence for documented behavior;
-- CI reproduces the relevant local verification;
-- a prerelease is used in an independent frontend project;
-- the repository contains no proprietary or private material.
+- a clean checkout follows documented install and verification steps — `README.md` and
+  `src/docs/Installation.mdx`, both walked through during the Phase 7 documentation review;
+- the package emits intentional ESM, CSS, and declaration artifacts — the artifact review in
+  `docs/RELEASES.md`, read from `npm pack --dry-run --json` at `0.17.0`;
+- a consumer fixture installs the packed artifact rather than workspace source — `check:consumer`
+  and `check:workbench`, both in CI and, since Phase 7, in the release workflow too;
+- every shipped component meets `docs/COMPONENT_STANDARD.md` — twenty components, each built
+  through `docs/COMPONENT_RECIPE.md` and verified before the next was started;
+- public Storybook documentation is complete for shipped components — all twenty Docs pages read in
+  the built site, in both themes, in Phase 7;
+- automated and manual checks provide evidence for documented behavior — the change-to-check matrix
+  and CI stage list in `docs/QUALITY.md`; what is *not* verified is named on the Accessibility page
+  rather than left out;
+- CI reproduces the relevant local verification — `ci.yml` on Node 22 and 24; the two known gaps,
+  Chromium-only browser checks and macOS-only visual baselines, are stated in `docs/QUALITY.md`;
+- a prerelease is used in an independent frontend project — **closed by Phase 6**:
+  `docs/adoption/planning-poker.md` records `kreobuddha/kreobuddhas-planning-poker` consuming the
+  published package, upgraded `0.3.0` → `0.16.0` and measured in the browser, not a fixture in this
+  repository;
+- the repository contains no proprietary or private material — the clean-room rules in `CLAUDE.md`,
+  held by review rather than by an automated check, which `docs/RELEASES.md` states plainly.
 
 `1.0.0` requires at least one independent consumer, resolution or documentation of adoption issues,
 and an explicitly reviewed stable public API.
