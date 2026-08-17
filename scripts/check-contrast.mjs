@@ -66,6 +66,10 @@ const PAIRS = [
   // The checked box's mark is `--kreo-text-on-accent` on `--kreo-accent-500`, already measured
   // above as 'focus ring on filled'. The label is 'ghost label'. Neither is repeated here.
   ['checkbox box edge', '--kreo-surface-page', '--kreo-border-control', NON_TEXT],
+  // Radio draws the same edge on the same surface as the checkbox, and its dot is
+  // `--kreo-text-on-accent` on `--kreo-accent-500` — both already measured. What is new is the
+  // edge of an option marked invalid, which no other control puts on the page surface.
+  ['radio invalid edge', '--kreo-surface-page', '--kreo-border-danger', NON_TEXT],
   // Tabs: the rest label and the selected indicator. The selected label is '--kreo-text-accent' on
   // the page, already measured as 'outlined label'; the rest label is 'muted text'.
   ['tab disabled label', '--kreo-surface-page', '--kreo-text-subtle', TEXT],

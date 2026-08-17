@@ -5,7 +5,7 @@ data-dense frontend applications.
 
 ## Status: early, but published
 
-**Nineteen components ship today** — they are listed, and linked to their documentation, under
+**Twenty components ship today** — they are listed, and linked to their documentation, under
 [Components](#components). Everything else in [docs/ROADMAP.md](docs/ROADMAP.md) is a plan, not an
 available feature. The package is published so it can be consumed normally; treat the `0.x` line as
 a moving target and pin what you depend on.
@@ -43,7 +43,7 @@ import '@kreobuddha/ui/styles.css';
 
 ## Components
 
-Nineteen components ship today. Each name links to its page on the documentation site, where the
+Twenty components ship today. Each name links to its page on the documentation site, where the
 prop table sits beside live, interactive examples:
 
 **Actions** — [`Button`](https://kreobuddha.github.io/kreobuddha-ui/?path=/docs/components-button--docs),
@@ -53,6 +53,7 @@ prop table sits beside live, interactive examples:
 [`Textarea`](https://kreobuddha.github.io/kreobuddha-ui/?path=/docs/components-textarea--docs),
 [`Select`](https://kreobuddha.github.io/kreobuddha-ui/?path=/docs/components-select--docs),
 [`Checkbox`](https://kreobuddha.github.io/kreobuddha-ui/?path=/docs/components-checkbox--docs),
+[`Radio`](https://kreobuddha.github.io/kreobuddha-ui/?path=/docs/components-radio--docs),
 [`Switch`](https://kreobuddha.github.io/kreobuddha-ui/?path=/docs/components-switch--docs),
 [`FieldGroup`](https://kreobuddha.github.io/kreobuddha-ui/?path=/docs/components-fieldgroup--docs)
 
@@ -69,6 +70,9 @@ prop table sits beside live, interactive examples:
 [`Spinner`](https://kreobuddha.github.io/kreobuddha-ui/?path=/docs/components-spinner--docs),
 [`Skeleton`](https://kreobuddha.github.io/kreobuddha-ui/?path=/docs/components-skeleton--docs),
 [`Progress`](https://kreobuddha.github.io/kreobuddha-ui/?path=/docs/components-progress--docs)
+
+`Toast` is the one component here that is not import-and-render: it raises messages through
+`useToast`, which needs a `ToastProvider` mounted above the tree and throws without one.
 
 **The prop tables are generated from the TypeScript types**, so they cannot drift from the code the
 way a hand-maintained table does. That is the reason they are not reproduced here: this file used to

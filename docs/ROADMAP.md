@@ -9,10 +9,11 @@ verification quality.
 ## Status
 
 Phases 0 through 5 are complete. The repository is public at `kreobuddha/kreobuddha-ui` with CI
-green, and the package is published to npm as `@kreobuddha/ui` (ADR-0006). Nineteen components
-ship, all of them released in `0.15.0`: `Button`, `IconButton`, `Badge`, `Spinner`, `Alert`,
-`TextField`, `Textarea`, `Select`, `Checkbox`, `Switch`, `FieldGroup`, `Tabs`, `Tooltip`, `Dialog`,
-`Skeleton`, `Progress`, `Accordion`, `Toggletip` and `Toast`.
+green, and the package is published to npm as `@kreobuddha/ui` (ADR-0006). Twenty components
+ship: `Button`, `IconButton`, `Badge`, `Spinner`, `Alert`, `TextField`, `Textarea`, `Select`,
+`Checkbox`, `Switch`, `FieldGroup`, `Tabs`, `Tooltip`, `Dialog`, `Skeleton`, `Progress`,
+`Accordion`, `Toggletip` and `Toast` in `0.15.0`, and `Radio` in `0.17.0` — the first component
+added because a consumer proved the need.
 
 Phase 5 added no component. It made what exists inspectable by someone who is not Rustam: a
 documentation site at [kreobuddha.github.io/kreobuddha-ui](https://kreobuddha.github.io/kreobuddha-ui/)
@@ -167,17 +168,41 @@ component's prop table without cloning the repository; the workbench composes th
 fixtures with its keyboard and 375px claims checked by a runner; nothing in the repository promises
 density; and `0.16.0` changed no component behaviour.
 
-## Phase 6 — First independent consumer
+## Phase 6 — First independent consumer — **in progress**
 
-Goal: integrate a packed prerelease into `session-lab` or another independent frontend project.
+Goal: integrate a released package into an independent frontend project.
+
+**The consumer installs published versions from npm only** — Rustam's decision, taken during this
+phase and replacing the original "packed prerelease". A local tarball resolves through the same
+`exports` map, so it proves the package boundary, but it leaves the application's manifest pointing
+at a file no one else has and its lockfile describing an artifact that was never published. When a
+component the application needs is not released yet, the application waits for the release. That is
+why `Radio` ships in `0.17.0` before the deck picker adopts it, rather than after.
+
+The consumer is
+[`kreobuddhas-planning-poker`](https://github.com/kreobuddha/kreobuddhas-planning-poker) — a
+real-time estimation tool on React, Vite and Firebase, written before this phase and depending on
+this package since `0.3.0`, for `Button` alone. It is an independent repository, not an example in
+this one.
 
 Deliverables:
 
-- install a versioned/tarball package instead of source aliases;
-- document missing APIs and friction;
-- fix general library gaps without adding app-specific components;
+- ~~install a versioned/tarball package instead of source aliases~~ — the application was upgraded
+  `0.3.0` → `0.16.0` from npm, with the build and the full flow verified in the browser;
+- ~~document missing APIs and friction~~ — [`adoption/planning-poker.md`](adoption/planning-poker.md),
+  every finding observed by running the application and carrying a verdict;
+- ~~fix general library gaps without adding app-specific components~~ — `Radio` is done: the one
+  general gap the consumer proved (finding 2), shipped as a single native option that `FieldGroup`
+  groups, rather than as a `RadioGroup` duplicating what `FieldGroup` already does or a
+  `SegmentedControl` departing from platform semantics. Rustam chose that design before it was
+  built. `README.md` also gained the line saying `Toast` needs a provider (finding 3);
 - add regressions for adoption issues;
-- record package size and tree-shaking evidence.
+- record package size and tree-shaking evidence — the upgrade half is measured in the adoption
+  notes; the post-adoption half is not.
+
+What is left after `0.17.0` reaches npm: the application adopts `Radio` in its deck picker, and the
+phase closes with the post-adoption size and tree-shaking numbers measured on a real application
+rather than on the fixture.
 
 ## Phase 7 — Public beta
 
@@ -213,7 +238,7 @@ second deliberate exception, to `COMPONENT_RECIPE.md` §8, now written down ther
 request is Rustam's call on how to land the batch, taken once the five were done: five reviews of
 one branch that was built in order would have been five readings of the same history. What is not
 relaxed is the verification — `npm run verify` ran green for each component before the next was
-started. Phase 5 followed them and is now complete; Phase 6 is next and not started.
+started. Phase 5 followed them and is now complete; Phase 6 is in progress.
 
 - `Skeleton` — **done**;
 - `Progress` — **done**, as a `div` with `role="progressbar"` by Rustam's decision rather than as a
