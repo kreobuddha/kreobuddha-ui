@@ -26,6 +26,20 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      # `workflow_dispatch` accepts any ref, and the workflow file only has to exist on the default
+      # branch for the button to appear — so without this the run could be started against a feature
+      # branch and publish whatever happened to be on it. `RELEASES.md` requires a release to come
+      # from a clean, verified protected branch; this is that requirement, executed rather than
+      # written down. The check is first because everything after it costs minutes.
+      - name: Refuse to release from anything but master
+        if: github.ref != 'refs/heads/master'
+        env:
+          REF: ${{ github.ref }}
+        run: |
+          echo "A release runs from master. This run was dispatched against $REF." >&2
+          echo "Merge the release branch first; the tag is cut from the commit that master holds." >&2
+          exit 1
+
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
       # Node 24 carries an npm new enough for trusted publishing (needs npm >= 11.5.1 and
@@ -48,8 +62,11 @@ jobs:
 
       - run: npx playwright install --with-deps chromium
 
-      # The same gate as CI. A release must not be able to pass on weaker checks than a pull
-      # request does.
+      # The same gate as CI, step for step and in the same order. That parity is the point: a
+      # release is the one irreversible action in this project, and for a while it ran on a
+      # shorter list than an ordinary pull request did — it skipped `check:css`, `check:consumer`,
+      # `check:workbench` and `check:browser`, which are exactly the four that cross the package
+      # boundary or need a real browser. The cheapest checks stay first so a failure is cheap.
       - run: npm run format:check
       - run: npm run lint
       - run: npm run lint:css
@@ -58,7 +75,24 @@ jobs:
       - run: npm run check:contrast
       - run: npm run build
       - run: npm run build-storybook
+
+      # Reads the built stylesheets and fails on an un-inlined `@import` or a missing token layer.
+      # It has to run after both builds, because both are what it inspects.
+      - run: npm run check:css
+
       - run: npm run check:package
+
+      # Packs the package and installs the tarball into two independent applications: the consumer
+      # fixture, and the workbench, which is then driven in a real browser. A release that has not
+      # been installed from its own tarball has not been tested as a package at all.
+      - run: npm run check:consumer
+      - run: npm run check:workbench
+
+      # Behaviour the browser owns rather than the DOM — `Escape` on a modal, the focus trap,
+      # forced-colors — driven by real key presses against the built Storybook. Chromium is
+      # installed above. `check:visual` is deliberately absent here as it is on CI: its baselines
+      # are macOS and this runner is Ubuntu, where the same text does not render identically.
+      - run: npm run check:browser
 
       # Publishing the wrong version is not recoverable — npm never lets a version number be
       # reused — so the manifest has to agree with what the operator typed before anything is
