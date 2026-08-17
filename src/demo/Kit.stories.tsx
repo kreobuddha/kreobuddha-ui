@@ -12,6 +12,7 @@ import { Select } from '../components/Select/Select.js';
 import { Progress } from '../components/Progress/Progress.js';
 import { Skeleton } from '../components/Skeleton/Skeleton.js';
 import { Spinner } from '../components/Spinner/Spinner.js';
+import { Radio } from '../components/Radio/Radio.js';
 import { Switch } from '../components/Switch/Switch.js';
 import { Tabs } from '../components/Tabs/Tabs.js';
 import { Toggletip } from '../components/Toggletip/Toggletip.js';
@@ -393,13 +394,24 @@ export const Kit: Story = {
         </div>
       </Section>
 
-      <Section title="Checkbox and Switch">
+      <Section title="Checkbox, Radio and Switch">
         <div style={{ display: 'flex', gap: 'var(--kreo-space-8)', flexWrap: 'wrap' }}>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--kreo-space-3)' }}>
             <Checkbox label="Off" />
             <Checkbox label="On" defaultChecked />
             <Checkbox label="Some of these" indeterminate />
             <Checkbox label="Unavailable" disabled defaultChecked />
+          </div>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--kreo-space-3)' }}>
+            <Radio name="kit-deck" value="off" label="Not chosen" />
+            <Radio name="kit-deck" value="on" label="Chosen" defaultChecked />
+            <Radio
+              name="kit-deck-disabled"
+              value="off"
+              label="Unavailable"
+              disabled
+              defaultChecked
+            />
           </div>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--kreo-space-3)' }}>
             <Switch label="Off" />

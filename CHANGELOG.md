@@ -9,6 +9,26 @@ explicitly rather than treated as disposable.
 
 ## [Unreleased]
 
+### Added
+
+- `Radio` — one option in a choice where exactly one answer is possible. A real
+  `<input type="radio">`, so the arrow keys, the single tab stop for the whole group and form
+  participation are the platform's rather than a reimplementation. Its label, hint, error and
+  focus ring are `Checkbox`'s, and the round mark is the one shape it does not share: it says the
+  options are exclusive before anything is clicked.
+
+  **`name` is required**, unlike the native attribute. A radio without a name belongs to no group,
+  which means it can be turned on and never off again — the same reasoning that made `label`
+  required on the fields.
+
+  It brings no question of its own: no legend, no fieldset, no `options` array. `FieldGroup`
+  already asks the question, lays the options out and carries the error for the choice as a whole,
+  so a group is those two composed — which is how `Checkbox` and `Switch` have always been grouped.
+
+  The first component in the library added because a consumer proved the need: `kreobuddhas-planning-poker`
+  had built a deck picker out of three action buttons with a `--selected` class, with no group, no
+  chosen state and no arrow keys. See [`docs/adoption/planning-poker.md`](docs/adoption/planning-poker.md).
+
 ## [0.16.0] — 2026-08-17
 
 **No component behaviour or public API changed.** No component was added, no prop, type, export or

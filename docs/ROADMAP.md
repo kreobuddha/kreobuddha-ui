@@ -12,7 +12,8 @@ Phases 0 through 5 are complete. The repository is public at `kreobuddha/kreobud
 green, and the package is published to npm as `@kreobuddha/ui` (ADR-0006). Nineteen components
 ship, all of them released in `0.15.0`: `Button`, `IconButton`, `Badge`, `Spinner`, `Alert`,
 `TextField`, `Textarea`, `Select`, `Checkbox`, `Switch`, `FieldGroup`, `Tabs`, `Tooltip`, `Dialog`,
-`Skeleton`, `Progress`, `Accordion`, `Toggletip` and `Toast`.
+`Skeleton`, `Progress`, `Accordion`, `Toggletip` and `Toast`. A twentieth, `Radio`, is built and
+unreleased — Phase 6 added it because a consumer proved the need.
 
 Phase 5 added no component. It made what exists inspectable by someone who is not Rustam: a
 documentation site at [kreobuddha.github.io/kreobuddha-ui](https://kreobuddha.github.io/kreobuddha-ui/)
@@ -183,8 +184,11 @@ Deliverables:
   `0.3.0` → `0.16.0` from npm, with the build and the full flow verified in the browser;
 - ~~document missing APIs and friction~~ — [`adoption/planning-poker.md`](adoption/planning-poker.md),
   every finding observed by running the application and carrying a verdict;
-- fix general library gaps without adding app-specific components — one candidate so far, a group of
-  mutually exclusive options (finding 2);
+- ~~fix general library gaps without adding app-specific components~~ — `Radio` is done: the one
+  general gap the consumer proved (finding 2), shipped as a single native option that `FieldGroup`
+  groups, rather than as a `RadioGroup` duplicating what `FieldGroup` already does or a
+  `SegmentedControl` departing from platform semantics. Rustam chose that design before it was
+  built. `README.md` also gained the line saying `Toast` needs a provider (finding 3);
 - add regressions for adoption issues;
 - record package size and tree-shaking evidence — the upgrade half is measured in the adoption
   notes; the post-adoption half is not.

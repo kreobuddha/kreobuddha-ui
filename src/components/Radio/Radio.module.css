@@ -1,0 +1,116 @@
+/* The label sits beside the control here rather than above it, exactly as on `Checkbox`, so the
+   stack from `../field/field.module.css` does not apply — only the dimming and the message styles
+   are shared. */
+
+@import '../../styles.css';
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--kreo-space-1);
+}
+
+.disabled {
+  composes: disabled from '../field/field.module.css';
+}
+
+.row {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--kreo-space-2);
+}
+
+.control {
+  /* Drawn rather than left to the platform, so it carries the same border, focus ring and accent
+     as every other control. The element stays a real radio: the group's arrow keys, the single
+     tab stop and form participation are all native. */
+  appearance: none;
+  flex: none;
+  width: 18px;
+  height: 18px;
+  margin: 0;
+  background: var(--kreo-surface-card);
+  border: var(--kreo-border-w) solid var(--kreo-border-control);
+
+  /* The one shape that is not shared with `Checkbox`: round is what tells a reader, before any
+     interaction, that these options are exclusive and that one has to win. */
+  border-radius: 50%;
+  cursor: pointer;
+  transition: var(--kreo-transition-color);
+
+  /* Lines the control up with the first line of the label rather than the top of its box. */
+  margin-block-start: 2px;
+  display: grid;
+  place-items: center;
+}
+
+.control:focus-visible {
+  outline: none;
+  border-color: var(--kreo-border-focus);
+  box-shadow: 0 0 0 var(--kreo-border-w-focus) var(--kreo-border-focus);
+}
+
+.control:checked {
+  background-color: var(--kreo-accent-500);
+  border-color: var(--kreo-accent-500);
+}
+
+/* The dot is a pseudo-element rather than an inset shadow so its colour comes from a token the
+   contrast script can find, and so it follows the theme like every other mark. */
+.control::after {
+  content: '';
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--kreo-text-on-accent);
+  transform: scale(0);
+  transition: var(--kreo-transition-color);
+}
+
+.control:checked::after {
+  transform: scale(1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .control::after {
+    transition: none;
+  }
+}
+
+.control:disabled {
+  cursor: not-allowed;
+}
+
+.invalid {
+  border-color: var(--kreo-border-danger);
+}
+
+.label {
+  font: var(--kreo-type-body);
+  color: var(--kreo-text-primary);
+  cursor: pointer;
+}
+
+.disabled .label {
+  cursor: not-allowed;
+}
+
+.required {
+  margin-inline-start: 2px;
+  color: var(--kreo-text-danger);
+}
+
+/* The messages line up under the label rather than under the control, so they read as belonging
+   to the option rather than to the dot. 18px control plus the row's gap. */
+.messages {
+  padding-inline-start: calc(18px + var(--kreo-space-2));
+}
+
+@media (forced-colors: active) {
+  /* `appearance: none` removed the system rendering, and neither the accent fill nor the drawn
+     dot is painted here — a chosen option would be indistinguishable from an empty one. Handing
+     the control back to the platform is the only treatment that stays correct. */
+  .control {
+    appearance: auto;
+  }
+}

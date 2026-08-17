@@ -37,6 +37,8 @@ export { Select } from './components/Select/Select.js';
 export type { SelectProps, SelectSize } from './components/Select/Select.js';
 export { Checkbox } from './components/Checkbox/Checkbox.js';
 export type { CheckboxProps } from './components/Checkbox/Checkbox.js';
+export { Radio } from './components/Radio/Radio.js';
+export type { RadioProps } from './components/Radio/Radio.js';
 export { Switch } from './components/Switch/Switch.js';
 export type { SwitchProps } from './components/Switch/Switch.js';
 export { FieldGroup } from './components/FieldGroup/FieldGroup.js';

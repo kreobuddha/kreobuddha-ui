@@ -15,6 +15,7 @@ import {
   FieldGroup,
   IconButton,
   Progress,
+  Radio,
   Select,
   Skeleton,
   Spinner,
@@ -102,6 +103,11 @@ export const App = (): React.ReactElement => (
     <FieldGroup legend="Notifications" hint="Both may be on.">
       <Checkbox label="Email" defaultChecked />
       <Switch label="Desktop" />
+    </FieldGroup>
+
+    <FieldGroup legend="Digest" hint="Exactly one of these.">
+      <Radio name="digest" value="daily" label="Daily" defaultChecked />
+      <Radio name="digest" value="weekly" label="Weekly" />
     </FieldGroup>
 
     <Tabs
