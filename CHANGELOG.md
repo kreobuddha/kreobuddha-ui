@@ -9,6 +9,53 @@ explicitly rather than treated as disposable.
 
 ## [Unreleased]
 
+## [0.16.0] — 2026-08-17
+
+**No component behaviour or public API changed.** No component was added, no prop, type, export or
+`--kreo-*` custom property was added, removed or altered. This release is documentation, an example
+application, and the infrastructure that publishes them.
+
+### Added
+
+- **A documentation site** at <https://kreobuddha.github.io/kreobuddha-ui/>, built from Storybook
+  and deployed to GitHub Pages. Every component has a Docs page whose **prop table is generated from
+  the TypeScript types**, so it cannot drift from the code the way a hand-written table does.
+- **Foundations pages** covering what a consumer needs before the first component: installation and
+  the ESM-only peer contract, the `data-kreo-theme` contract and the three override conventions, the
+  colour, typography, spacing and motion tokens, accessibility, and composition. The token pages
+  **resolve `--kreo-*` values from the published stylesheet at render time** rather than listing
+  them, so they follow the theme switch and cannot go stale when a token changes.
+- **Accessibility is documented including what is not verified** — the screen-reader pass is parked,
+  and WebKit does not return focus to the trigger when a dialog closes.
+- **`examples/workbench`** — _Devkit Console_, a settings and diagnostics interface composed
+  entirely from this library over deterministic local fixtures, with no fake backend and no
+  wall-clock timers. It installs the packed tarball like the existing consumer fixture, never a
+  source alias, and it sets `data-kreo-theme` and persists the choice itself — demonstrating that
+  the library owns neither.
+- **`npm run check:workbench`** — a third Playwright project that checks the workbench's claims
+  instead of asserting them: the keyboard-only path from the header through the tabs to save, the
+  unsaved-changes dialog returning focus to the tab it interrupted, and a 375px viewport with no
+  horizontal overflow. It compares against no baseline, so it runs on CI.
+
+### Changed
+
+- **`README.md` no longer duplicates the API.** The nineteen hand-maintained component sections —
+  about a hundred prop-table rows — are replaced by a list of the nineteen names, each linking to
+  its generated page. Install, usage, theming, fonts, the package boundary and development stay.
+  The cost, stated rather than hidden: `README.md` is the npm landing page, so a reader arriving
+  from npm now needs one click for a prop table.
+- `homepage` in the package manifest points at the documentation site instead of the README anchor.
+- `docs/COMPONENT_RECIPE.md` §6 — a new component no longer earns a hand-written README table. It
+  documents itself through JSDoc on its props and above the component, which is what the generator
+  reads.
+
+### Removed
+
+- **Density is removed from the documented scope.** It was a promise in seven documents and was
+  never implemented, so **no code changed and nothing a consumer uses was affected**. The `sm`/`md`/
+  `lg` size scale covers what the slices actually needed. Recorded in
+  [ADR-0012](docs/adr/0012-density-is-dropped.md), which supersedes the density lines in ADR-0005.
+
 ## [0.15.0] — 2026-08-16
 
 ### Added
@@ -293,7 +340,8 @@ from git for a single consumer.
   is public API.
 - Inter bundled as WOFF2 subsets, so no external font request is made at runtime.
 
-[unreleased]: https://github.com/kreobuddha/kreobuddha-ui/compare/v0.15.0...HEAD
+[unreleased]: https://github.com/kreobuddha/kreobuddha-ui/compare/v0.16.0...HEAD
+[0.16.0]: https://github.com/kreobuddha/kreobuddha-ui/compare/v0.15.0...v0.16.0
 [0.15.0]: https://github.com/kreobuddha/kreobuddha-ui/compare/v0.14.0...v0.15.0
 [0.14.0]: https://github.com/kreobuddha/kreobuddha-ui/compare/v0.13.0...v0.14.0
 [0.13.0]: https://github.com/kreobuddha/kreobuddha-ui/compare/v0.12.0...v0.13.0

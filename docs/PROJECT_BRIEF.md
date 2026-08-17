@@ -103,7 +103,6 @@ real component slices and consumer screens.
 
 - Build a typed, tree-shakeable React package with intentional exports.
 - Provide semantic CSS custom properties and original light/dark themes.
-- Provide comfortable and compact density when a real component slice validates the need.
 - Target WCAG 2.2 AA for documented component states without making universal compliance claims.
 - Provide keyboard-complete behavior for interactive components.
 - Provide static Storybook documentation that needs no backend.
@@ -123,6 +122,8 @@ The initial product will not:
 - include a data grid, charting library, date picker, rich-text editor, file uploader, command
   palette, or drag-and-drop framework;
 - provide a visual theme editor, Figma synchronization, CLI, or component generator;
+- offer a density contract; per-component `sm`/`md`/`lg` sizes are the whole of control sizing
+  ([ADR-0012](adr/0012-density-is-dropped.md));
 - promise compatibility or accessibility beyond explicitly verified versions and states;
 - support multiple brands during the first consumer cycle.
 
@@ -170,9 +171,9 @@ components, and receives complete TypeScript declarations without importing inte
 A consumer assembles an accessible settings or diagnostics interface using actions, fields, status
 indicators, tabs, and a dialog.
 
-### Theme and density
+### Theme
 
-A host application controls theme and density through a documented DOM and CSS-variable contract.
+A host application controls theme through a documented DOM and CSS-variable contract.
 The library does not own persistence or browser preference storage.
 
 ### Evaluation

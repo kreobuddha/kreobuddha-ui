@@ -1,0 +1,46 @@
+import { Meta } from '@storybook/addon-docs/blocks';
+
+<Meta title="Introduction" />
+
+# Kreobuddha UI
+
+An accessible, themeable React component library for developer tools, technical products and
+data-dense frontend applications. This site is the reference: every page here is built from the
+repository that publishes the package, and every prop table on it is generated from the types.
+
+## Status
+
+Nineteen components ship today: `Button`, `IconButton`, `TextField`, `Textarea`, `Select`,
+`Checkbox`, `Switch`, `FieldGroup`, `Tabs`, `Accordion`, `Tooltip`, `Toggletip`, `Dialog`,
+`Badge`, `Spinner`, `Skeleton`, `Progress`, `Toast` and `Alert`.
+
+The package is published so it can be consumed normally, but the line is `0.x` and it moves. Pin
+what you depend on. Anything not listed above is a plan, not an available feature.
+
+## What it is
+
+- **Frontend only.** React components, a token layer, one stylesheet. No backend, no data layer,
+  no application framework.
+- **ESM only**, with React `^19` as a peer dependency the host installs.
+- **Themed through CSS custom properties.** Every `--kreo-*` property in the published stylesheet
+  is public API under SemVer; CSS Module class names are not.
+- **Composed, not configured.** Components take the props they need and pass the rest through to
+  the element underneath.
+
+## What it is not
+
+- Not a layout system. Page gutters, grids and rails belong to the application.
+- Not a styling engine. There is no `css` prop, no `as` polymorphism and no theme object.
+- Not a stateful shell. The library stores no theme preference, reads no system preference and
+  owns no routing.
+
+## How to read these pages
+
+Each component's **Docs** page carries a generated prop table beside its stories. The table lists
+the props the component itself declares, with the documentation and default value taken from the
+source. It does not list the DOM attributes the component inherits: a `Button` also accepts every
+attribute a `<button>` accepts, and a `Dialog` every attribute a `<dialog>` accepts, but spelling
+out two hundred inherited attributes per component would bury the ten that matter.
+
+Use the **Theme** control in the toolbar to switch any page, including the token tables, between
+the light and dark themes.

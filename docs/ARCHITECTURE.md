@@ -17,7 +17,8 @@ kreobuddha-ui/
 ├── docs/
 │   └── adr/
 ├── examples/
-│   └── react-vite/          # consumer fixture: installs the packed tarball
+│   ├── react-vite/          # consumer fixture: installs the packed tarball
+│   └── workbench/           # composed example application, same tarball install
 ├── scripts/                 # build, measurement and generation, no runtime code
 ├── src/
 │   ├── components/
@@ -37,6 +38,13 @@ and lockfile. It exists only to install the packed tarball and must not become a
 package. `@kreobuddha/ui` is deliberately absent from its manifest: the package under test is
 installed unsaved from a tarball whose name carries the current version, so the fixture's lockfile
 pins the environment and does not have to be edited on every release.
+
+`examples/workbench` is the second example and is isolated in exactly the same way, with its own
+manifest and lockfile and the same tarball install. It is not a second fixture: where
+`examples/react-vite` proves the package boundary by importing every export into a bare page, the
+workbench composes the components into an interface — a shell, navigation, a settings form and a
+diagnostics view — and is what demonstrates that the host, not the library, owns page layout and
+the theme attribute. Neither example is published, and neither may reach back into `src`.
 
 Do not introduce workspaces, Turborepo, a separate tokens package, or a documentation application
 until a real limitation of the one-publishable-package structure is demonstrated.
@@ -168,8 +176,9 @@ settled in [ADR-0001](adr/0001-token-prefix-theme-attribute-and-styling-model.md
 records that token values are adopted from the separate Claude Design project rather than invented
 here.
 
-Density is handled by tokens rather than per-component branches. It is introduced only after the
-first component validates both comfortable and compact modes.
+There is no density layer. Control sizing is per-component `sm`/`md`/`lg`, and no host-level
+attribute selects a `comfortable` or `compact` mode —
+[ADR-0012](adr/0012-density-is-dropped.md) records why the promised token layer was dropped.
 
 ## Component API
 

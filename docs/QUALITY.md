@@ -135,6 +135,21 @@ macOS would fail on an Ubuntu runner for a reason unrelated to the change under 
 Chromium only, like every other automated check here. ADR-0010 records a one-off run against
 WebKit and Firefox, and what it found, rather than the suite pretending to be cross-browser.
 
+### 5b. The workbench
+
+`npm run check:workbench` is the third Playwright project, `tests/workbench/`, and the only check
+that judges the library as an interface rather than as a set of components.
+
+`scripts/check-workbench.mjs` drives it: it installs the packed tarball into `examples/workbench`,
+type-checks and builds that application, and runs the project against the built output on port
+6008. The pack step is shared with §7 through `scripts/pack-package.mjs`, so one `npm run verify`
+builds and packs the library once rather than twice.
+
+What it asserts is what the example claims and prose cannot establish: a keyboard-only path from
+the top of the page through the navigation to the save button, a modal guard that returns focus to
+the control it interrupted, the theme contract surviving a reload, and a 375px viewport with no
+horizontal overflow on any tab. It compares nothing against a baseline, so like §5a it runs in CI.
+
 ### 6. Visual regression
 
 Visual checks protect intentional states, not every possible prop combination.
@@ -147,7 +162,7 @@ Rules:
 
 - baseline changes are reviewed, never accepted automatically;
 - fonts, time, animation, and data are deterministic;
-- meaningful theme, density, focus, invalid, and long-content states receive priority;
+- meaningful theme, focus, invalid, and long-content states receive priority;
 - platform rendering differences are controlled by using the same baseline environment.
 
 The run is `npm run check:visual`, driven by `playwright.config.ts` over the built Storybook, with
@@ -212,6 +227,13 @@ drops, leaving an empty bundle to pass the check for no reason.
 Build Storybook statically and verify navigation, source examples, installation instructions, and
 links. Documentation must not claim support or functionality that the published artifact lacks.
 
+That build is also what is published: `.github/workflows/pages.yml` deploys `storybook-static` to
+GitHub Pages. A project site is served from a sub-path, so the deployed build — and only the
+deployed build — sets Vite's `base` from `STORYBOOK_BASE_PATH`; the local build stays unprefixed
+because `check:visual`, `check:browser` and `check:workbench` serve it from the root of a port. No
+runner checks the deployed site, so the evidence for a Pages change is the run itself plus the site
+opened by hand: navigation, both themes, and no asset 404 under the sub-path.
+
 ## Change-to-check matrix
 
 | Change | Minimum verification |
@@ -241,6 +263,7 @@ package build                         running
 Storybook build                       running
 package artifact checks               running
 consumer smoke build                  running — packed tarball in examples/react-vite
+workbench checks                      running — packed tarball in examples/workbench, tests/workbench
 browser behaviour checks              running — real key presses, tests/browser
 visual regression for protected states in `verify`, skipped on CI — macOS baselines
 ```

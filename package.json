@@ -1,6 +1,6 @@
 {
   "name": "@kreobuddha/ui",
-  "version": "0.15.0",
+  "version": "0.16.0",
   "description": "Accessible, themeable React component library for developer tools and data-dense interfaces.",
   "keywords": [
     "react",
@@ -12,7 +12,7 @@
     "css-modules",
     "dark-mode"
   ],
-  "homepage": "https://github.com/kreobuddha/kreobuddha-ui#readme",
+  "homepage": "https://kreobuddha.github.io/kreobuddha-ui/",
   "bugs": "https://github.com/kreobuddha/kreobuddha-ui/issues",
   "repository": {
     "type": "git",
@@ -50,6 +50,7 @@
     "check:package": "npm run build && publint && attw --pack --profile esm-only --exclude-entrypoints styles.css",
     "check:visual": "node scripts/check-visual.mjs",
     "check:visual:update": "node scripts/check-visual.mjs --update-snapshots",
+    "check:workbench": "node scripts/check-workbench.mjs",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "lint": "eslint .",
@@ -60,7 +61,7 @@
     "test": "vitest run",
     "test:one": "vitest run --project unit",
     "typecheck": "tsc -p tsconfig.json",
-    "verify": "npm run format:check && npm run lint && npm run lint:css && npm run typecheck && npm test && npm run check:contrast && npm run build && npm run build-storybook && npm run check:css && npm run check:package && npm run check:consumer && npm run check:browser && npm run check:visual",
+    "verify": "npm run format:check && npm run lint && npm run lint:css && npm run typecheck && npm test && npm run check:contrast && npm run build && npm run build-storybook && npm run check:css && npm run check:package && npm run check:consumer && npm run check:workbench && npm run check:browser && npm run check:visual",
     "verify:fast": "npm run format:check && npm run lint && npm run lint:css && npm run typecheck && npm run test:one"
   },
   "peerDependencies": {
@@ -73,6 +74,7 @@
     "@fontsource-variable/inter": "^5.3.0",
     "@playwright/test": "^1.62.1",
     "@storybook/addon-a11y": "^10.5.8",
+    "@storybook/addon-docs": "^10.5.8",
     "@storybook/addon-vitest": "^10.5.8",
     "@storybook/react-vite": "^10.5.8",
     "@testing-library/react": "^16.3.2",

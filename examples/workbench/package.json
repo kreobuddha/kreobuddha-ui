@@ -1,0 +1,21 @@
+{
+  "name": "kreobuddha-ui-workbench",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "description": "Composes the packed package into a coherent settings and diagnostics interface. Not a workspace member, and never published.",
+  "scripts": {
+    "build": "vite build",
+    "dev": "vite",
+    "typecheck": "tsc -p tsconfig.json"
+  },
+  "devDependencies": {
+    "@types/react": "^19.2.18",
+    "@types/react-dom": "^19.2.0",
+    "@vitejs/plugin-react": "^5.1.0",
+    "react": "^19.2.8",
+    "react-dom": "^19.2.8",
+    "typescript": "~6.0.3",
+    "vite": "^8.2.1"
+  }
+}

@@ -72,7 +72,9 @@ Keep the change to one slice. Commit subjects are conventional and lowercase (`f
 
 If the change touches a component's public props, a documented CSS custom property, DOM semantics or
 keyboard behaviour, it is compatibility-sensitive: say so in the description, and update
-`README.md`, `CHANGELOG.md` and `docs/ROADMAP.md` as `docs/COMPONENT_RECIPE.md` §6 requires.
+`CHANGELOG.md` and `docs/ROADMAP.md` as `docs/COMPONENT_RECIPE.md` §6 requires. The prop table is
+generated from the types, so a new or changed prop is documented by its JSDoc in the source rather
+than by editing `README.md`.
 
 Releases are not part of a feature pull request. They are a separate versioning commit followed by a
 manually dispatched workflow.

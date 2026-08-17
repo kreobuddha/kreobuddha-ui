@@ -70,6 +70,11 @@ jobs:
       # tarball into an independent application and uses it there.
       - run: npm run check:consumer
 
+      # The other side of the same boundary: the workbench example, built against the same packed
+      # tarball, with its keyboard-only flow and its 375px layout driven in a real browser. Like
+      # the run below it compares nothing against a baseline, so it is a CI gate.
+      - run: npm run check:workbench
+
       # Behaviour that belongs to the browser rather than to the DOM — `Escape` on a modal, the
       # focus trap, forced-colors — driven by real key presses against the built Storybook. It
       # compares nothing against a baseline, so unlike `check:visual` it is a CI gate. Chromium is
