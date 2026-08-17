@@ -3,6 +3,7 @@ import type { ReactElement, ReactNode } from 'react';
 
 import { DocsContainer } from '@storybook/addon-docs/blocks';
 import type { DocsContainerProps } from '@storybook/addon-docs/blocks';
+import { themes } from 'storybook/theming';
 
 /**
  * The story decorator in `preview.tsx` wraps stories, and a documentation page is not a story:
@@ -93,10 +94,27 @@ export const ThemedDocsContainer = ({
 
   const theme = useSyncExternalStore(subscribe, getSnapshot, getSnapshot);
 
+  const isDark = theme === 'dark';
+
   return (
-    <DocsContainer context={context}>
-      {/* Light needs no attribute at all, which is the contract these pages document. */}
-      <div data-kreo-theme={theme === 'dark' ? 'dark' : undefined}>{children}</div>
+    // Storybook draws the documentation page's own chrome — prose, tables, code blocks — from its
+    // theme rather than from `--kreo-*`, and it defaults to the light one. Without this the page
+    // stayed white whatever the toolbar said: the attribute below did switch, so the token values
+    // and any story on the page followed, but the page around them did not, and the control looked
+    // broken on exactly the pages that document theming.
+    <DocsContainer context={context} theme={isDark ? themes.dark : themes.light}>
+      {/* Light needs no attribute at all, which is the contract these pages document. The surface
+          is painted here for the same reason `preview.tsx` paints it around a story: the library
+          ships no page styles, so nothing else would give the prose a themed background. */}
+      <div
+        data-kreo-theme={isDark ? 'dark' : undefined}
+        style={{
+          background: 'var(--kreo-surface-page)',
+          color: 'var(--kreo-text-body)',
+        }}
+      >
+        {children}
+      </div>
     </DocsContainer>
   );
 };
