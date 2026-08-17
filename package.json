@@ -90,6 +90,7 @@
     "publint": "^0.3.23",
     "react": "^19.2.8",
     "react-dom": "^19.2.8",
+    "remark-gfm": "^4.0.1",
     "storybook": "^10.5.8",
     "stylelint": "^17.14.1",
     "stylelint-config-standard": "^40.0.0",

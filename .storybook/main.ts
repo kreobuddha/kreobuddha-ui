@@ -1,3 +1,5 @@
+import remarkGfm from 'remark-gfm';
+
 import type { StorybookConfig } from '@storybook/react-vite';
 
 // This file runs in Node, but `tsconfig.json` limits `types` to `vite/client` on purpose, so that
@@ -18,7 +20,24 @@ const base = basePath ? `/${basePath}/` : undefined;
 
 const config: StorybookConfig = {
   stories: ['../src/**/*.mdx', '../src/**/*.stories.tsx'],
-  addons: ['@storybook/addon-a11y', '@storybook/addon-docs', '@storybook/addon-vitest'],
+  addons: [
+    '@storybook/addon-a11y',
+    {
+      name: '@storybook/addon-docs',
+      // Storybook's MDX pipeline runs CommonMark, which has no table syntax: a GFM table is parsed
+      // as one paragraph and rendered as its own pipe characters. `remark-gfm` is what adds tables
+      // to the parser. It is a documentation-build plugin — nothing here reaches `dist`, and the
+      // package still ships no runtime dependency.
+      options: {
+        mdxPluginOptions: {
+          mdxCompileOptions: {
+            remarkPlugins: [remarkGfm],
+          },
+        },
+      },
+    },
+    '@storybook/addon-vitest',
+  ],
   framework: {
     name: '@storybook/react-vite',
     options: {},

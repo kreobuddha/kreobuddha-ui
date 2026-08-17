@@ -15,8 +15,13 @@
   border-block-end: var(--kreo-border-w) solid var(--kreo-border-default);
 
   /* More tabs than room scrolls sideways rather than wrapping. A wrapped tab list puts the
-     selected tab's underline on a different line from the panel it belongs to. */
-  overflow-x: auto;
+     selected tab's underline on a different line from the panel it belongs to.
+
+     The vertical axis is pinned shut on purpose. Setting one axis makes CSS compute the other as
+     `auto` rather than leaving it `visible`, so any pixel that ever pokes out below turns into a
+     vertical scrollbar — and a vertical scrollbar narrows the box enough to raise a horizontal one
+     that has nothing to scroll. Nothing here is meant to scroll vertically. */
+  overflow: auto hidden;
 
   /* Room for the selected tab's indicator, which sits on the same line as the rule above. */
   scrollbar-width: thin;
@@ -59,13 +64,15 @@
   color: var(--kreo-text-accent);
 }
 
-/* The indicator overlaps the list's own rule rather than sitting above it, so the selected tab
-   reads as joined to its panel. */
+/* The indicator sits directly on the list's own rule, joining the selected tab to its panel.
+   It cannot overlap the rule by a negative offset: the list is a scroll container, so anything
+   below its content box is clipped as overflow rather than painted over the border — the old
+   `-1px` offset hid the lower half of a 2px bar and left the other half scrollable. */
 .selected::after {
   content: '';
   position: absolute;
   inset-inline: 0;
-  inset-block-end: calc(var(--kreo-border-w) * -1);
+  inset-block-end: 0;
   block-size: 2px;
   background: var(--kreo-accent-500);
 }
