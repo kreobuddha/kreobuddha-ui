@@ -3,6 +3,7 @@ import { useState } from 'react';
 import type { ReactElement } from 'react';
 import { expect, userEvent, waitFor, within } from 'storybook/test';
 
+import { nodeControl, optionalNumber, optionalText } from '../../docs/storyControls.js';
 import { Button } from '../Button/Button.js';
 import { Dialog } from '../Dialog/Dialog.js';
 
@@ -30,6 +31,16 @@ const meta = {
   title: 'Components/Toast',
   component: ToastProvider,
   args: { children: null },
+  // Every one of these is a scalar the reader should be able to type. Without this they arrive as
+  // `union`, because `exactOptionalPropertyTypes` makes each `T | undefined`, and Storybook offers
+  // a JSON object editor for a number of milliseconds.
+  argTypes: {
+    children: nodeControl,
+    limit: optionalNumber,
+    duration: optionalNumber,
+    label: optionalText,
+    className: optionalText,
+  },
   parameters: { layout: 'padded' },
 } satisfies Meta<typeof ToastProvider>;
 

@@ -2,12 +2,21 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import type { ReactElement } from 'react';
 import { expect, userEvent, within } from 'storybook/test';
 
+import { textNodeControl } from '../../docs/storyControls.js';
 import { TextField } from './TextField.js';
 
 const meta = {
   title: 'Components/TextField',
   component: TextField,
   args: { label: 'Email' },
+  // Typed `ReactNode` so a field can carry a link, but a line of text in almost every use.
+  argTypes: {
+    label: textNodeControl,
+    hint: textNodeControl,
+    error: textNodeControl,
+    prefix: textNodeControl,
+    suffix: textNodeControl,
+  },
 } satisfies Meta<typeof TextField>;
 
 export default meta;

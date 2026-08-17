@@ -2,12 +2,20 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import type { ReactElement } from 'react';
 import { expect, userEvent, within } from 'storybook/test';
 
+import { textNodeControl } from '../../docs/storyControls.js';
 import { Switch } from './Switch.js';
 
 const meta = {
   title: 'Components/Switch',
   component: Switch,
   args: { label: 'Dark theme' },
+  // `hint` and `error` are typed `ReactNode` so a field can carry a link, but they are a line of
+  // text in almost every use. Inferred, they would arrive as JSON editors.
+  argTypes: {
+    label: textNodeControl,
+    hint: textNodeControl,
+    error: textNodeControl,
+  },
 } satisfies Meta<typeof Switch>;
 
 export default meta;

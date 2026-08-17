@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import type { ReactElement } from 'react';
 
+import { nodeControl } from '../../docs/storyControls.js';
 import { IconButton } from './IconButton.js';
 
 /** A local mark, not an icon set. Icons are `ReactNode`, so consumers bring their own. */
@@ -14,6 +15,8 @@ const meta = {
   title: 'Components/IconButton',
   component: IconButton,
   args: { label: 'Close', icon: <CloseMark /> },
+  // The icon is an element; an editor for it would print the element's internals.
+  argTypes: { icon: nodeControl },
 } satisfies Meta<typeof IconButton>;
 
 export default meta;

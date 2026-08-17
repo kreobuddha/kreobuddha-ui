@@ -3,6 +3,7 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import type { ReactElement } from 'react';
 import { expect, userEvent, waitFor, within } from 'storybook/test';
 
+import { nodeControl, textNodeControl } from '../../docs/storyControls.js';
 import { Button } from '../Button/Button.js';
 import { TextField } from '../TextField/TextField.js';
 
@@ -24,6 +25,12 @@ const meta = {
     title: 'Delete workspace',
     description: 'Everything in it goes with it, including the audit log.',
     children: 'This cannot be undone.',
+  },
+  // `footer` is a row of buttons; `description` and `children` are text in practice.
+  argTypes: {
+    description: textNodeControl,
+    children: textNodeControl,
+    footer: nodeControl,
   },
 } satisfies Meta<typeof Dialog>;
 

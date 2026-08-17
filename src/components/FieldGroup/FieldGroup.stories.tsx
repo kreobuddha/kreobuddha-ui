@@ -2,6 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import type { ReactElement } from 'react';
 import { expect, within } from 'storybook/test';
 
+import { nodeControl, textNodeControl } from '../../docs/storyControls.js';
 import { Checkbox } from '../Checkbox/Checkbox.js';
 import { Switch } from '../Switch/Switch.js';
 
@@ -19,6 +20,12 @@ const meta = {
         <Checkbox label="Scheduled maintenance" />
       </>
     ),
+  },
+  // `children` is the group's fields, not something to type into a box.
+  argTypes: {
+    hint: textNodeControl,
+    error: textNodeControl,
+    children: nodeControl,
   },
 } satisfies Meta<typeof FieldGroup>;
 
