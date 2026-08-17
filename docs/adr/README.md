@@ -65,10 +65,10 @@ records it.
 | Comfortable and compact density | ADR-0012 — dropped, not deferred |
 | npm publication and release authentication | ADR-0006 |
 | Storybook and test-runner responsibilities | open — settled in practice, never written down |
-| Changesets instead of a hand-written changelog | open — decided in principle, not implemented |
+| Changesets instead of a hand-written changelog | ADR-0013 — declined; the changelog is written, not generated |
 | Hosted documentation and visual-regression services | open — visual regression runs locally against committed baselines; adopting a hosted service would need this ADR |
 
-Do not create empty ADRs merely to populate the directory. The two "settled in practice" entries
-are honest rather than tidy: the arrangement works and nobody has had to defend it, which is
-precisely when an ADR is cheap to write and expensive to skip.
+Do not create empty ADRs merely to populate the directory. The remaining "settled in practice" entry
+is honest rather than tidy: the arrangement works and nobody has had to defend it, which is precisely
+when an ADR is cheap to write and expensive to skip.
 

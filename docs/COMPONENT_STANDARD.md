@@ -167,5 +167,7 @@ A public component is done when:
 - package build, declarations, and public exports pass;
 - the packed consumer still works when the public boundary changes;
 - limitations and unverified claims are stated honestly;
-- a changeset is added when the accepted release policy requires one.
+- `CHANGELOG.md` gains an entry in the same pull request when the change is user-visible. The
+  release policy asks for a written changelog rather than a changeset — see
+  [ADR-0013](adr/0013-changesets-declined.md).
 

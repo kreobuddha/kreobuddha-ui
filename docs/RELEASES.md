@@ -170,20 +170,22 @@ Use SemVer after the package name and publication plan are accepted.
 Before `1.0.0`, the project should still communicate breaking changes explicitly instead of treating
 all `0.x` changes as disposable.
 
-## Changesets
+## Changesets — declined
 
-Changesets is the preferred release-note and versioning candidate once the first real public API
-exists. Do not add it merely to initialize an empty package.
+This document held Changesets as the preferred candidate "once the first real public API exists".
+That API exists, so the condition was resolved rather than left standing: **Changesets is not
+adopted.** See [ADR-0013](adr/0013-changesets-declined.md) for the decision, its cost, and the two
+pieces of evidence that would reopen it.
 
-When adopted:
+What this repository does instead:
 
-- add a changeset for public package behavior changes;
-- documentation, tests, and internal refactors need no changeset unless they affect shipped users;
-- review version bumps and changelog text before publishing;
-- keep changeset and changelog content in English.
-
-The expected model is `changeset add` → reviewed version/release PR → verified publish. Exact scripts
-must match the installed tool and current official documentation.
+- `CHANGELOG.md` is written by hand, in prose, and describes user-visible impact in English;
+- it is updated in the same pull request as the change it describes — `CONTRIBUTING.md` requires
+  this, and nothing enforces it, which ADR-0013 records as the price of this decision;
+- `scripts/release-notes.mjs` reads a version's section out of it, so the GitHub release and the
+  changelog cannot disagree;
+- the version is set in one reviewed `chore: release X.Y.Z` commit, and `release.yml` refuses to
+  publish when the dispatched version does not match `package.json`.
 
 ## Prerelease gates
 
@@ -248,5 +250,6 @@ Do not overwrite an existing release. For a bad release:
 
 ## Official reference
 
-- [Changesets versioning and publishing](https://changesets.dev/guide/versioning-and-publishing)
+- [ADR-0006](adr/0006-npm-publication-and-release-authentication.md) — how a release is authenticated.
+- [ADR-0013](adr/0013-changesets-declined.md) — why the changelog is written rather than generated.
 
