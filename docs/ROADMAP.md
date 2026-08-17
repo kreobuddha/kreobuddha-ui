@@ -222,7 +222,7 @@ Deliverables:
 
 - final package-name confirmation;
 - reviewed CI and package artifacts;
-- Changesets/release flow if accepted;
+- Changesets/release flow if accepted — answered: declined, [ADR-0013](adr/0013-changesets-declined.md);
 - the public Storybook reviewed as beta documentation — the site itself shipped in Phase 5, so what
   is left here is its content standing up to a reader who is not Rustam;
 - tagged prerelease;
