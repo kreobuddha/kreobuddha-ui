@@ -11,8 +11,17 @@
     "rootDir": "src"
   },
   "include": ["src"],
-  // `src/docs` holds the Storybook documentation helpers. They share the project's toolchain but
-  // are not part of the library, and nothing in `src/index.ts` reaches them, so they must not
-  // appear in the emitted declarations either.
-  "exclude": ["src/**/*.test.ts", "src/**/*.test.tsx", "src/**/*.stories.tsx", "src/docs"]
+  // `src/docs` and `src/demo` hold Storybook helpers — the documentation pages and the sections the
+  // Kit story composes. They share the project's toolchain but are not part of the library, and
+  // nothing in `src/index.ts` reaches them, so they must not appear in the emitted declarations
+  // either. `src/demo` was missing from this list until Phase 7, and two of its declarations shipped
+  // in every release up to `0.17.0`: harmless, unreachable, and exactly the kind of thing that gets
+  // into a tarball because nobody reads the file list.
+  "exclude": [
+    "src/**/*.test.ts",
+    "src/**/*.test.tsx",
+    "src/**/*.stories.tsx",
+    "src/docs",
+    "src/demo"
+  ]
 }
