@@ -9,6 +9,39 @@ explicitly rather than treated as disposable.
 
 ## [Unreleased]
 
+## [0.17.0] — 2026-08-17
+
+### Added
+
+- `Radio` — one option in a choice where exactly one answer is possible. A real
+  `<input type="radio">`, so the arrow keys, the single tab stop for the whole group and form
+  participation are the platform's rather than a reimplementation. Its label, hint, error and
+  focus ring are `Checkbox`'s, and the round mark is the one shape it does not share: it says the
+  options are exclusive before anything is clicked.
+
+  **`name` is required**, unlike the native attribute. A radio without a name belongs to no group,
+  which means it can be turned on and never off again — the same reasoning that made `label`
+  required on the fields.
+
+  It brings no question of its own: no legend, no fieldset, no `options` array. `FieldGroup`
+  already asks the question, lays the options out and carries the error for the choice as a whole,
+  so a group is those two composed — which is how `Checkbox` and `Switch` have always been grouped.
+
+  The first component in the library added because a consumer proved the need: `kreobuddhas-planning-poker`
+  had built a deck picker out of three action buttons with a `--selected` class, with no group, no
+  chosen state and no arrow keys. See [`docs/adoption/planning-poker.md`](docs/adoption/planning-poker.md).
+
+- `docs/adoption/planning-poker.md` — what the first independent consumer asked of this library,
+  what it got, and what it built itself, each finding observed by running the application and
+  carrying a verdict. It also measures what thirteen minor versions cost an application that
+  imports one component: 0.24 kB of JavaScript, and a stylesheet that is deliberately whole.
+
+### Changed
+
+- `README.md` says that `Toast` needs a `ToastProvider` above the tree and that `useToast` throws
+  without one. It was the only component here that is not import-and-render, and the only place
+  that said so was its generated page — one click away from the reader deciding whether to use it.
+
 ## [0.16.0] — 2026-08-17
 
 **No component behaviour or public API changed.** No component was added, no prop, type, export or
