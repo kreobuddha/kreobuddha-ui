@@ -10,8 +10,21 @@ import { ToastProvider, useToast } from './Toast.js';
 import type { ToastOptions } from './Toast.js';
 
 /**
- * Every story wraps its own subtree in a `ToastProvider`, which is what a consumer does once around
- * their application. The region draws itself; there is no second component to place.
+ * A brief message that confirms something happened, then leaves on its own.
+ *
+ * `ToastProvider` owns the toasts and draws them in the corner of the viewport. It is a provider
+ * rather than a component you place, because a toast is not raised by the thing that draws it — it
+ * is raised in the callback where a save succeeded or failed, several levels below any place a
+ * floating stack could sensibly be rendered. `useToast` reaches it from there, and throws when no
+ * provider is above it rather than returning a silent no-op.
+ *
+ * **A toast confirms; it does not report.** It disappears, so nothing the reader has to act on or
+ * come back to belongs here — that is `Alert`, which stays beside the thing it is about. ADR-0011
+ * records what this deliberately does not do: no second region, no placement prop, no `assertive`
+ * politeness, no global hotkey.
+ *
+ * Every story below wraps its own subtree in a `ToastProvider`, which is what a consumer does once
+ * around their application. The region draws itself; there is no second component to place.
  */
 const meta = {
   title: 'Components/Toast',

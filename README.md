@@ -3,12 +3,30 @@
 An accessible, themeable React component library for developer tools, technical products, and
 data-dense frontend applications.
 
-## Status: early, but published
+## Status: public beta
 
 **Twenty components ship today** — they are listed, and linked to their documentation, under
 [Components](#components). Everything else in [docs/ROADMAP.md](docs/ROADMAP.md) is a plan, not an
-available feature. The package is published so it can be consumed normally; treat the `0.x` line as
-a moving target and pin what you depend on.
+available feature. The package is published so it can be consumed normally, and one application
+outside this repository consumes the published package rather than the source.
+
+**Beta means the whole `0.x` line, not a separate tag.** There is no `next` channel and no
+prerelease suffix: `npm install @kreobuddha/ui` is the beta. Four things it does not promise:
+
+- **The API moves.** A minor version may rename or remove an export, a prop or a `--kreo-*` custom
+  property. Breaking changes are called out in [CHANGELOG.md](CHANGELOG.md) rather than treated as
+  disposable, but they happen — pin what you depend on.
+- **No screen-reader conformance is claimed** for `Dialog`, `Tabs` and `Tooltip`. The pass is written
+  and has not been run, and no automated check here stands in for it.
+- **No browser support matrix is claimed.** The browser checks run in Chromium only, and one known
+  WebKit difference — focus not returning to the trigger when a dialog closes — is documented rather
+  than fixed.
+- **The set grows only on evidence.** A component arrives when a real consumer needs one, so a gap in
+  the list is deliberate rather than a queue position.
+
+Everything the site says is _not_ verified is on its
+[Accessibility page](https://kreobuddha.github.io/kreobuddha-ui/?path=/docs/foundations-accessibility--docs),
+in the same words.
 
 **The documentation lives at
 [kreobuddha.github.io/kreobuddha-ui](https://kreobuddha.github.io/kreobuddha-ui/)** — installation,
