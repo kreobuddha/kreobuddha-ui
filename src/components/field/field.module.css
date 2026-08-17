@@ -91,6 +91,7 @@
   margin: 0;
   font: var(--kreo-type-body);
   font-size: var(--kreo-text-12);
+  font-weight: var(--kreo-weight-medium);
   color: var(--kreo-text-muted);
 }
 
@@ -98,6 +99,7 @@
   margin: 0;
   font: var(--kreo-type-body);
   font-size: var(--kreo-text-12);
+  font-weight: var(--kreo-weight-medium);
   color: var(--kreo-text-danger);
 }
 

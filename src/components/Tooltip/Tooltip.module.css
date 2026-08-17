@@ -9,7 +9,8 @@
   composes: floating surface from '../overlay/overlay.module.css';
   padding: var(--kreo-space-2) var(--kreo-space-3);
   font: var(--kreo-type-body);
-  font-size: var(--kreo-text-13);
+  font-size: var(--kreo-text-12);
+  font-weight: var(--kreo-weight-medium);
 
   /* The pointer must never reach the tooltip. Hovering it would keep it open over whatever is
      underneath, and moving towards it is the most common way to lose the thing you were reading. */
