@@ -8,17 +8,17 @@ verification quality.
 
 ## Status
 
-Phases 0 through 4 are complete. The repository is public at `kreobuddha/kreobuddha-ui` with CI
+Phases 0 through 5 are complete. The repository is public at `kreobuddha/kreobuddha-ui` with CI
 green, and the package is published to npm as `@kreobuddha/ui` (ADR-0006). Nineteen components
-ship: `Button`, `IconButton`, `Badge`, `Spinner`, `Alert`, `TextField`, `Textarea`, `Select`,
-`Checkbox`, `Switch`, `FieldGroup`, `Tabs`, `Tooltip`, `Dialog` — all released — and `Skeleton`,
-`Progress`, `Accordion`, `Toggletip` and `Toast`, which are unreleased and due in `0.15.0`.
+ship, all of them released in `0.15.0`: `Button`, `IconButton`, `Badge`, `Spinner`, `Alert`,
+`TextField`, `Textarea`, `Select`, `Checkbox`, `Switch`, `FieldGroup`, `Tabs`, `Tooltip`, `Dialog`,
+`Skeleton`, `Progress`, `Accordion`, `Toggletip` and `Toast`.
 
-The batch of five below is complete and prepared for release: the changelog heading and the version
-in `package.json` are in place, so the release workflow can be run with `0.15.0` whenever Rustam
-asks for that exact action. Until that run, nothing of the five is on npm. The batch entered scope
-ahead of Phase 5 by Rustam's decision rather than by the backlog rule; see "Component batch,
-released together as `0.15.0`". Phase 5 is next after it and not started.
+Phase 5 added no component. It made what exists inspectable by someone who is not Rustam: a
+documentation site at [kreobuddha.github.io/kreobuddha-ui](https://kreobuddha.github.io/kreobuddha-ui/)
+with foundations pages and prop tables generated from the types, an example application composing
+the library, and a `README.md` that links to the site instead of duplicating the API. It closes as
+`0.16.0`, in which no component behaviour or public API changed.
 
 Phase 3 is complete: `TextField`, `Textarea`, `Select`, `Checkbox`, `Switch` and `FieldGroup` are
 done, and a settings form composes from them with no wrapper of its own.
@@ -135,20 +135,37 @@ Before implementation — **satisfied by [ADR-0010](adr/0010-overlay-and-composi
 
 Do not implement all three as one slice.
 
-## Phase 5 — Workbench and public documentation
+## Phase 5 — Workbench and public documentation — **done**
 
 Goal: prove components in a coherent frontend-only technical interface.
 
-Deliverables:
+Deliverables, each met:
 
-- static Storybook foundation pages;
-- a deterministic developer-tool settings/diagnostics workbench;
-- a theme control that belongs to the host demo;
-- responsive and keyboard-only flow;
+- static Storybook foundation pages — `src/docs/*.mdx`, with the token pages resolving
+  `--kreo-*` values from the stylesheet at render time rather than retyping them, so a token change
+  cannot leave the page stale;
+- a deterministic developer-tool settings/diagnostics workbench — `examples/workbench`, **Devkit
+  Console**, installed from a packed tarball like the fixture and never from `../../src`;
+- a theme control that belongs to the host demo — the workbench sets `data-kreo-theme` and persists
+  the choice itself, demonstrating the contract that the library owns neither;
+- responsive and keyboard-only flow — verified by a runner rather than asserted, in the `workbench`
+  Playwright project under `npm run check:workbench`;
 - installation, tokens, theming, accessibility, composition, and contribution docs;
-- static deployment after separate approval.
+- static deployment after separate approval — `.github/workflows/pages.yml`, deploying to
+  [kreobuddha.github.io/kreobuddha-ui](https://kreobuddha.github.io/kreobuddha-ui/).
 
 The workbench uses local fixtures and no fake backend architecture.
+
+Two things the phase settled beyond its deliverables. **Density was dropped rather than deferred**
+([ADR-0012](adr/0012-density-is-dropped.md)) and the promise removed from the seven documents that
+carried it. And **`README.md` stopped duplicating the API**: the nineteen hand-maintained prop
+tables are gone, replaced by links to generated ones, with `COMPONENT_RECIPE.md` §6 rewritten so a
+new component documents itself through JSDoc on its props instead.
+
+Exit criteria, all met: a stranger can read installation, theming, tokens, accessibility and every
+component's prop table without cloning the repository; the workbench composes the library from local
+fixtures with its keyboard and 375px claims checked by a runner; nothing in the repository promises
+density; and `0.16.0` changed no component behaviour.
 
 ## Phase 6 — First independent consumer
 
@@ -171,7 +188,8 @@ Deliverables:
 - final package-name confirmation;
 - reviewed CI and package artifacts;
 - Changesets/release flow if accepted;
-- public Storybook;
+- the public Storybook reviewed as beta documentation — the site itself shipped in Phase 5, so what
+  is left here is its content standing up to a reader who is not Rustam;
 - tagged prerelease;
 - contribution, security, and release documentation.
 
@@ -195,7 +213,7 @@ second deliberate exception, to `COMPONENT_RECIPE.md` §8, now written down ther
 request is Rustam's call on how to land the batch, taken once the five were done: five reviews of
 one branch that was built in order would have been five readings of the same history. What is not
 relaxed is the verification — `npm run verify` ran green for each component before the next was
-started. Phase 5 remains the next phase after them.
+started. Phase 5 followed them and is now complete; Phase 6 is next and not started.
 
 - `Skeleton` — **done**;
 - `Progress` — **done**, as a `div` with `role="progressbar"` by Rustam's decision rather than as a
