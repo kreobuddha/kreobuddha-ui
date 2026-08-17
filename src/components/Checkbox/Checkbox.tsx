@@ -30,6 +30,21 @@ export interface CheckboxProps extends Omit<ComponentPropsWithRef<'input'>, 'typ
   className?: string;
 }
 
+/**
+ * An independent yes or no — one setting that is on or off, with no bearing on the box beside it.
+ *
+ * That independence is what separates it from `Radio`, where the options are exclusive, and from
+ * `Switch`, which applies immediately rather than waiting for a form to be submitted. A real
+ * `<input type="checkbox">` underneath, so `Space`, form participation and the browser's own
+ * validation are the platform's.
+ *
+ * `label` is required, because a box with no label asks a question nobody can hear. `error` doubles
+ * as the invalid state — a single required checkbox, such as accepting terms, is exactly the case
+ * that needs somewhere to say what is wrong.
+ *
+ * `indeterminate` is a visual and assistive state only. The box still submits as unchecked, because
+ * that is what the platform does, and inventing a third value would break every form that reads it.
+ */
 export const Checkbox = ({
   label,
   hint,

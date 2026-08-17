@@ -4,9 +4,9 @@ import { Meta } from '@storybook/addon-docs/blocks';
 
 # Composition
 
-The component pages show each component on its own. This page shows the two shapes they were
-actually built for — a settings form and a diagnostics view — and the decisions that come with
-them.
+The component pages show each component on its own. This page shows the shapes they were actually
+built for — a settings form, an exclusive choice, a diagnostics view — and the decisions that come
+with them.
 
 ## A settings form
 
@@ -56,6 +56,35 @@ Three things worth copying from this shape:
 - **Explain a field with a `Toggletip`, not a `Tooltip`.** A tooltip opens on hover and focus and
   is unreachable by touch on its own; a toggletip is a button the reader presses, which is what an
   explanation needs to be.
+
+## An exclusive choice
+
+The one composition where neither half works alone. A `Radio` deliberately brings no question — it
+renders no `<legend>` and no `<fieldset>` — and a `FieldGroup` is the question with nothing to
+answer it. Together they are the shape a real consumer asked for first: picking one card deck for a
+room of people.
+
+```tsx
+<FieldGroup legend="Card deck" hint="Everyone in the room votes with this deck.">
+  <Radio name="deck" value="fibonacci" label="Fibonacci" hint="1 · 2 · 3 · 5 · 8 · 13 · 21" />
+  <Radio name="deck" value="tshirt" label="T-shirt sizes" hint="XS · S · M · L · XL" />
+</FieldGroup>
+```
+
+- **The shared `name` is what makes the options exclusive**, so it is required here where the native
+  attribute is optional. Radios without a name belong to no group, which means one can be turned on
+  and never off again.
+- **The legend is not decoration.** Without it a screen reader reaching the column hears the options
+  and never the question. This is the reason `Radio` refuses to grow its own.
+- **The keyboard belongs to the platform.** Arrow keys move through the group and select as they go,
+  and `Tab` treats the whole group as one stop — behaviour that comes from using real
+  `<input type="radio">` elements rather than from anything written here.
+- **A group-level fault goes on the group.** "Choose a deck" is about the set, so it belongs on
+  `FieldGroup`'s `error`; a fault in one option would belong on that option.
+
+Use radios when the reader should compare a handful of answers at a glance, and `Select` when the
+list is too long for that. The dividing line is whether seeing all the options at once is worth the
+vertical space.
 
 ## Losing unsaved work
 

@@ -18,6 +18,18 @@ export interface SwitchProps extends Omit<ComponentPropsWithRef<'input'>, 'type'
   className?: string;
 }
 
+/**
+ * A setting that takes effect when it is flipped, rather than when a form is submitted.
+ *
+ * That timing is the only thing separating it from `Checkbox`, and it is a promise to the reader: if
+ * flipping the switch does nothing until a Save button is pressed, this is the wrong component and a
+ * checkbox is the right one.
+ *
+ * Underneath it is an `<input type="checkbox">` carrying `role="switch"`, so what is announced
+ * becomes "on" and "off" rather than "checked", while the native keyboard handling and form
+ * participation stay. There is deliberately no `required`: a switch is always in one of its two
+ * states, so demanding one of them is a rule about the value, not about the control.
+ */
 export const Switch = ({
   label,
   hint,

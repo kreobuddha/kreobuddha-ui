@@ -9,6 +9,57 @@ explicitly rather than treated as disposable.
 
 ## [Unreleased]
 
+## [0.18.0] — 2026-08-17
+
+**No component behaviour or public API changed.** No component was added, no prop, type, export or
+`--kreo-*` custom property was added, removed or altered. This release is the release pipeline, the
+documentation, and one file that should never have been in the package.
+
+This is the release that closes Phase 7 and states the library's status in words: **public beta,
+meaning the whole `0.x` line rather than a separate tag.** There is no `next` dist-tag and no
+prerelease suffix — `npm install @kreobuddha/ui` is the beta — and `README.md` now lists the four
+things it does not promise: the API moves, no screen-reader conformance is claimed, no browser
+support matrix is claimed, and the component set grows only on evidence.
+
+### Fixed
+
+- **`dist/demo/DialogSection.d.ts` and `dist/demo/ToastSection.d.ts` are no longer published.**
+  Declarations for two Storybook sections had shipped in every release from the day `src/demo/` was
+  created up to and including `0.17.0`: `tsconfig.build.json` excluded `src/docs` and never
+  excluded `src/demo`. Nothing in `src/index.ts` reached them, so no consumer could have imported
+  them and none was affected — which is exactly why nobody noticed for fourteen minor versions.
+  Found by reading `npm pack --dry-run` output rather than assuming it.
+
+### Changed
+
+- **The release workflow now runs the same gate as a pull request**, which its own comment had
+  claimed while four checks were missing: `check:css`, `check:consumer`, `check:workbench` and
+  `check:browser` — precisely the checks that cross the package boundary or touch a browser.
+  Publishing is the one action here that cannot be undone, and it had been passing weaker checks
+  than an ordinary pull request. The workflow also refuses to run from any ref but `master`, since
+  `workflow_dispatch` accepts any ref while the release rules require a verified protected branch.
+  Releases now take a few minutes longer, deliberately.
+- **Every component's documentation page has a description saying why the component exists**, not
+  only what it renders, and `disabled` on `Button` and `IconButton` and `rows` on `Textarea` are
+  now documented. Those three props were always accepted through the native prop spread; they were
+  invisible in the generated tables because nothing declared them, and declaring them changes what
+  the tables show rather than what the components accept.
+- `docs/RELEASES.md` records the tarball review with numbers, settles the package name as a closed
+  question, and gives each of the eight prerelease gates its state and the file that shows it —
+  including the three that are not fully met. `docs/PROJECT_BRIEF.md`'s beta success criteria carry
+  the same treatment.
+- The documentation site was read end to end by someone reading it as a stranger would:
+  `Introduction.mdx` said "Nineteen components" and omitted `Radio`, and `Composition.mdx` did not
+  cover `FieldGroup` + `Radio`, which is how a group of options is built. Both fixed.
+
+### Added
+
+- [ADR-0013](docs/adr/0013-changesets-declined.md) — Changesets is declined rather than left as a
+  standing candidate. One maintainer means the coordination problem it solves does not exist here;
+  `CHANGELOG.md` is prose that explains user-visible effect and `scripts/release-notes.mjs` already
+  reads the release notes out of it. The ADR names what would reopen the decision: a second regular
+  contributor, or a second package in this repository.
+
 ## [0.17.0] — 2026-08-17
 
 ### Added
@@ -373,7 +424,9 @@ from git for a single consumer.
   is public API.
 - Inter bundled as WOFF2 subsets, so no external font request is made at runtime.
 
-[unreleased]: https://github.com/kreobuddha/kreobuddha-ui/compare/v0.16.0...HEAD
+[unreleased]: https://github.com/kreobuddha/kreobuddha-ui/compare/v0.18.0...HEAD
+[0.18.0]: https://github.com/kreobuddha/kreobuddha-ui/compare/v0.17.0...v0.18.0
+[0.17.0]: https://github.com/kreobuddha/kreobuddha-ui/compare/v0.16.0...v0.17.0
 [0.16.0]: https://github.com/kreobuddha/kreobuddha-ui/compare/v0.15.0...v0.16.0
 [0.15.0]: https://github.com/kreobuddha/kreobuddha-ui/compare/v0.14.0...v0.15.0
 [0.14.0]: https://github.com/kreobuddha/kreobuddha-ui/compare/v0.13.0...v0.14.0

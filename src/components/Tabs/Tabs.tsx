@@ -39,6 +39,25 @@ export interface TabsProps extends Omit<ComponentPropsWithRef<'div'>, 'onChange'
   activation?: TabsActivation;
 }
 
+/**
+ * One panel visible at a time, for views that belong together and are not read together.
+ *
+ * There is no native element for this, so the WAI-ARIA tab pattern is implemented here in full: the
+ * whole tab list is a single tab stop, arrows move within it, `Home` and `End` jump to the ends, and
+ * only the selected panel is rendered. Because those semantics are ours rather than the platform's,
+ * they are asserted with real key presses in a real engine by `npm run check:browser` rather than
+ * trusted.
+ *
+ * `activation` is the decision a consumer has to make. `automatic` selects as the arrow moves, which
+ * is fewer keystrokes and what WAI-ARIA recommends when panels are cheap; `manual` moves focus only
+ * and waits for `Enter` or `Space` — for a panel expensive enough that arrowing past four of them
+ * would fire four requests.
+ *
+ * A disabled tab is reported through `aria-disabled` rather than removed from the sequence, so a
+ * keyboard user learns the tab exists and is told it is unavailable, instead of finding a gap they
+ * cannot explain. This is a component for switching views, not for navigating routes — the library
+ * owns no routing.
+ */
 export const Tabs = ({
   items,
   value,

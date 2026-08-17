@@ -8,6 +8,59 @@ is MIT and the public repository is `kreobuddha/kreobuddha-ui` with CI green on 
 Publishing is still an external action: each release requires Rustam's explicit approval for the
 exact version and action. See ADR-0006 for how releases are authenticated.
 
+**The package name is settled.** `@kreobuddha/ui` has been the published name since `0.3.0`, the
+scope belongs to Rustam, and npm's trusted publisher is bound to `kreobuddha/kreobuddha-ui` and
+`release.yml` by name. A rename is now a migration for every consumer rather than a decision still
+open, so the roadmap's "final package-name confirmation" is closed by this paragraph rather than
+carried forward.
+
+## Artifact review — 2026-08-17, at `0.17.0`
+
+Read rather than assumed, because "public artifacts contain only intentional files" is a principle
+below and a principle nobody measures is a hope. Every number here came from a command that was run.
+
+`npm pack --dry-run --json`, before and after the one fix this review produced:
+
+| | before | after |
+| --- | --- | --- |
+| files | 129 | **127** |
+| packed | 152.2 kB | **152.0 kB** |
+| unpacked | 419.9 kB | **419.5 kB** |
+
+Top level is exactly what a release is allowed to contain: `dist/`, `README.md`, `LICENSE`,
+`NOTICE`, `package.json`. Nothing else — no source, no tests, no stories, no configuration.
+
+What the 127 files are:
+
+| Kind | Count | Note |
+| --- | --- | --- |
+| `.d.ts` | 26 | the published types; `src` itself is not shipped |
+| `.js` | 26 | the ESM build, React external |
+| `.module.js` | 21 | the CSS Module class maps |
+| `.js.map` | 46 | 163.6 kB unpacked — see below |
+| `.css` | 1 | `dist/styles.css`, 85.0 kB, the complete stylesheet |
+| `.woff2` | 2 | Inter Latin 48.3 kB and Cyrillic 18.7 kB, real files rather than inlined data |
+| licence, notice, readme, manifest | 5 | including `LICENSE-inter.txt` beside the fonts |
+
+**The one thing that should not have been there.** `dist/demo/DialogSection.d.ts` and
+`dist/demo/ToastSection.d.ts` — declarations for the Storybook sections the Kit story composes —
+shipped in every release from the day `src/demo/` was created up to and including `0.17.0`.
+`tsconfig.build.json` excluded `src/docs` and never excluded `src/demo`. They were unreachable
+(nothing in `src/index.ts` points at them) and cost 0.4 kB, so no consumer was affected; that is
+precisely why nobody noticed for fourteen minor versions. Fixed by adding `src/demo` to the same
+exclude list.
+
+**Source maps stay, deliberately.** They are 46 of the 127 files and 39% of the unpacked size, and
+they are the reason a consumer stepping into this library sees the original TypeScript rather than
+the build output. They embed `sourcesContent`, so they are self-contained and do not point at files
+the consumer lacks — which is also why `declarationMap` is off, as `tsconfig.build.json` records.
+They are not downloaded by a browser unless devtools asks for them, so the cost is registry storage
+and install time, not the shipped page.
+
+`npm run check:package` — `publint`: *All good*. `attw --profile esm-only`: green for `node16 (from
+ESM)` and `bundler`; `node10` and `node16 (from CJS)` fail and are excluded by that profile, which
+is the ESM-only decision `README.md` states rather than an unaddressed problem.
+
 ## How a release is cut
 
 1. `master` is green and the working tree is clean.
@@ -117,34 +170,42 @@ Use SemVer after the package name and publication plan are accepted.
 Before `1.0.0`, the project should still communicate breaking changes explicitly instead of treating
 all `0.x` changes as disposable.
 
-## Changesets
+## Changesets — declined
 
-Changesets is the preferred release-note and versioning candidate once the first real public API
-exists. Do not add it merely to initialize an empty package.
+This document held Changesets as the preferred candidate "once the first real public API exists".
+That API exists, so the condition was resolved rather than left standing: **Changesets is not
+adopted.** See [ADR-0013](adr/0013-changesets-declined.md) for the decision, its cost, and the two
+pieces of evidence that would reopen it.
 
-When adopted:
+What this repository does instead:
 
-- add a changeset for public package behavior changes;
-- documentation, tests, and internal refactors need no changeset unless they affect shipped users;
-- review version bumps and changelog text before publishing;
-- keep changeset and changelog content in English.
-
-The expected model is `changeset add` → reviewed version/release PR → verified publish. Exact scripts
-must match the installed tool and current official documentation.
+- `CHANGELOG.md` is written by hand, in prose, and describes user-visible impact in English;
+- it is updated in the same pull request as the change it describes — `CONTRIBUTING.md` requires
+  this, and nothing enforces it, which ADR-0013 records as the price of this decision;
+- `scripts/release-notes.mjs` reads a version's section out of it, so the GitHub release and the
+  changelog cannot disagree;
+- the version is set in one reviewed `chore: release X.Y.Z` commit, and `release.yml` refuses to
+  publish when the dispatched version does not match `package.json`.
 
 ## Prerelease gates
 
-A public prerelease requires:
+A public prerelease requires the eight things below. This list stood for four phases without ever
+saying whether any of them held, which made it a wish rather than a gate. Reviewed at `0.18.0`, each
+one now carries the file or the command that shows its state — and where a gate is not met, it says
+so instead of rounding up.
 
-- confirmed npm package name and ownership;
-- accepted license and repository metadata;
-- clean CI for type, lint, tests, package build, Storybook build, and package checks that currently
-  exist;
-- reviewed tarball contents;
-- successful installation in an independent consumer;
-- English README with honest installation and limitations;
-- no private or employer-owned content;
-- explicit approval from Rustam for the version and publish action.
+| Requirement | State | Evidence |
+| --- | --- | --- |
+| confirmed npm package name and ownership | **met** | "Current status" above: published as `@kreobuddha/ui` since `0.3.0`, scope owned by Rustam, trusted publisher bound to `kreobuddha/kreobuddha-ui` + `release.yml`; [ADR-0006](adr/0006-npm-publication-and-release-authentication.md) |
+| accepted license and repository metadata | **met** | `LICENSE` (MIT) and `NOTICE` in the tarball; `package.json` carries `license`, `repository`, `homepage`, `bugs`, `author`, `description`, `engines`, `exports`, `publishConfig.provenance`; `npm run check:package` reports `publint`: *All good* |
+| clean CI for type, lint, tests, package build, Storybook build, and package checks | **met, with two stated limits** | `.github/workflows/ci.yml` on Node 22.x and 24.x, green on `master` at `ae583b5` (run `32027376386`, 2026-08-17) and on every pull request of this phase; the stage list is in [QUALITY.md](QUALITY.md#ci-stages). The limits: story and browser checks run in **Chromium only**, and visual regression runs in `verify` but is **skipped on CI** because its baselines are macOS |
+| reviewed tarball contents | **met** | "Artifact review — 2026-08-17" above: 127 files, 152.0 kB packed, 419.5 kB unpacked, read from `npm pack --dry-run --json` rather than assumed. The review found and removed two files that had shipped since `src/demo/` existed |
+| successful installation in an independent consumer | **met** | [`docs/adoption/planning-poker.md`](adoption/planning-poker.md) — `kreobuddha/kreobuddhas-planning-poker`, a separate public repository, running the **published** package and measured in the browser. It is on `0.16.0`: the gate asks that an independent consumer install a published version, and it does, but no consumer outside this repository has yet run the version being released |
+| English README with honest installation and limitations | **met** | `README.md` "Status: public beta" names four things the beta does not promise; `src/docs/Installation.mdx` and `src/docs/Accessibility.mdx` say the same in the same words, checked page by page in the built Storybook during this phase |
+| no private or employer-owned content | **met as a rule, unverifiable as a check** | The clean-room rules in `CLAUDE.md` govern every change, and `CONTRIBUTING.md` repeats them. Nothing automated can confirm the absence of proprietary material — the gate is held by review discipline, and saying otherwise would be the kind of unsupported claim this document forbids |
+| explicit approval from Rustam for the version and publish action | **version approved; publish pending, by design** | `0.18.0` was chosen before this phase began — the beta is the whole `0.x` line, so no prerelease suffix or `next` dist-tag is created. The publish itself is a separate explicit request per release, as ADR-0006 requires; this gate is the only one that closes at release time rather than before it |
+
+Seven gates are met before the release runs. The eighth is the release.
 
 ## `1.0.0` gates
 
@@ -195,5 +256,6 @@ Do not overwrite an existing release. For a bad release:
 
 ## Official reference
 
-- [Changesets versioning and publishing](https://changesets.dev/guide/versioning-and-publishing)
+- [ADR-0006](adr/0006-npm-publication-and-release-authentication.md) — how a release is authenticated.
+- [ADR-0013](adr/0013-changesets-declined.md) — why the changelog is written rather than generated.
 

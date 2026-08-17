@@ -32,8 +32,25 @@ export interface TextareaProps extends Omit<ComponentPropsWithRef<'textarea'>, '
   fullWidth?: boolean;
   /** Class for the outer wrapper. Native props and `ref` go to the `<textarea>` itself. */
   className?: string;
+  /**
+   * How many lines tall the field starts, which is what sets its height — the size scale sets the
+   * type and the padding only. With `resize="none"` this is also its final height.
+   */
+  rows?: number;
 }
 
+/**
+ * Text that runs to several lines — a description, a note, a pasted log.
+ *
+ * It is `TextField`'s counterpart and shares its whole field contract: the same required `label`, the
+ * same hint, the same `error`-is-the-invalid-state rule, the same size scale. Reach for it when the
+ * answer has no reason to fit on one line, and for `TextField` when it does, since a one-line answer
+ * in a three-line box invites a paragraph nobody wanted.
+ *
+ * Height comes from `rows` rather than from the size scale, so a field can be as tall as the answer
+ * deserves. `resize` decides whether the reader may drag it taller; horizontal dragging is never
+ * offered, because it breaks the form's grid and a wider box is not easier to read.
+ */
 export const Textarea = ({
   label,
   size = 'md',

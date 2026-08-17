@@ -34,6 +34,22 @@ export interface AlertProps extends ComponentPropsWithRef<'div'> {
   dismissLabel?: string;
 }
 
+/**
+ * A message that stays where it is put, beside the thing it is about.
+ *
+ * This is the counterpart to `Toast`, and the choice between them is the whole point of having
+ * both: a toast confirms something that already worked and then leaves, while an alert is for
+ * something the reader has to read, or act on, or come back to. Anything that must not be missed
+ * cannot be allowed to disappear on a timer.
+ *
+ * `live` is off by default. A banner already on screen when the page loads has nothing to announce,
+ * and announcing it would interrupt for no reason; turn it on for a message that appears in answer
+ * to something the reader did.
+ *
+ * The tone is never the message. Each tone supplies a mark as well as a colour, so the meaning
+ * survives being read in monochrome or by someone who does not see the hue — and the wording still
+ * has to carry it on its own.
+ */
 export const Alert = ({
   tone = 'info',
   title,
