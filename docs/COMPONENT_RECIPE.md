@@ -87,12 +87,31 @@ What earns a place is a state where the tokens do the work and no other check wo
 change — the focus ring, the invalid treatment, a size scale, or whatever this component draws that
 the others do not. Review the new baselines like code before committing them.
 
-## 6. The three documents that must move
+## 6. What the component owes its documentation
 
-- **`README.md`** — the prop table and the paragraphs describing behaviour a consumer cannot guess.
+**The prop table is generated, so there is no table to write.** Storybook derives it from the
+TypeScript types via `react-docgen`, and `tags: ['autodocs']` gives every component a Docs page
+without anyone adding one. What that generator can only read, and never invent, is the prose beside
+each prop — so the documentation work moved into the source:
+
+- **JSDoc on the props themselves**, in the component's `Props` interface. A comment above a prop
+  becomes its description in the published table. A prop with no comment ships as a bare name and a
+  type, which is the new equivalent of an undocumented prop.
+- **A JSDoc block directly above the exported component**, which `react-docgen` reads as the
+  description at the top of that component's Docs page. This is where behaviour a consumer cannot
+  guess from the types belongs — the keyboard model, focus handling, and what the component
+  deliberately does not own — stated next to a live example instead of in a file far from the code.
+
+Then the two documents that still must move by hand:
+
 - **`CHANGELOG.md`** — an entry under `## [Unreleased]`, describing user-visible impact rather than
   the diff.
 - **`docs/ROADMAP.md`** — the component's status on its phase.
+
+**`README.md` is no longer one of them.** It links to the documentation site and lists the component
+names; a new component earns one name in that list and nothing more. It carried about a hundred
+hand-copied table rows until `0.16.0`, and every one was a promise to remember something at the
+moment a prop changed.
 
 ## 7. Verification
 
