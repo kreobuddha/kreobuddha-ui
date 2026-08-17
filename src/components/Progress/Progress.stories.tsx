@@ -2,12 +2,19 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import type { CSSProperties, ReactElement } from 'react';
 import { expect, waitFor, within } from 'storybook/test';
 
+import { optionalNumber, textNodeControl } from '../../docs/storyControls.js';
 import { Progress } from './Progress.js';
 
 const meta = {
   title: 'Components/Progress',
   component: Progress,
   args: { label: 'Uploading files', value: 60 },
+  // `value` is `number | undefined` — indeterminate is the absent value — which `react-docgen`
+  // reports as a union with no control, leaving a percentage to be typed as JSON.
+  argTypes: {
+    value: optionalNumber,
+    label: textNodeControl,
+  },
 } satisfies Meta<typeof Progress>;
 
 export default meta;

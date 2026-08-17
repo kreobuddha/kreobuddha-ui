@@ -37,14 +37,10 @@ const preview: Preview = {
     theme: 'light',
   },
   globalTypes: {
+    // Declared, but with no `toolbar`: `.storybook/manager.tsx` draws the control instead, as a
+    // switch rather than a two-item dropdown. A `toolbar` here would put a second one beside it.
     theme: {
       description: 'Colour theme',
-      toolbar: {
-        title: 'Theme',
-        icon: 'circlehollow',
-        items: ['light', 'dark'],
-        dynamicTitle: true,
-      },
     },
   },
   parameters: {

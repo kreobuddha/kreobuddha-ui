@@ -2,12 +2,17 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import type { ReactElement } from 'react';
 import { expect, fn, userEvent, within } from 'storybook/test';
 
+import { nodeControl, textNodeControl } from '../../docs/storyControls.js';
 import { Alert } from './Alert.js';
 
 const meta = {
   title: 'Components/Alert',
   component: Alert,
   args: { children: 'The invitation expires today.' },
+  argTypes: {
+    children: textNodeControl,
+    icon: nodeControl,
+  },
 } satisfies Meta<typeof Alert>;
 
 export default meta;

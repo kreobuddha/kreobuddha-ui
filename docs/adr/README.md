@@ -63,6 +63,7 @@ records it.
 | Primitive strategy for `Dialog`, `Tooltip` and composite widgets | ADR-0010 |
 | Who owns toast state, and how a toast is announced | ADR-0011 |
 | Comfortable and compact density | ADR-0012 — dropped, not deferred |
+| How `loading` and `disabled` differ on a button | ADR-0004 §5, amended by ADR-0014 |
 | npm publication and release authentication | ADR-0006 |
 | Storybook and test-runner responsibilities | open — settled in practice, never written down |
 | Changesets instead of a hand-written changelog | ADR-0013 — declined; the changelog is written, not generated |

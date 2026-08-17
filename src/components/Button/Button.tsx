@@ -19,8 +19,8 @@ export interface ButtonProps extends Omit<ComponentPropsWithRef<'button'>, 'type
   /** Swaps the accent for the danger hue. For destructive confirmations only. */
   danger?: boolean;
   /**
-   * Marks the action as in flight. The button stays focusable, reports `aria-busy`, keeps its
-   * exact size, and shows a spinner in place of its content until loading ends.
+   * Marks the action as in flight. The button dims, stays focusable, reports `aria-busy`, keeps
+   * its exact size, and shows a spinner in place of its content until loading ends.
    */
   loading?: boolean;
   /**
@@ -55,8 +55,9 @@ export interface ButtonProps extends Omit<ComponentPropsWithRef<'button'>, 'type
  * Everything here exists to keep one promise: a button never becomes ambiguous. `loading` is the
  * reason the component holds state at all — it keeps the exact box, stays in the tab order, reports
  * `aria-busy` and refuses activation, so an action in flight cannot be fired twice and a keyboard
- * user does not lose focus mid-action. That is deliberately different from `disabled`, which is
- * dimmed and inert: "working on it" and "unavailable" must not look alike.
+ * user does not lose focus mid-action. Both are dimmed, but not by the same amount:
+ * `loading` is the lighter of the two, because dimming it as far as `disabled` drags the spinner
+ * below the contrast this library asks of a status mark. See ADR-0014.
  *
  * `type` defaults to `button` rather than to the platform's `submit`, because the platform's default
  * turns any button dropped into a form into a submit button by accident.

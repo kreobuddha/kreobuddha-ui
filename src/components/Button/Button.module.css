@@ -150,9 +150,10 @@
   color: var(--kreo-text-danger);
 }
 
-/* `inactive` only suppresses the hover and active responses. The visual treatments below are
-   what tell disabled and loading apart — they used to share one, which made an action in flight
-   indistinguishable from an action that is unavailable. */
+/* `inactive` only suppresses the hover and active responses. Both states are dimmed, because
+   neither can be pressed and this library has one convention for that — but not by the same
+   amount, and the difference is measured rather than chosen. See ADR-0014, which amends
+   ADR-0004 §5. */
 .inactive {
   cursor: not-allowed;
 }
@@ -161,8 +162,15 @@
   opacity: 0.45;
 }
 
+/* Dimmer than this and the spinner stops meeting the 3:1 the library asks of a status mark.
+   `opacity` composites the button and the spinner over the page as one group, so fading the button
+   fades the only thing that distinguishes "working on it" from "unavailable"; at 0.45 the spinner
+   measures 2.16:1 against its own button, and no spinner colour recovers it. 0.65 is the least
+   dimming that clears the bar in *both* themes — light is the stricter of the two — and it leaves
+   `disabled` visibly the fainter state. */
 .loading {
   cursor: progress;
+  opacity: 0.65;
 }
 
 /* The content keeps its box while it is hidden, so the button's width is identical in both
@@ -221,5 +229,12 @@
     opacity: 1;
     color: GrayText;
     border-color: GrayText;
+  }
+
+  /* Full strength, and no `GrayText`: the system paints its own colours here, a faded control is
+     not one of its conventions, and "in flight" is not "unavailable" — the spinner carries the
+     state instead. */
+  .loading {
+    opacity: 1;
   }
 }

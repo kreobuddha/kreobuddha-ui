@@ -23,6 +23,11 @@ export interface DialogProps extends Omit<ComponentPropsWithRef<'dialog'>, 'titl
   size?: DialogSize;
   /** Supporting text under the heading, announced with the dialog through `aria-describedby`. */
   description?: ReactNode;
+  /**
+   * The body of the panel — the question itself, or the form that answers it. It scrolls on its
+   * own when it outgrows the panel, so the heading and the actions stay put.
+   */
+  children?: ReactNode;
   /** Actions along the bottom of the panel. */
   footer?: ReactNode;
   /** Renders a close button in the heading row. */
