@@ -8,8 +8,10 @@ verification quality.
 
 ## Status
 
-Phases 0 through 6 are complete. The repository is public at `kreobuddha/kreobuddha-ui` with CI
-green, and the package is published to npm as `@kreobuddha/ui` (ADR-0006). Twenty components
+Phases 0 through 7 are complete. The repository is public at `kreobuddha/kreobuddha-ui` with CI
+green, and the package is published to npm as `@kreobuddha/ui` (ADR-0006) as a **public beta** —
+which is the whole `0.x` line rather than a separate tag, so there is no `next` channel and no
+prerelease suffix. Twenty components
 ship: `Button`, `IconButton`, `Badge`, `Spinner`, `Alert`, `TextField`, `Textarea`, `Select`,
 `Checkbox`, `Switch`, `FieldGroup`, `Tabs`, `Tooltip`, `Dialog`, `Skeleton`, `Progress`,
 `Accordion`, `Toggletip` and `Toast` in `0.15.0`, and `Radio` in `0.17.0` — the first component
@@ -214,19 +216,59 @@ only** — a local tarball would have let the deck picker adopt `Radio` a releas
 of a manifest pointing at a file nobody else has. `0.17.0` therefore shipped before the adoption
 that motivated it, and the order — ship, adopt, measure — is what the next consumer follows.
 
-## Phase 7 — Public beta
+## Phase 7 — Public beta — **done**
 
 Goal: release a defensible beta after real consumption.
 
+**Four of the six deliverables existed before the phase opened.** `CONTRIBUTING.md`, `SECURITY.md`
+and `docs/RELEASES.md` were written in earlier phases; CI pins its actions by SHA and runs the full
+gate on Node 22 and 24; the package name has been settled by publication since `0.3.0`; the
+documentation site shipped in Phase 5. Recording that plainly matters more than a tidy list of
+completions: this phase **reviewed** those four rather than building them, and what it produced is
+the difference between what they claimed and what they did.
+
+Three such differences were found, and they became the phase:
+
+- **the release ran a weaker gate than a pull request**, while a comment in `release.yml` said the
+  opposite. `check:css`, `check:consumer`, `check:workbench` and `check:browser` — the four checks
+  that cross the package boundary or touch a browser — were missing from the one action that cannot
+  be undone;
+- **the site's first page said "Nineteen components" and did not list `Radio`**;
+- **Changesets sat unresolved** in `RELEASES.md` on a condition that had already been satisfied.
+
 Deliverables:
 
-- final package-name confirmation;
-- reviewed CI and package artifacts;
-- Changesets/release flow if accepted — answered: declined, [ADR-0013](adr/0013-changesets-declined.md);
-- the public Storybook reviewed as beta documentation — the site itself shipped in Phase 5, so what
-  is left here is its content standing up to a reader who is not Rustam;
-- tagged prerelease;
-- contribution, security, and release documentation.
+- ~~final package-name confirmation~~ — closed rather than carried forward: `RELEASES.md`
+  "Current status" records that `@kreobuddha/ui` has been the published name since `0.3.0`, the
+  scope belongs to Rustam and npm's trusted publisher is bound to the repository and `release.yml`
+  by name, so a rename is now a consumer migration and not an open question;
+- ~~reviewed CI and package artifacts~~ — the release gate now runs the same steps as `ci.yml` in
+  the same order and refuses to start from any ref but `master`; the tarball was read rather than
+  assumed — **127 files, 152.0 kB packed, 419.5 kB unpacked** — and the reading found two
+  `dist/demo/*.d.ts` declarations that had shipped in every release since `src/demo/` was created;
+- ~~Changesets/release flow if accepted~~ — declined, [ADR-0013](adr/0013-changesets-declined.md);
+- ~~the public Storybook reviewed as beta documentation~~ — all twenty Docs pages read in the built
+  site in both themes, as a reader who is not Rustam. `Introduction.mdx` corrected to twenty
+  components, `FieldGroup` + `Radio` documented in `Composition.mdx`, and every component gained a
+  description answering "why it exists" rather than only "what it is";
+- ~~tagged prerelease~~ — **satisfied by `0.18.0`**, per the decision below;
+- ~~contribution, security, and release documentation~~ — present before the phase, and re-read
+  against what the repository does; the prerelease gates and the beta success criteria now carry
+  their evidence per item instead of standing as an unchecked list.
+
+Two decisions, recorded here so they are not re-argued:
+
+- **Beta is a state, not a version number.** The whole `0.x` line is a prerelease under SemVer, so
+  the phase closes with an ordinary `0.18.0`. No prerelease suffix, no `next` dist-tag: what
+  `npm install @kreobuddha/ui` gives you is the beta, and `README.md` says so along with the four
+  things it does not promise.
+- **Changesets is declined**, with the two pieces of evidence that would reopen it named in
+  ADR-0013 — a second regular contributor, or a second package in this repository.
+
+Exit criteria, all met: no document describes an open question that has in fact been answered; the
+irreversible action no longer passes a weaker gate than the reversible one; every prerelease gate
+names the file that shows its state, and the three that are not fully met say so; and the site tells
+a stranger what `0.18.0` actually contains.
 
 Publishing, tagging, GitHub settings, and deployment each require explicit approval.
 
@@ -248,7 +290,7 @@ second deliberate exception, to `COMPONENT_RECIPE.md` §8, now written down ther
 request is Rustam's call on how to land the batch, taken once the five were done: five reviews of
 one branch that was built in order would have been five readings of the same history. What is not
 relaxed is the verification — `npm run verify` ran green for each component before the next was
-started. Phase 5 followed them and is now complete; Phase 6 is in progress.
+started. Phases 5, 6 and 7 followed them and are complete.
 
 - `Skeleton` — **done**;
 - `Progress` — **done**, as a `div` with `role="progressbar"` by Rustam's decision rather than as a
