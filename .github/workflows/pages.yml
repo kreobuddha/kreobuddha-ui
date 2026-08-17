@@ -1,0 +1,62 @@
+name: Pages
+
+# The documentation site. `master` is the published state of the repository, so a push to it is what
+# refreshes the site; `workflow_dispatch` exists because a release branch does not push to `master`
+# for the length of a phase, and the first deploy of the site has to happen from one.
+on:
+  workflow_dispatch:
+  push:
+    branches: [master]
+
+# Actions are pinned to a commit, with the version they correspond to in the comment beside it, for
+# the reason spelled out in `ci.yml`: a tag is a movable pointer and a commit is not.
+
+permissions:
+  contents: read
+  # The two permissions Pages needs and nothing else: `pages` to publish the artifact, and
+  # `id-token` for the OIDC token `deploy-pages` exchanges for the deployment.
+  pages: write
+  id-token: write
+
+# A site has one live version, so overlapping runs would race to be it. Unlike CI, a run in progress
+# is not cancelled: it may already be mid-deployment, and cancelling that leaves the site serving
+# half of an upload.
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    environment:
+      name: github-pages
+      url: ${{ steps.deploy.outputs.page_url }}
+
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: 24.x
+          cache: npm
+
+      - run: npm ci
+
+      # A project site is served from `https://<owner>.github.io/<repo>/`, not from the root, and
+      # this step reports that sub-path rather than the workflow guessing it. `.storybook/main.ts`
+      # reads `STORYBOOK_BASE_PATH` and sets Vite's `base` only when it is present — the local
+      # build, which the Playwright runs serve from a port root, must stay unprefixed.
+      - uses: actions/configure-pages@45bfe0192ca1faeb007ade9deae92b16b8254a0d # v6.0.0
+        id: pages
+
+      - run: npm run build-storybook
+        env:
+          STORYBOOK_BASE_PATH: ${{ steps.pages.outputs.base_path }}
+
+      - uses: actions/upload-pages-artifact@fc324d3547104276b827a68afc52ff2a11cc49c9 # v5.0.0
+        with:
+          path: storybook-static
+
+      - uses: actions/deploy-pages@cd2ce8fcbc39b97be8ca5fce6e763baed58fa128 # v5.0.0
+        id: deploy
