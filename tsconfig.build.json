@@ -11,5 +11,8 @@
     "rootDir": "src"
   },
   "include": ["src"],
-  "exclude": ["src/**/*.test.ts", "src/**/*.test.tsx", "src/**/*.stories.tsx"]
+  // `src/docs` holds the Storybook documentation helpers. They share the project's toolchain but
+  // are not part of the library, and nothing in `src/index.ts` reaches them, so they must not
+  // appear in the emitted declarations either.
+  "exclude": ["src/**/*.test.ts", "src/**/*.test.tsx", "src/**/*.stories.tsx", "src/docs"]
 }

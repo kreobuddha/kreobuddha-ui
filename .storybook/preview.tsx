@@ -1,5 +1,7 @@
 import type { Decorator, Preview } from '@storybook/react-vite';
 
+import { ThemedDocsContainer } from './ThemedDocsContainer';
+
 import '../src/fonts.css';
 import '../src/styles.css';
 
@@ -28,6 +30,9 @@ const withTheme: Decorator = (Story, context) => {
 
 const preview: Preview = {
   decorators: [withTheme],
+  // Every component gets a generated Docs page. The prop tables on it come from the types, so
+  // they cannot drift the way a hand-written table does.
+  tags: ['autodocs'],
   initialGlobals: {
     theme: 'light',
   },
@@ -44,6 +49,29 @@ const preview: Preview = {
   },
   parameters: {
     controls: { expanded: true },
+    docs: { container: ThemedDocsContainer },
+    options: {
+      // Alphabetical order would open the site on `Components/Accordion`. A reader arriving for
+      // the first time should get the introduction, then how to install it, then the foundations.
+      storySort: {
+        order: [
+          'Introduction',
+          'Installation',
+          'Foundations',
+          [
+            'Theming',
+            'Colour tokens',
+            'Typography',
+            'Spacing and shape',
+            'Motion',
+            'Accessibility',
+            'Composition',
+          ],
+          'Overview',
+          'Components',
+        ],
+      },
+    },
     // Every story is scanned by axe when the story tests run, and a violation fails the build.
     a11y: { test: 'error' },
   },
