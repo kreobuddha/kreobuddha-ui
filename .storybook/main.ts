@@ -1,11 +1,19 @@
 import type { StorybookConfig } from '@storybook/react-vite';
 
 const config: StorybookConfig = {
-  stories: ['../src/**/*.stories.tsx'],
-  addons: ['@storybook/addon-a11y', '@storybook/addon-vitest'],
+  stories: ['../src/**/*.mdx', '../src/**/*.stories.tsx'],
+  addons: ['@storybook/addon-a11y', '@storybook/addon-docs', '@storybook/addon-vitest'],
   framework: {
     name: '@storybook/react-vite',
     options: {},
+  },
+  // `react-docgen` is the framework default, stated here so it cannot change underneath the
+  // documentation. It reads every prop this library declares, with its JSDoc and its default,
+  // and leaves the inherited DOM attributes out — which is what the tables want. The alternative,
+  // `react-docgen-typescript`, would add the inherited attributes and needs a prop filter and a
+  // compiler run to remove them again; it buys nothing here.
+  typescript: {
+    reactDocgen: 'react-docgen',
   },
   // This project does not send data to external services without an explicit decision.
   core: {

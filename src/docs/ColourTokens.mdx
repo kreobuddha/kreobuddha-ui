@@ -1,0 +1,59 @@
+import { Meta } from '@storybook/addon-docs/blocks';
+
+import { TokenTable } from './TokenTable';
+
+<Meta title="Foundations/Colour tokens" />
+
+# Colour tokens
+
+Every table on this page is read out of `src/tokens/colors.css` and resolved in your browser, so
+it shows what the current theme actually computes. Switch the **Theme** control in the toolbar and
+the values change with it.
+
+Components reference only the semantic aliases. The numeric ramps exist so the aliases have
+something to point at; treat them as the palette, not as the API you style against.
+
+## Ramps
+
+A neutral grey with no temperature, one berry accent, and four status hues. Each status carries a
+`-500` fill, and the ones that appear as marks carry a brighter `-mark` value as well.
+
+<TokenTable
+  source="colors"
+  include={[
+    '--kreo-neutral-',
+    '--kreo-accent-',
+    '--kreo-danger-',
+    '--kreo-success-',
+    '--kreo-warning-',
+    '--kreo-info-',
+  ]}
+  preview="swatch"
+/>
+
+## Surfaces
+
+<TokenTable source="colors" include={['--kreo-surface-']} preview="swatch" />
+
+## Text
+
+`--kreo-text-*` is always readable body text at 4.5:1 or better. The `-on-*` values are label
+colours for a specific background rather than for the page.
+
+<TokenTable source="colors" include={['--kreo-text-']} preview="swatch" />
+
+## Marks
+
+Icons, dots and status borders. These are measured at 3:1, the threshold for non-text contrast,
+and are deliberately brighter than the text of the same status. Using a mark as text, or text as a
+mark, is the mistake this split exists to prevent.
+
+<TokenTable source="colors" include={['--kreo-icon-']} preview="swatch" />
+
+## Borders
+
+`--kreo-border-subtle`, `-default` and `-strong` separate content and are not held to 3:1.
+`--kreo-border-control` and `--kreo-border-input` identify an interactive control and are, because
+WCAG 2.2 SC 1.4.11 asks for it.
+
+<TokenTable source="colors" include={['--kreo-border-']} preview="swatch" />

@@ -1,0 +1,72 @@
+/* Documentation-only styling for the generated token tables. This file is not reachable from
+   `src/index.ts`, so it is never inlined into the published `styles.css`. */
+@import '../styles.css';
+
+.table {
+  inline-size: 100%;
+  border-collapse: collapse;
+  font: var(--kreo-type-body);
+  color: var(--kreo-text-body);
+  text-align: start;
+}
+
+.table th,
+.table td {
+  padding: var(--kreo-space-2) var(--kreo-space-3);
+  border-block-end: var(--kreo-border-w) solid var(--kreo-border-subtle);
+  text-align: start;
+  vertical-align: middle;
+}
+
+.table thead th {
+  font: var(--kreo-type-label);
+  letter-spacing: var(--kreo-tracking-label);
+  text-transform: uppercase;
+  color: var(--kreo-text-subtle);
+  border-block-end: var(--kreo-border-w) solid var(--kreo-border-default);
+}
+
+.table tbody th {
+  font: var(--kreo-type-body);
+  font-weight: var(--kreo-weight-regular);
+}
+
+.name,
+.value {
+  font: var(--kreo-type-data);
+  font-variant-numeric: var(--kreo-numeric-tabular);
+}
+
+.value {
+  color: var(--kreo-text-muted);
+  overflow-wrap: anywhere;
+}
+
+.swatch {
+  display: block;
+  inline-size: var(--kreo-space-10);
+  block-size: var(--kreo-space-6);
+  border: var(--kreo-border-w) solid var(--kreo-border-default);
+  border-radius: var(--kreo-radius-sm);
+}
+
+.bar {
+  display: block;
+  block-size: var(--kreo-space-3);
+  min-inline-size: 1px;
+  background: var(--kreo-accent-500);
+  border-radius: var(--kreo-radius-xs);
+}
+
+.radius {
+  display: block;
+  inline-size: var(--kreo-space-10);
+  block-size: var(--kreo-space-10);
+  background: var(--kreo-surface-sunken);
+  border: var(--kreo-border-w) solid var(--kreo-border-strong);
+}
+
+.text {
+  display: block;
+  color: var(--kreo-text-primary);
+}

@@ -1,0 +1,46 @@
+import { Meta } from '@storybook/addon-docs/blocks';
+
+import { TokenTable } from './TokenTable';
+
+<Meta title="Foundations/Typography" />
+
+# Typography
+
+One family, Inter, bundled with the package. The fallbacks in `--kreo-font-sans` only matter while
+the font files are still loading.
+
+**There is no monospace family.** Figures that need to line up in columns use
+`--kreo-numeric-tabular`, which switches Inter to its tabular figures — the actual requirement
+behind reaching for a mono. It is a separate property from the `font` shorthand, so it has to be
+applied alongside a type role rather than inside one:
+
+```css
+font: var(--kreo-type-data);
+font-variant-numeric: var(--kreo-numeric-tabular);
+```
+
+## Roles
+
+Composite tokens that set weight, size, line height and family in one declaration. Prefer these
+over assembling a type style from the scales below — a role is the thing that stays consistent
+across components.
+
+<TokenTable source="typography" include={['--kreo-type-']} preview="text" />
+
+## Family
+
+<TokenTable source="typography" include={['--kreo-font-', '--kreo-numeric-']} />
+
+## Size scale
+
+Named in pixels, declared in `rem`, so a host that scales its root font size scales the library
+with it.
+
+<TokenTable source="typography" include={['--kreo-text-']} />
+
+## Weight, line height and tracking
+
+<TokenTable
+  source="typography"
+  include={['--kreo-weight-', '--kreo-leading-', '--kreo-tracking-']}
+/>
