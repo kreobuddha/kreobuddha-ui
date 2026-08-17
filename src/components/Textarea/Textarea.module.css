@@ -42,24 +42,11 @@
   resize: none;
 }
 
-/* Sizes set the type scale and padding. Height comes from `rows`, so unlike a single-line field
-   there is no fixed control height to hit.
-
-   Only `sm` moves off body type. The four-step scale (ADR-0016) has nothing between body and the
-   next size up, and 24px in a text box is a heading, not a larger input — so `lg` is a roomier box
-   around the same text, which is what its padding below says. */
-.sm {
-  font: var(--kreo-type-body);
-  font-size: var(--kreo-text-12);
-  font-weight: var(--kreo-weight-medium);
-}
-
+/* Size is padding here and nothing else (ADR-0017). Height comes from `rows`, so unlike a
+   single-line field there is no control height to hit, and the type comes from `.shell` — the
+   same body type at every size. */
 .sm .control {
   padding: var(--kreo-space-2) var(--kreo-control-px-sm);
-}
-
-.md {
-  font: var(--kreo-type-body);
 }
 
 .md .control {

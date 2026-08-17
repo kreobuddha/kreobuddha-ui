@@ -79,16 +79,12 @@
   --select-px: var(--kreo-control-px-sm);
 
   min-height: var(--kreo-control-h-sm);
-  font: var(--kreo-type-body);
-  font-size: var(--kreo-text-12);
-  font-weight: var(--kreo-weight-medium);
 }
 
 .md {
   --select-px: var(--kreo-control-px-md);
 
   min-height: var(--kreo-control-h-md);
-  font: var(--kreo-type-body);
 }
 
 .lg {

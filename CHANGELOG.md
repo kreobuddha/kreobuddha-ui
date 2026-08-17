@@ -25,10 +25,12 @@ explicitly rather than treated as disposable.
 - **`--kreo-weight-regular` is 300 instead of 400.** Inter ships as a variable font over `100 900`,
   so this is a real weight. Twelve-pixel text in the library is always `medium` and never
   `regular` — at 300 a 12px stroke thins out too far, most visibly on a dark surface.
-- **`size` on `Button`, `TextField`, `Textarea` and `Select` no longer changes text size between
-  `md` and `lg`.** There is no step between 16px and 24px, and 24px inside an input is a heading.
-  `lg` is a taller control with wider padding around body-sized text; `sm` still drops to 12px.
-  Control heights are unchanged — they were never derived from the type scale.
+- **`size` on `Button`, `TextField`, `Textarea` and `Select` sets the control's geometry and
+  nothing else.** All three sizes are set in `--kreo-type-body`, including `sm`, which used to drop
+  to 12px — a dense form is now a form with shorter controls rather than a form in smaller type. On
+  `Textarea`, where height comes from `rows`, `size` is the padding alone. Control heights are
+  unchanged; 16px text fits a 32px control with room to spare, which was measured rather than
+  assumed. See [ADR-0017](docs/adr/0017-size-is-geometry-not-type.md).
 
 ### Fixed
 

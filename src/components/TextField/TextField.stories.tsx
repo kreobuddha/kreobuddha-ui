@@ -34,7 +34,11 @@ export const Default: Story = {
   args: { placeholder: 'you@example.com' },
 };
 
-/** Heights match `Button` on the same scale, so a field and a button sit level side by side. */
+/**
+ * Heights match `Button` on the same scale, so a field and a button sit level side by side. Only
+ * the box changes: the text is `--kreo-type-body` in all three, so a dense form and a roomy one
+ * are the same form at different sizes rather than two different type treatments.
+ */
 export const Sizes: Story = {
   render: (args): ReactElement => (
     <div style={column}>

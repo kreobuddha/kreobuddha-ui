@@ -32,6 +32,10 @@ export const Default: Story = {
   args: { placeholder: 'What changed in this version?' },
 };
 
+/**
+ * Padding, and only padding. Height is `rows` and the type is `--kreo-type-body` whatever the
+ * size — a longer answer does not deserve smaller letters.
+ */
 export const Sizes: Story = {
   render: (args): ReactElement => (
     <div style={column}>

@@ -42,6 +42,7 @@ export const Default: Story = {
   args: { placeholder: 'Choose a timezone' },
 };
 
+/** Heights match `Button` and `TextField`. The type is `--kreo-type-body` in all three. */
 export const Sizes: Story = {
   render: (args): ReactElement => (
     <div style={column}>

@@ -13,7 +13,11 @@ export type TextareaResize = 'vertical' | 'none';
 export interface TextareaProps extends Omit<ComponentPropsWithRef<'textarea'>, 'prefix'> {
   /** The field's visible label. Required: a field without one is unusable by anybody not looking at it. */
   label: string;
-  /** Type scale and padding, matching `TextField`. Height comes from `rows`. */
+  /**
+   * The padding around the text, matching `TextField`'s at the same name. Height comes from
+   * `rows` and the type comes from `--kreo-type-body` at every size, so this is the one thing
+   * left for `size` to say here.
+   */
   size?: TextareaSize;
   /** Guidance shown under the field. Announced with the field, not read as separate text. */
   hint?: ReactNode;
@@ -33,8 +37,8 @@ export interface TextareaProps extends Omit<ComponentPropsWithRef<'textarea'>, '
   /** Class for the outer wrapper. Native props and `ref` go to the `<textarea>` itself. */
   className?: string;
   /**
-   * How many lines tall the field starts, which is what sets its height — the size scale sets the
-   * type and the padding only. With `resize="none"` this is also its final height.
+   * How many lines tall the field starts, which is what sets its height — `size` sets the padding
+   * only. With `resize="none"` this is also its final height.
    */
   rows?: number;
 }
@@ -43,11 +47,11 @@ export interface TextareaProps extends Omit<ComponentPropsWithRef<'textarea'>, '
  * Text that runs to several lines — a description, a note, a pasted log.
  *
  * It is `TextField`'s counterpart and shares its whole field contract: the same required `label`, the
- * same hint, the same `error`-is-the-invalid-state rule, the same size scale. Reach for it when the
+ * same hint, the same `error`-is-the-invalid-state rule, the same body type. Reach for it when the
  * answer has no reason to fit on one line, and for `TextField` when it does, since a one-line answer
  * in a three-line box invites a paragraph nobody wanted.
  *
- * Height comes from `rows` rather than from the size scale, so a field can be as tall as the answer
+ * Height comes from `rows` rather than from `size`, so a field can be as tall as the answer
  * deserves. `resize` decides whether the reader may drag it taller; horizontal dragging is never
  * offered, because it breaks the form's grid and a wider box is not easier to read.
  */

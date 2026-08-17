@@ -44,6 +44,7 @@
   display: flex;
   min-width: 0;
   background: var(--kreo-surface-card);
+  font: var(--kreo-type-body);
   border: var(--kreo-border-w) solid var(--kreo-border-control);
   border-radius: var(--kreo-radius-md);
   transition: var(--kreo-transition-color);
