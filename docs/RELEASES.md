@@ -189,17 +189,23 @@ What this repository does instead:
 
 ## Prerelease gates
 
-A public prerelease requires:
+A public prerelease requires the eight things below. This list stood for four phases without ever
+saying whether any of them held, which made it a wish rather than a gate. Reviewed at `0.18.0`, each
+one now carries the file or the command that shows its state — and where a gate is not met, it says
+so instead of rounding up.
 
-- confirmed npm package name and ownership;
-- accepted license and repository metadata;
-- clean CI for type, lint, tests, package build, Storybook build, and package checks that currently
-  exist;
-- reviewed tarball contents;
-- successful installation in an independent consumer;
-- English README with honest installation and limitations;
-- no private or employer-owned content;
-- explicit approval from Rustam for the version and publish action.
+| Requirement | State | Evidence |
+| --- | --- | --- |
+| confirmed npm package name and ownership | **met** | "Current status" above: published as `@kreobuddha/ui` since `0.3.0`, scope owned by Rustam, trusted publisher bound to `kreobuddha/kreobuddha-ui` + `release.yml`; [ADR-0006](adr/0006-npm-publication-and-release-authentication.md) |
+| accepted license and repository metadata | **met** | `LICENSE` (MIT) and `NOTICE` in the tarball; `package.json` carries `license`, `repository`, `homepage`, `bugs`, `author`, `description`, `engines`, `exports`, `publishConfig.provenance`; `npm run check:package` reports `publint`: *All good* |
+| clean CI for type, lint, tests, package build, Storybook build, and package checks | **met, with two stated limits** | `.github/workflows/ci.yml` on Node 22.x and 24.x, green on `master` at `ae583b5` (run `32027376386`, 2026-08-17) and on every pull request of this phase; the stage list is in [QUALITY.md](QUALITY.md#ci-stages). The limits: story and browser checks run in **Chromium only**, and visual regression runs in `verify` but is **skipped on CI** because its baselines are macOS |
+| reviewed tarball contents | **met** | "Artifact review — 2026-08-17" above: 127 files, 152.0 kB packed, 419.5 kB unpacked, read from `npm pack --dry-run --json` rather than assumed. The review found and removed two files that had shipped since `src/demo/` existed |
+| successful installation in an independent consumer | **met** | [`docs/adoption/planning-poker.md`](adoption/planning-poker.md) — `kreobuddha/kreobuddhas-planning-poker`, a separate public repository, running the **published** package and measured in the browser. It is on `0.16.0`: the gate asks that an independent consumer install a published version, and it does, but no consumer outside this repository has yet run the version being released |
+| English README with honest installation and limitations | **met** | `README.md` "Status: public beta" names four things the beta does not promise; `src/docs/Installation.mdx` and `src/docs/Accessibility.mdx` say the same in the same words, checked page by page in the built Storybook during this phase |
+| no private or employer-owned content | **met as a rule, unverifiable as a check** | The clean-room rules in `CLAUDE.md` govern every change, and `CONTRIBUTING.md` repeats them. Nothing automated can confirm the absence of proprietary material — the gate is held by review discipline, and saying otherwise would be the kind of unsupported claim this document forbids |
+| explicit approval from Rustam for the version and publish action | **version approved; publish pending, by design** | `0.18.0` was chosen before this phase began — the beta is the whole `0.x` line, so no prerelease suffix or `next` dist-tag is created. The publish itself is a separate explicit request per release, as ADR-0006 requires; this gate is the only one that closes at release time rather than before it |
+
+Seven gates are met before the release runs. The eighth is the release.
 
 ## `1.0.0` gates
 
