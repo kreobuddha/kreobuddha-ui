@@ -45,6 +45,40 @@ Read together with the findings below:
   500, so the declared type scale resolved silently to 400. The variable font costs 3.2 kB more and
   makes the shipped weights match the documented ones.
 
+## What adoption cost, measured after it happened
+
+The application then adopted the library properly: `TextField` and `Alert` on the home screen,
+`TextField`, `Alert`, `Spinner`, `Badge` and `Toast` in the room, and `FieldGroup` + `Radio` in the
+deck picker once `0.17.0` was published. Eight components in use, against one before.
+
+| Build output | `0.3.0`, one component | `0.16.0`, still one | `0.17.0`, eight components |
+| --- | --- | --- | --- |
+| `index-*.js` | 856.59 kB (gzip 260.27 kB) | 856.83 kB (gzip 260.35 kB) | 866.03 kB (gzip 260.90 kB) |
+| `index-*.css` | 17.02 kB (gzip 3.75 kB) | 43.53 kB (gzip 7.65 kB) | 43.60 kB (gzip 7.56 kB) |
+
+**Seven more components cost 9.20 kB of JavaScript, 0.55 kB gzipped.** That is the number this phase
+existed to produce, and it is measured on an application rather than on the fixture.
+
+**The stylesheet did not move**, because it was already whole at the upgrade: +0.07 kB raw and
+−0.09 kB gzipped, the app having deleted slightly more SCSS than the components brought CSS. The
+all-or-nothing stylesheet (finding 7) is therefore a fixed cost paid once, not a cost per component —
+which is the piece of evidence the "known cost" verdict was missing.
+
+**Tree shaking, on the real application.** Twelve of the twenty components are not imported, and
+markers that exist only inside them are absent from the bundle:
+
+| Marker | Belongs to | In the bundle |
+| --- | --- | --- |
+| `aria-busy` | `Button`, `Spinner` — both used | yes |
+| `type="radio"` | `Radio` — used | yes |
+| `showModal` | `Dialog` — not imported | no |
+| `progressbar` | `Progress` — not imported | no |
+| `tablist` | `Tabs` — not imported | no |
+| `type="checkbox"` | `Checkbox`, `Switch` — not imported | no |
+
+The same method `scripts/check-consumer.mjs` uses on the fixture, run against an application that
+imports a real subset rather than a curated one.
+
 ## Findings
 
 ### 1. Fields without labels — the plainest win of the whole upgrade
@@ -72,11 +106,11 @@ second press, which is not radio behaviour.
 The library ships `Checkbox` and `Switch`, which are independent, and `Tabs`, which owns a panel.
 Nothing covers "pick one of a few, in place".
 
-**Verdict: general gap.** This is the demonstrated need `ROADMAP.md` requires before a candidate
-enters scope, and it is the strongest candidate for the `0.17.0` slice. Its design is not settled
-here: whether it is a `RadioGroup` on native `<input type="radio">` or a segmented control on the
-roving-tabindex model already written for `Tabs` is a design decision that gets made in its own
-slice, with an ADR if it introduces a new interaction model.
+**Verdict: general gap — closed in `0.17.0` by [`Radio`](../../src/components/Radio/Radio.tsx).**
+Rustam chose the shape before it was built: a single native option, grouped by the `FieldGroup`
+that already exists, rather than a `RadioGroup` duplicating it or a `SegmentedControl` trading
+platform semantics for the look the application happened to have. The deck picker is now that
+composition, and its three buttons, their `--selected` class and 45 lines of SCSS are gone.
 
 ### 3. `ToastProvider` is invisible from the README
 
@@ -88,8 +122,9 @@ learns the cost only after one click and one scroll.
 Every other component in the library is `import` and render. This one is not, and that difference is
 worth one line where the components are listed.
 
-**Verdict: documentation friction.** A one-line note in `README.md` beside the component list, not a
-new document.
+**Verdict: documentation friction — fixed in `0.17.0`.** One line in `README.md` beside the
+component list, not a new document. The application mounts `ToastProvider` in its `App`, above the
+router, and reports every failed action through `useToast`.
 
 ### 4. The error banner reimplements `Alert`
 
@@ -139,8 +174,10 @@ consumer does not prove it: 4 kB of additional gzipped CSS sits beside 260 kB of
 most of it the Firebase SDK, and the difference disappears once the application actually adopts the
 components it is paying for.
 
-**Verdict: known cost.** Recorded with a number so the next consumer argues from data. It becomes a
-gap when an application ships a small bundle and can show the CSS dominating it.
+**Verdict: known cost.** Recorded with a number so the next consumer argues from data, and the
+post-adoption measurement above sharpens it: the whole stylesheet is a fixed cost paid at the
+first import, not a cost that grows per component. It becomes a gap when an application ships a
+small bundle and can show the CSS dominating it.
 
 ## Not gaps
 
