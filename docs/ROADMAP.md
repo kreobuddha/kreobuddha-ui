@@ -8,7 +8,7 @@ verification quality.
 
 ## Status
 
-Phases 0 through 5 are complete. The repository is public at `kreobuddha/kreobuddha-ui` with CI
+Phases 0 through 6 are complete. The repository is public at `kreobuddha/kreobuddha-ui` with CI
 green, and the package is published to npm as `@kreobuddha/ui` (ADR-0006). Twenty components
 ship: `Button`, `IconButton`, `Badge`, `Spinner`, `Alert`, `TextField`, `Textarea`, `Select`,
 `Checkbox`, `Switch`, `FieldGroup`, `Tabs`, `Tooltip`, `Dialog`, `Skeleton`, `Progress`,
@@ -168,7 +168,7 @@ component's prop table without cloning the repository; the workbench composes th
 fixtures with its keyboard and 375px claims checked by a runner; nothing in the repository promises
 density; and `0.16.0` changed no component behaviour.
 
-## Phase 6 — First independent consumer — **in progress**
+## Phase 6 — First independent consumer — **done**
 
 Goal: integrate a released package into an independent frontend project.
 
@@ -196,13 +196,23 @@ Deliverables:
   groups, rather than as a `RadioGroup` duplicating what `FieldGroup` already does or a
   `SegmentedControl` departing from platform semantics. Rustam chose that design before it was
   built. `README.md` also gained the line saying `Toast` needs a provider (finding 3);
-- add regressions for adoption issues;
-- record package size and tree-shaking evidence — the upgrade half is measured in the adoption
-  notes; the post-adoption half is not.
+- ~~add regressions for adoption issues~~ — `Radio` carries its own unit tests and stories, and it
+  is used in `examples/react-vite`, which `npm run check:consumer` compares against the published
+  declarations: the gap the consumer found cannot silently reopen;
+- ~~record package size and tree-shaking evidence~~ — measured on the application, not the fixture:
+  seven more components cost **9.20 kB of JavaScript, 0.55 kB gzipped**, the stylesheet did not
+  move because it was already whole, and markers belonging to `Dialog`, `Progress`, `Tabs`,
+  `Checkbox` and `Switch` are absent from a bundle that imports none of them.
 
-What is left after `0.17.0` reaches npm: the application adopts `Radio` in its deck picker, and the
-phase closes with the post-adoption size and tree-shaking numbers measured on a real application
-rather than on the fixture.
+Exit criteria, all met: an independent application, written before this phase and not by this
+repository's rules, runs on the published package; every point of friction it hit is written down
+with a verdict rather than remembered; the one general gap it proved is closed by a component whose
+design was chosen before it was built; and what adoption costs is a measured number.
+
+One decision the phase produced beyond its deliverables. **A consumer installs published versions
+only** — a local tarball would have let the deck picker adopt `Radio` a release early, at the cost
+of a manifest pointing at a file nobody else has. `0.17.0` therefore shipped before the adoption
+that motivated it, and the order — ship, adopt, measure — is what the next consumer follows.
 
 ## Phase 7 — Public beta
 
