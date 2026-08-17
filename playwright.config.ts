@@ -20,6 +20,21 @@ export default defineConfig({
   projects: [
     { name: 'visual', testDir: 'tests/visual' },
     { name: 'browser', testDir: 'tests/browser' },
+
+    // The third run judges neither pixels nor a component, but the example that composes them:
+    // `examples/workbench`, built against the packed package and served on its own port. Like
+    // `browser` it compares nothing against a baseline, so it is CI-safe.
+    //
+    // Its server is not a `webServer` entry below, and that is deliberate: Playwright starts every
+    // entry whichever project is selected, so an entry here would make `check:visual` and
+    // `check:browser` wait on a directory neither of them asked anyone to build.
+    // `scripts/check-workbench.mjs` builds the example, serves it on 6008 and runs this project —
+    // which is why the workbench is run through that script rather than by hand.
+    {
+      name: 'workbench',
+      testDir: 'tests/workbench',
+      use: { baseURL: 'http://localhost:6008' },
+    },
   ],
 
   // A pixel diff that is retried is a pixel diff that is being hidden.

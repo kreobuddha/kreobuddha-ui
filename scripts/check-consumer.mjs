@@ -14,6 +14,8 @@ import { existsSync, readFileSync, readdirSync, rmSync, statSync } from 'node:fs
 import { join } from 'node:path';
 import process from 'node:process';
 
+import { packPackage } from './pack-package.mjs';
+
 const FIXTURE = 'examples/react-vite';
 const INSTALLED = `${FIXTURE}/node_modules/@kreobuddha/ui`;
 
@@ -47,15 +49,15 @@ const filesUnder = (dir) =>
 
 step('Packing the package');
 
-const version = JSON.parse(readFileSync('package.json', 'utf8')).version;
-const tarball = `kreobuddha-ui-${version}.tgz`;
+// Shared with `check:workbench`, which installs the same tarball into the other example. See
+// `scripts/pack-package.mjs` for why it is reused rather than rebuilt per check.
+const { tarball, packed } = packPackage();
 
-rmSync(tarball, { force: true });
-run('npm', ['pack', '--silent']);
-
-assert('npm pack produced a tarball', existsSync(tarball), tarball);
-
-if (!existsSync(tarball)) process.exit(1);
+assert(
+  'a current tarball is available',
+  existsSync(tarball),
+  packed ? tarball : `${tarball}, reused`
+);
 
 step('Installing it into the fixture');
 
@@ -278,7 +280,9 @@ assert(
 
 // ---------------------------------------------------------------------------------------------
 
-rmSync(tarball, { force: true });
+// The tarball is deliberately left in place: `check:workbench` installs the same one later in the
+// chain, and deleting it here would make that check rebuild the library for nothing. It is
+// git-ignored, and `pack-package.mjs` repacks it as soon as anything it is built from changes.
 
 if (failed > 0) {
   process.stdout.write(`\n${failed} consumer check(s) failed\n`);

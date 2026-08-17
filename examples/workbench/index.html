@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Devkit Console — Kreobuddha UI workbench</title>
+
+    <!--
+      The stored theme is applied before the application mounts, so a reader who chose dark does
+      not get a frame of light first. The library owns neither the storage nor the attribute — this
+      is the host doing its half of the contract, which is exactly what the workbench is here to
+      show. The key matches `src/theme.ts`, and reading it can throw where storage is blocked.
+    -->
+    <script>
+      try {
+        if (localStorage.getItem('kreobuddha-ui-workbench-theme') === 'dark') {
+          document.documentElement.dataset.kreoTheme = 'dark';
+        }
+      } catch {
+        /* No stored preference is reachable; the light theme is the documented default. */
+      }
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
