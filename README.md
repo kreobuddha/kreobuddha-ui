@@ -854,6 +854,7 @@ npm run check:contrast
 npm run build
 npm run check:package
 npm run check:consumer
+npm run check:workbench
 npm run check:visual
 npm run storybook
 ```
@@ -864,6 +865,13 @@ that the published declarations type-check, that the build works, that importing
 not pull in the others, that React is not bundled, that the fonts are real files rather than inlined
 data, and that the package renders on a server with no DOM at all.
 
+`npm run check:workbench` does the same for [`examples/workbench`](examples/workbench) — **Devkit
+Console**, a settings and diagnostics interface composed entirely from this library — and then
+drives it in a browser: the keyboard-only path from the header through the tabs to the save button,
+the unsaved-changes dialog returning focus to the tab it interrupted, and a 375px viewport with no
+horizontal overflow. `npm --prefix examples/workbench run dev` opens it to look at, once the check
+has installed the package there.
+
 `npm run check:visual` compares the protected visual states against committed baselines, over the
 built Storybook. It runs as part of `npm run verify` and stands down on CI, because the baselines
 are macOS and the runners are Ubuntu, where the same text does not render identically. Review the
@@ -873,7 +881,7 @@ diff when it fails, and use `npm run check:visual:update` to accept an intended 
 seconds. `npm run verify` is the full gate and what CI runs; use it before opening a pull request,
 not after every edit.
 
-`npm run storybook` opens the workbench. **Overview → Kit** is a single page showing everything the
+`npm run storybook` opens Storybook. **Overview → Kit** is a single page showing everything the
 library currently ships, in either theme — the quickest way to see the whole kit at once.
 
 [CONTRIBUTING.md](CONTRIBUTING.md) describes how a change gets in and what it has to clear.

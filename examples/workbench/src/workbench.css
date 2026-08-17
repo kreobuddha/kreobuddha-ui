@@ -1,0 +1,214 @@
+/* The application's own layout.
+ *
+ * Everything visual here is expressed in the library's published `--kreo-*` custom properties, so
+ * the workbench follows the theme without knowing anything about it. The values that are not
+ * published — the page gutter, the maximum content width, the column widths in the two lists — are
+ * literals, because `docs/ARCHITECTURE.md` says page layout belongs to the application rather than
+ * to the library. That is the boundary, demonstrated rather than described.
+ */
+
+:root {
+  --workbench-gutter: var(--kreo-space-6);
+  --workbench-width: 60rem;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--kreo-surface-page);
+  color: var(--kreo-text-body);
+  font: var(--kreo-type-body);
+}
+
+/* ---- Shell ---- */
+
+.shell {
+  max-width: var(--workbench-width);
+  margin: 0 auto;
+  padding: var(--workbench-gutter);
+}
+
+.shell-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: var(--kreo-space-4);
+  padding-bottom: var(--kreo-space-5);
+  border-bottom: var(--kreo-border-w) solid var(--kreo-border-default);
+}
+
+.shell-eyebrow {
+  margin: 0 0 var(--kreo-space-1);
+  color: var(--kreo-text-subtle);
+  font: var(--kreo-type-label);
+  letter-spacing: var(--kreo-tracking-label);
+  text-transform: uppercase;
+}
+
+.shell-title {
+  margin: 0;
+  color: var(--kreo-text-primary);
+  font: var(--kreo-type-title);
+}
+
+.shell-controls {
+  display: flex;
+  align-items: flex-end;
+  gap: var(--kreo-space-3);
+}
+
+.shell-main {
+  padding-top: var(--kreo-space-6);
+}
+
+/* ---- Panels ---- */
+
+.panel {
+  display: flex;
+  flex-direction: column;
+  gap: var(--kreo-space-5);
+  padding-top: var(--kreo-space-5);
+}
+
+.panel-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--kreo-space-3);
+}
+
+.panel-note {
+  color: var(--kreo-text-muted);
+  font-size: var(--kreo-text-13);
+}
+
+/* The select and the explanation beside it. `align-items: end` keeps the small icon button on the
+   control's baseline rather than on the label's. */
+.field-with-help {
+  display: flex;
+  align-items: flex-end;
+  gap: var(--kreo-space-2);
+}
+
+.field-with-help > :first-child {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+/* ---- Diagnostics ---- */
+
+.progress-row {
+  display: flex;
+  flex-direction: column;
+  gap: var(--kreo-space-2);
+}
+
+.progress-caption {
+  color: var(--kreo-text-muted);
+  font-size: var(--kreo-text-13);
+  font-variant-numeric: var(--kreo-numeric-tabular);
+}
+
+.check-list,
+.event-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border: var(--kreo-border-w) solid var(--kreo-border-subtle);
+  border-radius: var(--kreo-radius-lg);
+  background: var(--kreo-surface-card);
+}
+
+.check-row,
+.event-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--kreo-space-3);
+  padding: var(--kreo-space-3) var(--kreo-space-4);
+}
+
+.check-row + .check-row,
+.event-row + .event-row {
+  border-top: var(--kreo-border-w) solid var(--kreo-border-subtle);
+}
+
+.check-name {
+  flex: 0 0 auto;
+  color: var(--kreo-text-primary);
+  font-weight: var(--kreo-weight-medium);
+}
+
+/* A button because the tooltip has to be reachable from the keyboard; styled back down to text
+   because it reads as an identifier, not as an action. */
+.check-identifier {
+  flex: 1 1 8rem;
+  min-width: 0;
+  padding: 0;
+  overflow: hidden;
+  border: 0;
+  border-radius: var(--kreo-radius-sm);
+  background: none;
+  color: var(--kreo-text-muted);
+  font: var(--kreo-type-data);
+  font-variant-numeric: var(--kreo-numeric-tabular);
+  text-align: start;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  cursor: help;
+}
+
+.check-identifier:focus-visible {
+  outline: none;
+  box-shadow: var(--kreo-focus-ring);
+}
+
+/* Figures that have to line up down the column — the actual requirement behind "use a mono". */
+.check-duration,
+.event-time {
+  flex: 0 0 auto;
+  margin-inline-start: auto;
+  color: var(--kreo-text-muted);
+  font-variant-numeric: var(--kreo-numeric-tabular);
+}
+
+.accordion-label {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--kreo-space-2);
+}
+
+/* ---- Activity ---- */
+
+.event-time {
+  margin-inline-start: 0;
+}
+
+.event-message {
+  flex: 1 1 12rem;
+  min-width: 0;
+  /* A long identifier in a message must wrap rather than push the row wider than the viewport. */
+  overflow-wrap: anywhere;
+}
+
+/* ---- Narrow viewports ---- */
+
+@media (width <= 40rem) {
+  :root {
+    --workbench-gutter: var(--kreo-space-4);
+  }
+
+  .shell-controls {
+    flex: 1 1 100%;
+    justify-content: space-between;
+  }
+
+  /* The duration stops being a right-hand column and simply follows the name. */
+  .check-duration {
+    margin-inline-start: 0;
+  }
+}

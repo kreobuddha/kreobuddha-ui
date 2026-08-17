@@ -135,6 +135,21 @@ macOS would fail on an Ubuntu runner for a reason unrelated to the change under 
 Chromium only, like every other automated check here. ADR-0010 records a one-off run against
 WebKit and Firefox, and what it found, rather than the suite pretending to be cross-browser.
 
+### 5b. The workbench
+
+`npm run check:workbench` is the third Playwright project, `tests/workbench/`, and the only check
+that judges the library as an interface rather than as a set of components.
+
+`scripts/check-workbench.mjs` drives it: it installs the packed tarball into `examples/workbench`,
+type-checks and builds that application, and runs the project against the built output on port
+6008. The pack step is shared with §7 through `scripts/pack-package.mjs`, so one `npm run verify`
+builds and packs the library once rather than twice.
+
+What it asserts is what the example claims and prose cannot establish: a keyboard-only path from
+the top of the page through the navigation to the save button, a modal guard that returns focus to
+the control it interrupted, the theme contract surviving a reload, and a 375px viewport with no
+horizontal overflow on any tab. It compares nothing against a baseline, so like §5a it runs in CI.
+
 ### 6. Visual regression
 
 Visual checks protect intentional states, not every possible prop combination.
@@ -241,6 +256,7 @@ package build                         running
 Storybook build                       running
 package artifact checks               running
 consumer smoke build                  running — packed tarball in examples/react-vite
+workbench checks                      running — packed tarball in examples/workbench, tests/workbench
 browser behaviour checks              running — real key presses, tests/browser
 visual regression for protected states in `verify`, skipped on CI — macOS baselines
 ```
