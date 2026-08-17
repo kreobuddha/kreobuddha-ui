@@ -8,6 +8,59 @@ is MIT and the public repository is `kreobuddha/kreobuddha-ui` with CI green on 
 Publishing is still an external action: each release requires Rustam's explicit approval for the
 exact version and action. See ADR-0006 for how releases are authenticated.
 
+**The package name is settled.** `@kreobuddha/ui` has been the published name since `0.3.0`, the
+scope belongs to Rustam, and npm's trusted publisher is bound to `kreobuddha/kreobuddha-ui` and
+`release.yml` by name. A rename is now a migration for every consumer rather than a decision still
+open, so the roadmap's "final package-name confirmation" is closed by this paragraph rather than
+carried forward.
+
+## Artifact review — 2026-08-17, at `0.17.0`
+
+Read rather than assumed, because "public artifacts contain only intentional files" is a principle
+below and a principle nobody measures is a hope. Every number here came from a command that was run.
+
+`npm pack --dry-run --json`, before and after the one fix this review produced:
+
+| | before | after |
+| --- | --- | --- |
+| files | 129 | **127** |
+| packed | 152.2 kB | **152.0 kB** |
+| unpacked | 419.9 kB | **419.5 kB** |
+
+Top level is exactly what a release is allowed to contain: `dist/`, `README.md`, `LICENSE`,
+`NOTICE`, `package.json`. Nothing else — no source, no tests, no stories, no configuration.
+
+What the 127 files are:
+
+| Kind | Count | Note |
+| --- | --- | --- |
+| `.d.ts` | 26 | the published types; `src` itself is not shipped |
+| `.js` | 26 | the ESM build, React external |
+| `.module.js` | 21 | the CSS Module class maps |
+| `.js.map` | 46 | 163.6 kB unpacked — see below |
+| `.css` | 1 | `dist/styles.css`, 85.0 kB, the complete stylesheet |
+| `.woff2` | 2 | Inter Latin 48.3 kB and Cyrillic 18.7 kB, real files rather than inlined data |
+| licence, notice, readme, manifest | 5 | including `LICENSE-inter.txt` beside the fonts |
+
+**The one thing that should not have been there.** `dist/demo/DialogSection.d.ts` and
+`dist/demo/ToastSection.d.ts` — declarations for the Storybook sections the Kit story composes —
+shipped in every release from the day `src/demo/` was created up to and including `0.17.0`.
+`tsconfig.build.json` excluded `src/docs` and never excluded `src/demo`. They were unreachable
+(nothing in `src/index.ts` points at them) and cost 0.4 kB, so no consumer was affected; that is
+precisely why nobody noticed for fourteen minor versions. Fixed by adding `src/demo` to the same
+exclude list.
+
+**Source maps stay, deliberately.** They are 46 of the 127 files and 39% of the unpacked size, and
+they are the reason a consumer stepping into this library sees the original TypeScript rather than
+the build output. They embed `sourcesContent`, so they are self-contained and do not point at files
+the consumer lacks — which is also why `declarationMap` is off, as `tsconfig.build.json` records.
+They are not downloaded by a browser unless devtools asks for them, so the cost is registry storage
+and install time, not the shipped page.
+
+`npm run check:package` — `publint`: *All good*. `attw --profile esm-only`: green for `node16 (from
+ESM)` and `bundler`; `node10` and `node16 (from CJS)` fail and are excluded by that profile, which
+is the ESM-only decision `README.md` states rather than an unaddressed problem.
+
 ## How a release is cut
 
 1. `master` is green and the working tree is clean.
