@@ -167,17 +167,27 @@ component's prop table without cloning the repository; the workbench composes th
 fixtures with its keyboard and 375px claims checked by a runner; nothing in the repository promises
 density; and `0.16.0` changed no component behaviour.
 
-## Phase 6 — First independent consumer
+## Phase 6 — First independent consumer — **in progress**
 
-Goal: integrate a packed prerelease into `session-lab` or another independent frontend project.
+Goal: integrate a packed prerelease into an independent frontend project.
+
+The consumer is
+[`kreobuddhas-planning-poker`](https://github.com/kreobuddha/kreobuddhas-planning-poker) — a
+real-time estimation tool on React, Vite and Firebase, written before this phase and depending on
+this package since `0.3.0`, for `Button` alone. It is an independent repository, not an example in
+this one.
 
 Deliverables:
 
-- install a versioned/tarball package instead of source aliases;
-- document missing APIs and friction;
-- fix general library gaps without adding app-specific components;
+- ~~install a versioned/tarball package instead of source aliases~~ — the application was upgraded
+  `0.3.0` → `0.16.0` from npm, with the build and the full flow verified in the browser;
+- ~~document missing APIs and friction~~ — [`adoption/planning-poker.md`](adoption/planning-poker.md),
+  every finding observed by running the application and carrying a verdict;
+- fix general library gaps without adding app-specific components — one candidate so far, a group of
+  mutually exclusive options (finding 2);
 - add regressions for adoption issues;
-- record package size and tree-shaking evidence.
+- record package size and tree-shaking evidence — the upgrade half is measured in the adoption
+  notes; the post-adoption half is not.
 
 ## Phase 7 — Public beta
 
@@ -213,7 +223,7 @@ second deliberate exception, to `COMPONENT_RECIPE.md` §8, now written down ther
 request is Rustam's call on how to land the batch, taken once the five were done: five reviews of
 one branch that was built in order would have been five readings of the same history. What is not
 relaxed is the verification — `npm run verify` ran green for each component before the next was
-started. Phase 5 followed them and is now complete; Phase 6 is next and not started.
+started. Phase 5 followed them and is now complete; Phase 6 is in progress.
 
 - `Skeleton` — **done**;
 - `Progress` — **done**, as a `div` with `role="progressbar"` by Rustam's decision rather than as a
