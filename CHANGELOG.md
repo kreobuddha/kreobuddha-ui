@@ -9,6 +9,8 @@ explicitly rather than treated as disposable.
 
 ## [Unreleased]
 
+## [0.17.0] — 2026-08-17
+
 ### Added
 
 - `Radio` — one option in a choice where exactly one answer is possible. A real
@@ -28,6 +30,17 @@ explicitly rather than treated as disposable.
   The first component in the library added because a consumer proved the need: `kreobuddhas-planning-poker`
   had built a deck picker out of three action buttons with a `--selected` class, with no group, no
   chosen state and no arrow keys. See [`docs/adoption/planning-poker.md`](docs/adoption/planning-poker.md).
+
+- `docs/adoption/planning-poker.md` — what the first independent consumer asked of this library,
+  what it got, and what it built itself, each finding observed by running the application and
+  carrying a verdict. It also measures what thirteen minor versions cost an application that
+  imports one component: 0.24 kB of JavaScript, and a stylesheet that is deliberately whole.
+
+### Changed
+
+- `README.md` says that `Toast` needs a `ToastProvider` above the tree and that `useToast` throws
+  without one. It was the only component here that is not import-and-render, and the only place
+  that said so was its generated page — one click away from the reader deciding whether to use it.
 
 ## [0.16.0] — 2026-08-17
 
