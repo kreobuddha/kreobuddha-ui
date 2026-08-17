@@ -227,6 +227,13 @@ drops, leaving an empty bundle to pass the check for no reason.
 Build Storybook statically and verify navigation, source examples, installation instructions, and
 links. Documentation must not claim support or functionality that the published artifact lacks.
 
+That build is also what is published: `.github/workflows/pages.yml` deploys `storybook-static` to
+GitHub Pages. A project site is served from a sub-path, so the deployed build — and only the
+deployed build — sets Vite's `base` from `STORYBOOK_BASE_PATH`; the local build stays unprefixed
+because `check:visual`, `check:browser` and `check:workbench` serve it from the root of a port. No
+runner checks the deployed site, so the evidence for a Pages change is the run itself plus the site
+opened by hand: navigation, both themes, and no asset 404 under the sub-path.
+
 ## Change-to-check matrix
 
 | Change | Minimum verification |
