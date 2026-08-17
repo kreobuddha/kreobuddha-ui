@@ -245,7 +245,25 @@ opened by hand: navigation, both themes, and no asset 404 under the sub-path.
 | Keyboard/focus behavior | component checks plus `check:browser` for anything the engine owns, and manual keyboard/focus review for the rest |
 | Public exports/types | package build, artifact inspection, type/package lint, consumer smoke |
 | Build configuration | all static, package, Storybook, and consumer checks |
-| Release workflow | full CI in a non-publishing dry run |
+| Release workflow | `ci.yml` green on the pull request, and the diff read line by line — see below |
+
+### Why the release workflow is the one thing that cannot be rehearsed
+
+Every other row above names a command that can be run before the change lands. `release.yml`
+cannot: its distinguishing steps push a tag and publish to npm, and neither has a dry run that
+proves the real one works. `npm publish --dry-run` skips the OIDC exchange that is the whole
+mechanism, and a tag push either happens or does not.
+
+So the verification is what is available rather than what would be ideal, and it is stated here as
+a limitation rather than dressed up:
+
+- `ci.yml` runs on the pull request and covers every check the release job shares with it, which
+  after the parity fix is all of them except the two publishing steps;
+- the diff is read line by line, because a workflow is a program that will first execute in
+  production;
+- the first release after a change to this file is watched while it runs, and the ordering inside
+  the workflow — tag before publish — exists so that the recoverable step is the one that fails
+  first.
 
 ## CI stages
 
