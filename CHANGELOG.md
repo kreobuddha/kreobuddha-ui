@@ -9,6 +9,35 @@ explicitly rather than treated as disposable.
 
 ## [Unreleased]
 
+### Changed — breaking
+
+- **The type scale is four sizes instead of eleven, and body is 16px instead of 14px.**
+  `--kreo-text-12`, `--kreo-text-16`, `--kreo-text-24` and `--kreo-text-36` are the whole scale.
+  `--kreo-text-11`, `--kreo-text-13`, `--kreo-text-14`, `--kreo-text-18`, `--kreo-text-20`,
+  `--kreo-text-30` and `--kreo-text-48` are removed — the last three were referenced by nothing in
+  the library, and the rest sat within two or three pixels of a neighbour. A consumer reading one
+  of them directly should move to a `--kreo-type-*` role, which is the interface that says what a
+  size is _for_. See [ADR-0016](docs/adr/0016-four-type-sizes-and-a-lighter-regular.md).
+- **`--kreo-type-body-lg` is removed.** With body at 16px it resolved to exactly
+  `--kreo-type-body`. Replace it with `--kreo-type-body`.
+- **`--kreo-type-heading` is 16px, and `--kreo-type-label` is 12px.** `heading` is now body-sized
+  and separated from body by weight rather than size; `label` moves up one pixel.
+- **`--kreo-weight-regular` is 300 instead of 400.** Inter ships as a variable font over `100 900`,
+  so this is a real weight. Twelve-pixel text in the library is always `medium` and never
+  `regular` — at 300 a 12px stroke thins out too far, most visibly on a dark surface.
+- **`size` on `Button`, `TextField`, `Textarea` and `Select` no longer changes text size between
+  `md` and `lg`.** There is no step between 16px and 24px, and 24px inside an input is a heading.
+  `lg` is a taller control with wider padding around body-sized text; `sm` still drops to 12px.
+  Control heights are unchanged — they were never derived from the type scale.
+
+### Fixed
+
+- **Switching the theme no longer flashes the page white.** A documentation page is rebuilt from
+  scratch whenever a global changes, and the surface used to be painted by a React element — so for
+  the frame in between, nothing painted it. `data-kreo-theme` and the page surface now live on the
+  preview document, outside React's reach, and hold across the rebuild. Documentation-site only; no
+  packaged file is involved.
+
 ## [0.18.0] — 2026-08-17
 
 **No component behaviour or public API changed.** No component was added, no prop, type, export or

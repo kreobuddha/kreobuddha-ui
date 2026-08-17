@@ -45,11 +45,15 @@
 }
 
 /* Sizes come after .button so their font-size wins over the `font` shorthand. `min-height` rather
-   than `height`: a single line still lands exactly on the token, but a wrapped label can grow. */
+   than `height`: a single line still lands exactly on the token, but a wrapped label can grow.
+
+   Only `sm` moves off the button role's own size. The four-step scale (ADR-0016) offers nothing
+   between body and a section title, so `md` and `lg` are the same text in boxes of different
+   heights — which is what the size prop is documented to control. */
 .sm {
   min-height: var(--kreo-control-h-sm);
   padding-inline: var(--kreo-control-px-sm);
-  font-size: var(--kreo-text-13);
+  font-size: var(--kreo-text-12);
 }
 
 /* Off the 4px scale on purpose: the full gap crowds a 32px control. */
@@ -60,13 +64,11 @@
 .md {
   min-height: var(--kreo-control-h-md);
   padding-inline: var(--kreo-control-px-md);
-  font-size: var(--kreo-text-14);
 }
 
 .lg {
   min-height: var(--kreo-control-h-lg);
   padding-inline: var(--kreo-control-px-lg);
-  font-size: var(--kreo-text-16);
 }
 
 .filled {

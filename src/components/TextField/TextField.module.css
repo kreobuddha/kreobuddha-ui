@@ -45,7 +45,8 @@
 .sm {
   min-height: var(--kreo-control-h-sm);
   font: var(--kreo-type-body);
-  font-size: var(--kreo-text-13);
+  font-size: var(--kreo-text-12);
+  font-weight: var(--kreo-weight-medium);
 }
 
 .sm .input,
@@ -67,7 +68,6 @@
 
 .lg {
   min-height: var(--kreo-control-h-lg);
-  font: var(--kreo-type-body-lg);
 }
 
 .lg .input,

@@ -11,19 +11,18 @@
      property, so the `font` shorthand below cannot carry it. */
   --kreo-numeric-tabular: tabular-nums;
 
-  --kreo-text-11: 0.6875rem; /* 11px — captions and eyebrows */
-  --kreo-text-12: 0.75rem;
-  --kreo-text-13: 0.8125rem;
-  --kreo-text-14: 0.875rem; /* body default */
-  --kreo-text-16: 1rem;
-  --kreo-text-18: 1.125rem;
-  --kreo-text-20: 1.25rem;
-  --kreo-text-24: 1.5rem;
-  --kreo-text-30: 1.875rem;
-  --kreo-text-36: 2.25rem;
-  --kreo-text-48: 3rem;
+  /* Four sizes, and no more (ADR-0015, ADR-0016). Eleven steps only ever produced near-duplicates
+     a reader could not tell apart, and three of them were referenced by nothing at all. */
 
-  --kreo-weight-regular: 400;
+  /* Small text — captions, hints, field messages, eyebrows. Always set in `medium`, never in
+     `regular`: at 300 a 12px stroke thins out badly, and worst of all on a dark surface. Optical
+     compensation, and the rule holds everywhere in the library. */
+  --kreo-text-12: 0.75rem;
+  --kreo-text-16: 1rem; /* body default */
+  --kreo-text-24: 1.5rem;
+  --kreo-text-36: 2.25rem;
+
+  --kreo-weight-regular: 300;
   --kreo-weight-medium: 500;
   --kreo-weight-semibold: 600;
 
@@ -42,13 +41,15 @@
     var(--kreo-font-sans);
   --kreo-type-title: var(--kreo-weight-semibold) var(--kreo-text-24) / var(--kreo-leading-snug)
     var(--kreo-font-sans);
-  --kreo-type-heading: var(--kreo-weight-semibold) var(--kreo-text-18) / var(--kreo-leading-snug)
+
+  /* Body-sized, and told apart by weight rather than by size. With `regular` at 300 the step up to
+     `semibold` is wide enough to read as a heading without a size the four-step scale cannot
+     supply — the next one up is `title`, which is a section, not a subhead. */
+  --kreo-type-heading: var(--kreo-weight-semibold) var(--kreo-text-16) / var(--kreo-leading-snug)
     var(--kreo-font-sans);
-  --kreo-type-body: var(--kreo-weight-regular) var(--kreo-text-14) / var(--kreo-leading-relaxed)
+  --kreo-type-body: var(--kreo-weight-regular) var(--kreo-text-16) / var(--kreo-leading-relaxed)
     var(--kreo-font-sans);
-  --kreo-type-body-lg: var(--kreo-weight-regular) var(--kreo-text-16) / var(--kreo-leading-relaxed)
-    var(--kreo-font-sans);
-  --kreo-type-label: var(--kreo-weight-medium) var(--kreo-text-11) / 1.2 var(--kreo-font-sans);
-  --kreo-type-button: var(--kreo-weight-medium) var(--kreo-text-14) / 1 var(--kreo-font-sans);
-  --kreo-type-data: var(--kreo-weight-regular) var(--kreo-text-14) / 1.4 var(--kreo-font-sans);
+  --kreo-type-label: var(--kreo-weight-medium) var(--kreo-text-12) / 1.2 var(--kreo-font-sans);
+  --kreo-type-button: var(--kreo-weight-medium) var(--kreo-text-16) / 1 var(--kreo-font-sans);
+  --kreo-type-data: var(--kreo-weight-regular) var(--kreo-text-16) / 1.4 var(--kreo-font-sans);
 }

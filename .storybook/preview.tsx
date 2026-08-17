@@ -1,32 +1,33 @@
 import type { Decorator, Preview } from '@storybook/react-vite';
 
 import { ThemedDocsContainer } from './ThemedDocsContainer';
+// Imported for its side effect: it puts `data-kreo-theme` on the preview document and keeps it
+// there. Nothing below reads the theme any more — see `.storybook/theme.ts` for why that matters.
+import './theme';
 
 import '../src/fonts.css';
 import '../src/styles.css';
+import './preview.css';
 
 /**
  * The library ships no page styles, so the canvas supplies the surface and body type a real
- * application would provide. Dark mode is the documented DOM contract: an attribute on an
- * ancestor, with light needing no attribute at all.
+ * application would provide. The surface stays here — as an opaque layer, which is also what keeps
+ * text antialiasing identical to the visual baselines — but the theme *attribute* does not: it
+ * lives on the preview document, so a documentation page keeps its colour through the rebuild
+ * Storybook performs on every globals change.
  */
-const withTheme: Decorator = (Story, context) => {
-  const isDark = context.globals['theme'] === 'dark';
-
-  return (
-    <div
-      data-kreo-theme={isDark ? 'dark' : undefined}
-      style={{
-        background: 'var(--kreo-surface-page)',
-        color: 'var(--kreo-text-body)',
-        font: 'var(--kreo-type-body)',
-        padding: 'var(--kreo-space-6)',
-      }}
-    >
-      <Story />
-    </div>
-  );
-};
+const withTheme: Decorator = (Story) => (
+  <div
+    style={{
+      background: 'var(--kreo-surface-page)',
+      color: 'var(--kreo-text-body)',
+      font: 'var(--kreo-type-body)',
+      padding: 'var(--kreo-space-6)',
+    }}
+  >
+    <Story />
+  </div>
+);
 
 const preview: Preview = {
   decorators: [withTheme],
