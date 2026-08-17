@@ -8,14 +8,29 @@ An accessible, themeable React component library for developer tools, technical 
 data-dense frontend applications. This site is the reference: every page here is built from the
 repository that publishes the package, and every prop table on it is generated from the types.
 
-## Status
+## Status: public beta
 
-Nineteen components ship today: `Button`, `IconButton`, `TextField`, `Textarea`, `Select`,
-`Checkbox`, `Switch`, `FieldGroup`, `Tabs`, `Accordion`, `Tooltip`, `Toggletip`, `Dialog`,
+Twenty components ship today: `Button`, `IconButton`, `TextField`, `Textarea`, `Select`,
+`Checkbox`, `Radio`, `Switch`, `FieldGroup`, `Tabs`, `Accordion`, `Tooltip`, `Toggletip`, `Dialog`,
 `Badge`, `Spinner`, `Skeleton`, `Progress`, `Toast` and `Alert`.
 
-The package is published so it can be consumed normally, but the line is `0.x` and it moves. Pin
-what you depend on. Anything not listed above is a plan, not an available feature.
+The package is published so it can be consumed normally, and one application outside this repository
+consumes the published package rather than the source. Anything not listed above is a plan, not an
+available feature.
+
+**Beta here means the whole `0.x` line, not a separate tag** — there is no `next` channel and no
+prerelease suffix to install. What it does not promise, stated plainly so nothing on these pages has
+to be read generously:
+
+- **The API moves.** A minor version may rename or remove an export, a prop or a `--kreo-*` property.
+  Breaking changes are called out in the changelog rather than treated as disposable, but they happen.
+  Pin what you depend on.
+- **No screen-reader conformance is claimed** for `Dialog`, `Tabs` and `Tooltip`. That pass is written
+  and has not been run — see [Accessibility](?path=/docs/foundations-accessibility--docs).
+- **No browser support matrix is claimed.** The components are tested in Chromium, and one known
+  WebKit difference is documented rather than fixed.
+- **The component set is small and grows only on evidence.** A component arrives when a real consumer
+  needs it, so a gap in the list is a gap on purpose, not a queue position.
 
 ## What it is
 
@@ -32,15 +47,23 @@ what you depend on. Anything not listed above is a plan, not an available featur
 - Not a layout system. Page gutters, grids and rails belong to the application.
 - Not a styling engine. There is no `css` prop, no `as` polymorphism and no theme object.
 - Not a stateful shell. The library stores no theme preference, reads no system preference and
-  owns no routing.
+  owns no routing. It holds state in exactly one place — `ToastProvider` owns the queue of toasts
+  it renders, because a message raised from anywhere has to be rendered somewhere above it (see
+  ADR-0011). That is the one exception, and it is scoped to the toasts themselves.
 
 ## How to read these pages
 
-Each component's **Docs** page carries a generated prop table beside its stories. The table lists
-the props the component itself declares, with the documentation and default value taken from the
-source. It does not list the DOM attributes the component inherits: a `Button` also accepts every
-attribute a `<button>` accepts, and a `Dialog` every attribute a `<dialog>` accepts, but spelling
-out two hundred inherited attributes per component would bury the ten that matter.
+Each component's **Docs** page opens with a paragraph on why the component exists, then a generated
+prop table beside its stories. Both come from the source — the paragraph from the component's own
+documentation comment, the table from the types — so neither can drift from the code the way a
+hand-maintained page does.
+
+The table lists the props the component itself declares, and does not enumerate the DOM attributes
+it inherits: a `Button` also accepts every attribute a `<button>` accepts, and a `Dialog` every
+attribute a `<dialog>` accepts, but spelling out two hundred inherited attributes per component
+would bury the ten that matter. A handful of inherited attributes do appear, and for a reason worth
+knowing — a component that gives a native attribute a default, like `disabled` on `Button`, is
+making a decision about it, so the table shows that default and the source explains it.
 
 Use the **Theme** control in the toolbar to switch any page, including the token tables, between
 the light and dark themes.

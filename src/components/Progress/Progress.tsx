@@ -4,20 +4,6 @@ import { cx } from '../../internal/cx.js';
 
 import styles from './Progress.module.css';
 
-/**
- * A bar for work whose extent is known, and for work whose extent is not.
- *
- * **This is a `div` with `role="progressbar"`, not a native `<progress>`, by Rustam's decision.**
- * The project's usual rule is platform semantics before ARIA, so the departure is written down
- * rather than left implicit. What it buys: one styling model instead of three vendor pseudo-element
- * sets (`::-webkit-progress-bar`, `::-webkit-progress-value`, `::-moz-progress-bar`), which is what
- * a native element would have cost to reach the same bar in every engine. What it costs: the
- * semantics are ours to get right and to keep right, so every attribute below is asserted in
- * `Progress.test.tsx` rather than inherited from the element.
- *
- * It is not a `Spinner`. A spinner says only that something is happening; this says how much of it
- * has happened, and is worth its space only when that number is real.
- */
 export interface ProgressProps extends Omit<ComponentPropsWithRef<'div'>, 'children' | 'role'> {
   /**
    * What is progressing, as a screen reader will hear it — "Uploading files".
@@ -42,6 +28,20 @@ export interface ProgressProps extends Omit<ComponentPropsWithRef<'div'>, 'child
   max?: number;
 }
 
+/**
+ * A bar for work whose extent is known, and for work whose extent is not.
+ *
+ * **This is a `div` with `role="progressbar"`, not a native `<progress>`, by Rustam's decision.**
+ * The project's usual rule is platform semantics before ARIA, so the departure is written down
+ * rather than left implicit. What it buys: one styling model instead of three vendor pseudo-element
+ * sets (`::-webkit-progress-bar`, `::-webkit-progress-value`, `::-moz-progress-bar`), which is what
+ * a native element would have cost to reach the same bar in every engine. What it costs: the
+ * semantics are ours to get right and to keep right, so every attribute is asserted in
+ * `Progress.test.tsx` rather than inherited from the element.
+ *
+ * It is not a `Spinner`. A spinner says only that something is happening; this says how much of it
+ * has happened, and is worth its space only when that number is real.
+ */
 export const Progress = ({
   label,
   value,

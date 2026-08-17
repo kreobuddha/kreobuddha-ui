@@ -23,6 +23,11 @@ export interface ButtonProps extends Omit<ComponentPropsWithRef<'button'>, 'type
    * exact size, and shows a spinner in place of its content until loading ends.
    */
   loading?: boolean;
+  /**
+   * Stretches the button to the full width of its container, for a form's primary action or a
+   * narrow column where a centred label reads as the whole row. The label stretches with it, so a
+   * truncating label has the whole width to use.
+   */
   fullWidth?: boolean;
   /**
    * Lets a long label wrap onto several lines and the button grow past its minimum height.
@@ -36,8 +41,29 @@ export interface ButtonProps extends Omit<ComponentPropsWithRef<'button'>, 'type
   iconEnd?: ReactNode;
   /** Defaults to `button` so a button inside a form never submits it by accident. */
   type?: 'button' | 'submit' | 'reset';
+  /**
+   * Natively disabled: dimmed, removed from the tab order and inert. Use it for an action that is
+   * unavailable, and `loading` for one that is already under way — a disabled button cannot be
+   * focused, so it is the wrong state for something the reader is waiting on.
+   */
+  disabled?: boolean;
 }
 
+/**
+ * The action a view is asking for, as a real `<button>`.
+ *
+ * Everything here exists to keep one promise: a button never becomes ambiguous. `loading` is the
+ * reason the component holds state at all — it keeps the exact box, stays in the tab order, reports
+ * `aria-busy` and refuses activation, so an action in flight cannot be fired twice and a keyboard
+ * user does not lose focus mid-action. That is deliberately different from `disabled`, which is
+ * dimmed and inert: "working on it" and "unavailable" must not look alike.
+ *
+ * `type` defaults to `button` rather than to the platform's `submit`, because the platform's default
+ * turns any button dropped into a form into a submit button by accident.
+ *
+ * There is one variant hierarchy per view — one `filled` action, `outlined` for secondary, `ghost`
+ * for tertiary. It is a convention this component cannot enforce, and the one worth keeping.
+ */
 export const Button = ({
   variant = 'filled',
   size = 'md',
