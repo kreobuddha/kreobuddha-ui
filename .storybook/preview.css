@@ -1,0 +1,10 @@
+/* Documentation site only — not part of the package.
+
+   The surface is painted here, on the document itself, rather than by a React element. Storybook
+   rebuilds a documentation page whenever a global changes, and anything React owns is absent for
+   the frame in between: painting from a component meant every theme toggle flashed white. `<html>`
+   is not React's to remove, so the colour holds across the rebuild. See `.storybook/theme.ts`. */
+html {
+  background: var(--kreo-surface-page);
+  color: var(--kreo-text-body);
+}
