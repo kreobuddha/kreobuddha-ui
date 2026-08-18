@@ -215,5 +215,7 @@ of evidence is visible rather than assumed current:
 - the repository contains no proprietary or private material — the clean-room rules in `CLAUDE.md`,
   held by review rather than by an automated check, which `docs/RELEASES.md` states plainly.
 
-`1.0.0` requires at least one independent consumer, resolution or documentation of adoption issues,
-and an explicitly reviewed stable public API.
+All nine held at `0.18.0`, which is where the beta closed. **`1.0.0` adds the freeze**: at least one
+independent consumer, adoption feedback resolved or documented, and an explicitly reviewed stable
+public API — each recorded with its evidence in the `1.0.0` gate table in `docs/RELEASES.md`, and
+the review itself in [ADR-0020](adr/0020-api-freeze-for-1-0-0.md).

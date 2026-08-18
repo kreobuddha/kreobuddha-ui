@@ -9,6 +9,29 @@ explicitly rather than treated as disposable.
 
 ## [Unreleased]
 
+## [1.0.0] — 2026-08-18
+
+**The public API is frozen.** From here an export, a prop, a `--kreo-*` custom property, a DOM
+shape or a documented keyboard behaviour cannot be renamed or removed without a major version —
+which is the whole difference between this release and the `0.x` line, where `README.md` said a
+minor could break any of them and `0.19.0` used that licence on purpose.
+
+Nothing in the library's API changed to get here. Twenty components, twenty-one exports, 135
+custom properties: the same surface `0.19.0` shipped, now recorded in
+`scripts/public-api.snapshot.json` and checked on every pull request.
+[ADR-0020](docs/adr/0020-api-freeze-for-1-0-0.md) records what is frozen, including 28 custom
+properties the library does not use itself, and what that promise costs.
+
+What did change is what the project can show. Where `0.x` declined a browser matrix, `1.0.0` runs
+the behaviour suite in three engines. Where server rendering was intended, every export is now
+rendered without a DOM on every pull request. Where accessibility evidence was spread across four
+places, it is one table with a command in every cell. And two contracts that would have cost a
+major version to decide later — React Server Components, and the cascade — are decided now.
+
+**Two limits are carried in rather than closed**, and they are stated wherever a reader meets the
+claim: no screen-reader conformance is claimed for `Dialog`, `Tabs` and `Tooltip`, because that
+pass needs a person and has not been run; and nothing is claimed about engines nothing runs on.
+
 ### Fixed
 
 - **The published stylesheet carried the token layer twenty times.** Every component stylesheet

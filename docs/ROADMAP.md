@@ -8,11 +8,12 @@ verification quality.
 
 ## Status
 
-Phases 0 through 7 are complete, the current release is `0.19.0`, and **Phase 8 — `1.0.0` — is
-open**. The repository is public at
+Phases 0 through 8 are complete and the current release is **`1.0.0`** — the public API is frozen
+([ADR-0020](adr/0020-api-freeze-for-1-0-0.md)), and an export, a prop or a `--kreo-*` property
+cannot be renamed or removed without a major version. The repository is public at
 `kreobuddha/kreobuddha-ui` with CI green, and the package is published to npm as `@kreobuddha/ui`
-(ADR-0006) as a **public beta** — which is the whole `0.x` line rather than a separate tag, so
-there is no `next` channel and no prerelease suffix. Twenty components
+(ADR-0006). The `0.x` line was the public beta: the whole of it rather than a separate tag, with no
+`next` channel and no prerelease suffix. Twenty components
 ship: `Button`, `IconButton`, `Badge`, `Spinner`, `Alert`, `TextField`, `Textarea`, `Select`,
 `Checkbox`, `Switch`, `FieldGroup`, `Tabs`, `Tooltip`, `Dialog`, `Skeleton`, `Progress`,
 `Accordion`, `Toggletip` and `Toast` in `0.15.0`, and `Radio` in `0.17.0` — the first component
@@ -285,7 +286,7 @@ a stranger what `0.18.0` actually contains.
 
 Publishing, tagging, GitHub settings, and deployment each require explicit approval.
 
-## Phase 8 — `1.0.0` — **in progress**
+## Phase 8 — `1.0.0` — **done**
 
 Goal: stabilize evidence-backed public contracts. The requirements are the `1.0.0` gates in
 [RELEASES.md](RELEASES.md#100-gates); component count alone cannot trigger `1.0.0`, and **no
@@ -295,17 +296,24 @@ phase is about turning each gate from a sentence into a file or a command.
 
 ### Where each gate stands
 
-Read at `0.19.0`, before any slice of this phase ran:
+Read at the `1.0.0` candidate, after the slices below:
 
-| Gate | State at `0.19.0` | Closed by |
+| Gate | State | Evidence |
 | --- | --- | --- |
 | at least one independent application consuming a published version | met, at `0.16.0` — no consumer outside this repository has run `0.19.0` | the consumer's own upgrade, which is Rustam's and not this repository's work |
 | adoption feedback resolved or documented | **met** — all seven verdicts re-read at `1.0.0`, with the two that closed named and the one that changed measured; the note says plainly that it is a re-read rather than a new run, and that the consumer is still on `0.16.0` | [`adoption/planning-poker.md`](adoption/planning-poker.md) |
-| stable package and token exports | stable in practice, recorded nowhere and checked by nothing | a committed snapshot of the exports and `--kreo-*` names, verified by a check in `verify` and CI |
-| reviewed deprecation and migration policy | the policy exists in `RELEASES.md`; no migration document does, and `0.19.0` removed tokens without ever marking them `@deprecated` | `MIGRATION.md` for `0.x` → `1.0.0`, and a policy that matches what the project actually does |
+| stable package and token exports | **met** — `scripts/public-api.snapshot.json`, verified by `npm run check:api` in `verify`, CI and the release workflow | 21 exports, 40 types, 3 subpaths, 135 custom properties |
+| reviewed deprecation and migration policy | **met** — the policy now records that it never applied in `0.x`, and binds from `1.0.0` | [`MIGRATION.md`](MIGRATION.md), `RELEASES.md` "Deprecation" |
 | documented browser/React support supported by evidence | **met** — the behaviour suite runs in Chromium, Firefox and WebKit in CI and in the release gate, with two WebKit differences recorded as expected failures; React 19 is stated as a decision rather than a fact | `docs/QUALITY.md` §5a, `README.md` |
-| accessibility release checklist for all shipped interactive components | the material exists across `tests/browser/`, `check:contrast` and the Accessibility page; the checklist as one reviewable artifact does not | a per-component table naming the evidence for each claim |
-| explicit API freeze review | not done | an ADR listing what is frozen for `1.x` and what was removed before the freeze |
+| accessibility release checklist for all shipped interactive components | **met, with the screen-reader pass excluded and stated** | [`ACCESSIBILITY_CHECKLIST.md`](ACCESSIBILITY_CHECKLIST.md) — twenty rows, each cell naming a run |
+| explicit API freeze review | **met** | [ADR-0020](adr/0020-api-freeze-for-1-0-0.md) — frozen unchanged, including 28 properties the library does not use itself, with that cost named |
+
+Everything above is closed except the first row, which belongs to the consumer's own repository.
+Two slices arrived that the plan did not contain: the published stylesheet was shipping the token
+layer twenty times, found by counting what the built file declares rather than by reading the
+source that produces it; and the SSR and cascade contracts were decided rather than left implied
+([ADR-0018](adr/0018-server-rendering-is-verified-rsc-is-not-claimed.md),
+[ADR-0019](adr/0019-the-stylesheet-is-unlayered.md)).
 
 ### Deliverables
 

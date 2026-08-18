@@ -3,19 +3,22 @@
 An accessible, themeable React component library for developer tools, technical products, and
 data-dense frontend applications.
 
-## Status: public beta
+## Status: stable — `1.0.0`
 
 **Twenty components ship today** — they are listed, and linked to their documentation, under
 [Components](#components). Everything else in [docs/ROADMAP.md](docs/ROADMAP.md) is a plan, not an
-available feature. The package is published so it can be consumed normally, and one application
-outside this repository consumes the published package rather than the source.
+available feature.
 
-**Beta means the whole `0.x` line, not a separate tag.** There is no `next` channel and no
-prerelease suffix: `npm install @kreobuddha/ui` is the beta. Five limits, stated plainly:
+**`1.0.0` means the public API is frozen.** An export, a prop, a `--kreo-*` custom property, the
+DOM a component renders and the keyboard behaviour it documents cannot be renamed or removed
+without a major version — see
+[ADR-0020](docs/adr/0020-api-freeze-for-1-0-0.md). The surface is recorded in
+`scripts/public-api.snapshot.json` and compared against the built package on every pull request,
+so a change to it has to be intended and described rather than noticed later. Upgrading from `0.x`?
+[docs/MIGRATION.md](docs/MIGRATION.md) lists the edits, and only `0.19.0` requires any.
 
-- **The API moves.** A minor version may rename or remove an export, a prop or a `--kreo-*` custom
-  property. Breaking changes are called out in [CHANGELOG.md](CHANGELOG.md) rather than treated as
-  disposable, but they happen — pin what you depend on.
+Four things it does not promise:
+
 - **No screen-reader conformance is claimed** for `Dialog`, `Tabs` and `Tooltip`. The pass is written
   and has not been run, and no automated check here stands in for it.
 - **The browser matrix is what a runner measured, and no wider.** The behaviour suite runs in
