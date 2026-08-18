@@ -8,7 +8,8 @@ verification quality.
 
 ## Status
 
-Phases 0 through 7 are complete and the current release is `0.19.0`. The repository is public at
+Phases 0 through 7 are complete, the current release is `0.19.0`, and **Phase 8 — `1.0.0` — is
+open**. The repository is public at
 `kreobuddha/kreobuddha-ui` with CI green, and the package is published to npm as `@kreobuddha/ui`
 (ADR-0006) as a **public beta** — which is the whole `0.x` line rather than a separate tag, so
 there is no `next` channel and no prerelease suffix. Twenty components
@@ -284,11 +285,59 @@ a stranger what `0.18.0` actually contains.
 
 Publishing, tagging, GitHub settings, and deployment each require explicit approval.
 
-## Phase 8 — `1.0.0`
+## Phase 8 — `1.0.0` — **in progress**
 
-Goal: stabilize evidence-backed public contracts.
+Goal: stabilize evidence-backed public contracts. The requirements are the `1.0.0` gates in
+[RELEASES.md](RELEASES.md#100-gates); component count alone cannot trigger `1.0.0`, and **no
+component is added in this phase**. What `1.0.0` promises is that the exports, the props and the
+`--kreo-*` custom properties a consumer depends on stop moving without a major version — so the
+phase is about turning each gate from a sentence into a file or a command.
 
-Requirements are defined in `RELEASES.md`. Component count alone cannot trigger `1.0.0`.
+### Where each gate stands
+
+Read at `0.19.0`, before any slice of this phase ran:
+
+| Gate | State at `0.19.0` | Closed by |
+| --- | --- | --- |
+| at least one independent application consuming a published version | met, at `0.16.0` — no consumer outside this repository has run `0.19.0` | the consumer's own upgrade, which is Rustam's and not this repository's work |
+| adoption feedback resolved or documented | seven findings with verdicts in [`adoption/planning-poker.md`](adoption/planning-poker.md), taken at `0.16.0` | re-reading them against `1.0.0`, or stamping the version they were taken at |
+| stable package and token exports | stable in practice, recorded nowhere and checked by nothing | a committed snapshot of the exports and `--kreo-*` names, verified by a check in `verify` and CI |
+| reviewed deprecation and migration policy | the policy exists in `RELEASES.md`; no migration document does, and `0.19.0` removed tokens without ever marking them `@deprecated` | `MIGRATION.md` for `0.x` → `1.0.0`, and a policy that matches what the project actually does |
+| documented browser/React support supported by evidence | `README.md` declines a browser matrix; browser checks run in Chromium only | running the browser project on Firefox and WebKit and recording the result, including the differences it finds |
+| accessibility release checklist for all shipped interactive components | the material exists across `tests/browser/`, `check:contrast` and the Accessibility page; the checklist as one reviewable artifact does not | a per-component table naming the evidence for each claim |
+| explicit API freeze review | not done | an ADR listing what is frozen for `1.x` and what was removed before the freeze |
+
+### Deliverables
+
+- status documents that match the released version, each piece of evidence stamped with the
+  version it was observed at;
+- a public-API snapshot that a change cannot slip past unnoticed — the counterpart to
+  `check:css`, which exists because six `@import` statements shipped for several releases without
+  anyone reading the built stylesheet;
+- `MIGRATION.md`, and a deprecation policy reconciled with what `0.19.0` actually did;
+- a measured browser matrix rather than a declined one, with each cross-engine difference either
+  fixed in its own slice or written down;
+- an accessibility release checklist per interactive component;
+- the SSR and cascade contracts decided rather than implied — a server-render check, a recorded
+  position on React Server Components, and a recorded position on `@layer`;
+- an API freeze ADR, a re-taken tarball review, and the `1.0.0` release itself.
+
+### Exit criteria
+
+- every gate above names a file or a command, and a gate that is not met says so;
+- `npm run verify` is green, and the public-API check fails on an intentional change to an export
+  or a token;
+- no document claims screen-reader conformance, browser support or adoption beyond what was
+  observed;
+- `CHANGELOG.md` describes `1.0.0` in terms of what a consumer must migrate;
+- the release runs from CI on Rustam's explicit approval of that exact version.
+
+### What this phase cannot close
+
+The screen-reader pass over `Dialog`, `Tabs` and `Tooltip` — parked below — needs a person driving
+a real assistive technology. Unless Rustam runs the script in ADR-0010 before the release, `1.0.0`
+ships with the same statement the beta carries: **no screen-reader conformance is claimed** for
+those three. A version number does not turn an unverified claim into a verified one.
 
 ## Component batch, released together as `0.15.0`
 

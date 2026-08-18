@@ -221,6 +221,9 @@ Seven gates are met before the release runs. The eighth is the release.
 
 ## `1.0.0` gates
 
+Where each of these stands today, and which slice closes it, is the gate table under Phase 8 in
+[ROADMAP.md](ROADMAP.md).
+
 Stable `1.0.0` additionally requires:
 
 - at least one independent application consuming a published version rather than source;
