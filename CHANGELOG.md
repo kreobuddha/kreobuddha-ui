@@ -15,10 +15,17 @@ explicitly rather than treated as disposable.
   declares its dependency on the tokens with `@import '../../styles.css'`, and Vite inlines that
   import once per CSS module rather than once per output file, so `dist/styles.css` repeated the
   whole `:root` block — and the reduced-motion block beside it — for each of the twenty modules.
-  It was 40,220 of the file's 79,085 bytes and made no difference to a single rendered pixel:
-  custom properties resolve where they are used. **The stylesheet is now 38.6 kB instead of
-  85.0 kB.** Nothing about the theming contract changed; the dark theme still declares the same
-  properties under `[data-kreo-theme='dark']`, which is a theme and not a repeat.
+  It made no difference to a single rendered pixel: custom properties resolve where they are used.
+  **`dist/styles.css` is 38,583 bytes instead of the 79,091 published in `0.19.0`**, and an
+  installed package is 405.5 kB unpacked instead of 444.3 kB.
+
+  Two numbers that did _not_ move, stated so the saving is not oversold: the packed tarball is
+  162,522 bytes against `0.19.0`'s 162,531 — nine bytes — and the stylesheet gzips to 7,435 bytes
+  against 8,127, because repetition is what compression is best at. What this buys is disk after
+  install, and the bytes a consumer's own CSS bundle carries before their server compresses it.
+
+  Nothing about the theming contract changed; the dark theme still declares the same properties
+  under `[data-kreo-theme='dark']`, which is a theme and not a repeat.
 
 ### Added
 
