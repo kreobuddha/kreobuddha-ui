@@ -23,9 +23,10 @@ Four things it does not promise:
   and has not been run, and no automated check here stands in for it.
 - **The browser matrix is what a runner measured, and no wider.** The behaviour suite runs in
   Chromium, Firefox and WebKit on every pull request; the story and visual checks stay Chromium-only.
-  Two WebKit differences are recorded rather than fixed: a modal dialog does not return focus to its
-  trigger, and Safari leaves buttons out of the tab order unless the reader turns that on. Nothing is
-  claimed about older engines, because nothing runs there — see
+  Two differences in WebKit's macOS build are recorded rather than fixed: a modal dialog does not
+  return focus to its trigger, and Safari leaves buttons out of the tab order unless the reader turns
+  that on. Its Linux build does both, which is why the tests name the platform as well as the engine.
+  Nothing is claimed about older engines, because nothing runs there — see
   [docs/QUALITY.md](docs/QUALITY.md).
 - **Server rendering works; React Server Components are not claimed.** Every export is rendered
   without a DOM on every pull request. Inside an App Router tree, wrap the import in your own

@@ -1,6 +1,7 @@
 import { expect, test } from '@playwright/test';
 import type { Page } from '@playwright/test';
 
+import { isMacOS } from '../host-platform.js';
 import { storyUrl } from '../story-url.js';
 
 /**
@@ -90,11 +91,17 @@ test('the close button is reachable by keyboard, and a real Enter dismisses', as
   browserName,
 }) => {
   // Safari does not put buttons in the tab order unless the reader turns on "Press Tab to
-  // highlight each item on a webpage", and WebKit under Playwright behaves the same way. That is
+  // highlight each item on a webpage", and Playwright's macOS WebKit inherits that default. It is
   // the platform's keyboard model rather than this library's markup — the button is a real
-  // `<button>`, and Enter dismisses in every engine — but the sentence in the test name is not
-  // true on WebKit, so it is recorded as a failure rather than quietly passed.
-  test.fail(browserName === 'webkit', 'Safari omits buttons from the tab order by default');
+  // `<button>` and Enter dismisses everywhere — but the sentence in the test name is not true
+  // there, so it is recorded as a failure rather than quietly passed.
+  //
+  // The Ubuntu build does put buttons in the tab order, which CI proved by failing with "Expected
+  // to fail, but passed" when this condition was on the engine alone.
+  test.fail(
+    browserName === 'webkit' && isMacOS,
+    'macOS Safari omits buttons from the tab order by default'
+  );
 
   await openStory(page, 'components-toast--long-message');
 

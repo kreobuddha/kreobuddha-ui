@@ -68,10 +68,17 @@ pass needs a person and has not been run; and nothing is claimed about engines n
   silently change which rules win.
 - **The behaviour suite runs in three engines.** `npm run check:browser:matrix` runs
   `tests/browser/` in Chromium, Firefox and WebKit, and it is what CI and the release workflow run.
-  Measured on 2026-08-18: Chromium 30 passed, Firefox 30 passed, WebKit 28 passed with two
-  differences recorded as expected failures — a modal dialog does not return focus to its trigger,
-  and Safari leaves buttons out of the tab order unless the reader turns that on. The project now
-  states a browser matrix instead of declining one; nothing changed in the library to earn it.
+  Measured on 2026-08-18: Chromium and Firefox 30 passed on both macOS and Ubuntu; WebKit 30 passed
+  on Ubuntu and 28 with two expected failures on macOS — a modal dialog does not return focus to its
+  trigger, and Safari leaves buttons out of the tab order unless the reader turns that on.
+
+  That split is itself a finding. The two expectations were written against the engine name, and CI
+  rejected them with `Expected to fail, but passed`: Playwright ships two WebKits, and only the
+  macOS one behaves like the engine a Safari user has. They now name the platform as well.
+
+  The project states a browser matrix instead of declining one; nothing changed in the library to
+  earn it.
+
 - **`npm run check:api`** compares the built exports, the package subpaths and the `--kreo-*`
   custom properties against a snapshot committed at `scripts/public-api.snapshot.json`, and fails
   when any of them moves. Exports, subpaths and custom properties are versioned contracts that

@@ -9,7 +9,9 @@ Taken at `0.19.0` + Phase 8, 2026-08-18. Every number below came from a run:
 - `npm test` — 408 tests in 41 files. Two projects: unit tests in jsdom, and every story executed
   in a real Chromium through `@storybook/addon-vitest`, with axe scanning the rendered output;
 - `npm run check:contrast` — 146 pairs, both themes, against the WCAG 2.2 targets;
-- `npm run check:browser:matrix` — 30 behaviour tests in Chromium, Firefox and WebKit.
+- `npm run check:browser:matrix` — 30 behaviour tests in Chromium, Firefox and WebKit. On macOS,
+  WebKit records two expected failures; CI's Linux WebKit passes all thirty, which is the difference
+  between the two builds rather than between this library's behaviour on them.
 
 ## What the columns mean
 
@@ -36,7 +38,7 @@ presses in three engines; **C** = `check:contrast`; **—** = not applicable to 
 | `Badge` | plain `<span>`, out of the tab order — U | content | — | — | C | CSS | — |
 | `Button` | `<button>` — U, S | U, S | native | S, `--kreo-focus-ring` inside the box | C | CSS | — |
 | `Checkbox` | `<input type="checkbox">` — U, S | U (`label` required) | native | S | C | CSS | — |
-| `Dialog` | `<dialog>` + `showModal()` — U, S | `title` — U | B — `Escape` closes; `Tab` never leaves the panel | B — into the panel, page behind inert; **returns to the trigger except on WebKit** | C | CSS + B (a non-zero border under `forced-colors`) | CSS |
+| `Dialog` | `<dialog>` + `showModal()` — U, S | `title` — U | B — `Escape` closes; `Tab` never leaves the panel | B — into the panel, page behind inert; **returns to the trigger except on WebKit's macOS build** | C | CSS + B (a non-zero border under `forced-colors`) | CSS |
 | `FieldGroup` | `<fieldset>` + `<legend>` — U | `legend` — U | native | native | C | shared `field.module.css` | — |
 | `IconButton` | `<button>` — U, S | `label` required, compiler-checked — U, S | native | S | C | CSS | — |
 | `Progress` | `role="progressbar"` by decision, not `<progress>` — U, S | `label` required — U | — | — | C | B — track keeps its extent, fill stays visible | CSS |
@@ -48,7 +50,7 @@ presses in three engines; **C** = `check:contrast`; **—** = not applicable to 
 | `Tabs` | WAI-ARIA tabs — U, S | U | **S** — arrows move and select, `Home`/`End` jump, roving `tabindex` keeps one tab stop; real key presses in Chromium through the story runner, and in jsdom through the unit tests | S | C | CSS | — |
 | `TextField` | `<input>` + `<label>`, `aria-describedby` ordered hint-then-error — U, S | `label` required — U | native | S | C | shared `field.module.css` | — |
 | `Textarea` | `<textarea>` — U, S | `label` required — U | native | S | C | shared `field.module.css` | — |
-| `Toast` | `role="status"` region, popover — U, B | U | B — the dismiss button is reachable and `Enter` dismisses (**not on WebKit**, see below) | B — the timer pauses while focus is inside | C | B | CSS |
+| `Toast` | `role="status"` region, popover — U, B | U | B — the dismiss button is reachable and `Enter` dismisses (**Tab does not reach it on WebKit's macOS build**, see below) | B — the timer pauses while focus is inside | C | B | CSS |
 | `Toggletip` | `popover`, opened by a real `<button>` — U, B | U | B — `Escape` closes and returns focus to the trigger | B | C | B | — |
 | `Tooltip` | `popover` + CSS anchor positioning — U, B | U | B — `Escape` closes without moving focus | B — focus opens it and does not move | C | B — the bubble keeps a visible edge | — |
 
@@ -59,10 +61,10 @@ presses in three engines; **C** = `check:contrast`; **—** = not applicable to 
   person driving a real assistive technology. No check in this repository stands in for it, so
   **`1.0.0` claims no screen-reader conformance for those three**. It restarts when Rustam runs the
   script.
-- **On WebKit, closing a `Dialog` does not return focus to its trigger.** Recorded in the test as
+- **On WebKit's macOS build, closing a `Dialog` does not return focus to its trigger.** The Linux build CI runs does return it, which is how the difference turned out to be the build rather than the engine. Recorded in the test as
   an expected failure, so the day WebKit changes, the suite says so. The decision not to work
   around it is ADR-0010's: overlay focus behaviour belongs to the browser.
-- **On WebKit, `Tab` does not reach the toast's dismiss button.** Safari leaves buttons out of the
+- **On WebKit's macOS build, `Tab` does not reach the toast's dismiss button.** Safari leaves buttons out of the
   tab order unless the reader turns on "Press Tab to highlight each item on a webpage". The button
   is a real `<button>` and `Enter` activates it in every engine; what differs is the platform's
   keyboard model, not this markup.

@@ -143,14 +143,18 @@ visual run in §6 remain Chromium-only, for the reasons each of those sections g
 
 Measured on 2026-08-18, Playwright 1.62.1, thirty behaviour tests per engine:
 
-| Engine | Result |
-| --- | --- |
-| Chromium | 30 passed |
-| Firefox | 30 passed |
-| WebKit | 28 passed, 2 expected failures |
+| Engine | macOS (local) | Ubuntu (CI) |
+| --- | --- | --- |
+| Chromium | 30 passed | 30 passed |
+| Firefox | 30 passed | 30 passed |
+| WebKit | 28 passed, 2 expected failures | 30 passed |
 
-The two WebKit differences are recorded in the tests as `test.fail`, not as skips, so the suite
-fails on the day either stops being true:
+**"WebKit" is two builds, and they disagree.** The expectations were written against the engine
+name first, and CI rejected them: `Expected to fail, but passed`, twice. Playwright's Linux WebKit
+returns focus to a dialog's trigger and puts buttons in the tab order; its macOS build — the one
+close to the engine a Safari user actually has — does neither. The two expectations are therefore
+conditioned on the host platform as well as the engine, through `tests/host-platform.ts`, and they
+stay `test.fail` rather than skips, so the suite fails on the day either stops being true:
 
 - **a modal `<dialog>` does not return focus to its trigger when it closes.** The engine's, not
   this library's, and stated in [ADR-0010](adr/0010-overlay-and-composite-strategy.md) since Phase

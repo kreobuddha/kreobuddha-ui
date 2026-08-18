@@ -51,7 +51,7 @@ behaviour suite runs in Chromium, Firefox and WebKit on every pull request, and 
 recorded there as an expected failure — so the suite fails on the day the engine changes. It is
 still Playwright's WebKit build rather than shipping Safari.
 
-**On WebKit, `Tab` does not reach a toast's dismiss button.** Safari leaves buttons out of the tab
+**On WebKit's macOS build, `Tab` does not reach a toast's dismiss button.** Safari leaves buttons out of the tab
 order unless the reader turns on "Press Tab to highlight each item on a webpage". The button is a
 real `<button>` and `Enter` activates it everywhere; the difference belongs to the platform's
 keyboard model.
