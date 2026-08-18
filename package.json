@@ -41,7 +41,7 @@
     "provenance": true
   },
   "scripts": {
-    "build": "vite build && node scripts/bundle-fonts.mjs && tsc -p tsconfig.build.json",
+    "build": "vite build && node scripts/dedupe-token-layer.mjs && node scripts/bundle-fonts.mjs && tsc -p tsconfig.build.json",
     "build-storybook": "storybook build",
     "check:api": "node scripts/check-public-api.mjs",
     "check:browser": "npx playwright test --project=browser",

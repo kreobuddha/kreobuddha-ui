@@ -222,6 +222,19 @@ because entries in one build share their common code through a chunk belonging t
 mounts what it imports, because an entry whose export nobody consumes is dead code that Rollup
 drops, leaving an empty bundle to pass the check for no reason.
 
+### 7a. The published stylesheet
+
+`npm run check:css` reads the built stylesheets rather than trusting the build. It fails on an
+`@import` the bundler did not inline — six of them shipped once, pointing at nothing — on a
+missing token layer, and now on a **repeated** one.
+
+The repeat was real and expensive. Each component stylesheet imports the tokens, Vite inlines that
+import per CSS module, and the published file carried twenty copies of the `:root` block: 40,220
+of 79,085 bytes for no rendered difference. `scripts/dedupe-token-layer.mjs` runs inside `build`
+and removes exact repeats of a block that declares nothing but `--kreo-*` properties. Component
+rules are left alone, including identical ones, because two identical rules can sit either side of
+a third that competes with them and dropping one would change the cascade.
+
 ### 8. Public API snapshot
 
 `npm run check:api` reads the built `dist/index.d.ts`, the `exports` map and the `--kreo-*`

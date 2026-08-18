@@ -9,6 +9,27 @@ explicitly rather than treated as disposable.
 
 ## [Unreleased]
 
+### Fixed
+
+- **The published stylesheet carried the token layer twenty times.** Every component stylesheet
+  declares its dependency on the tokens with `@import '../../styles.css'`, and Vite inlines that
+  import once per CSS module rather than once per output file, so `dist/styles.css` repeated the
+  whole `:root` block — and the reduced-motion block beside it — for each of the twenty modules.
+  It was 40,220 of the file's 79,085 bytes and made no difference to a single rendered pixel:
+  custom properties resolve where they are used. **The stylesheet is now 38.6 kB instead of
+  85.0 kB.** Nothing about the theming contract changed; the dark theme still declares the same
+  properties under `[data-kreo-theme='dark']`, which is a theme and not a repeat.
+
+### Added
+
+- **`npm run check:api`** compares the built exports, the package subpaths and the `--kreo-*`
+  custom properties against a snapshot committed at `scripts/public-api.snapshot.json`, and fails
+  when any of them moves. Exports, subpaths and custom properties are versioned contracts that
+  nothing had ever read: `publint` and `attw` inspect the package's shape rather than its
+  contents. It runs in `verify`, in CI and in the release workflow.
+- **[`docs/MIGRATION.md`](docs/MIGRATION.md)** — what an upgrade actually costs, token by token.
+  Only `0.19.0` requires any edit in the whole `0.x` line.
+
 ## [0.19.0] — 2026-08-18
 
 **The typography decisions this library had been carrying without ever making.** Thirteen defects
