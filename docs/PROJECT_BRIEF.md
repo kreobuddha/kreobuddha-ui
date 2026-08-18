@@ -12,7 +12,10 @@
 - Backend: none by design
 - License: MIT
 - Typeface: Inter, bundled with the package; no monospace family (ADR-0005)
-- Shipped components: `Button`
+- Shipped components: twenty, listed in `README.md` — `Button`, `IconButton`, `TextField`,
+  `Textarea`, `Select`, `Checkbox`, `Radio`, `Switch`, `FieldGroup`, `Tabs`, `Accordion`,
+  `Tooltip`, `Toggletip`, `Dialog`, `Badge`, `Spinner`, `Skeleton`, `Progress`, `Toast`, `Alert`
+- Current release: `1.0.0`, in which the public API is frozen (ADR-0020)
 
 ## Product summary
 
@@ -108,7 +111,7 @@ real component slices and consumer screens.
 - Provide static Storybook documentation that needs no backend.
 - Verify the packed artifact in a consumer application rather than importing source directly.
 - Establish automated type, lint, behavior, accessibility, build, and package checks.
-- Use the published prerelease in at least one independent application before `1.0.0`.
+- Use the published prerelease in at least one independent application before `1.0.0` — done in Phase 6, measured at `0.16.0`.
 
 ## Non-goals
 
