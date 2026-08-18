@@ -66,6 +66,7 @@ records it.
 | How `loading` and `disabled` differ on a button | ADR-0004 §5, amended by ADR-0014 |
 | How much of the library a consumer is meant to configure | ADR-0015 |
 | How many type sizes and weights the scale carries | ADR-0016 — applies ADR-0015, amends ADR-0005 |
+| What a control's `size` prop controls | ADR-0017 — geometry, not type; amends ADR-0016 |
 | npm publication and release authentication | ADR-0006 |
 | Storybook and test-runner responsibilities | open — settled in practice, never written down |
 | Changesets instead of a hand-written changelog | ADR-0013 — declined; the changelog is written, not generated |

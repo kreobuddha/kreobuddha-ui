@@ -53,7 +53,6 @@
 .sm {
   min-height: var(--kreo-control-h-sm);
   padding-inline: var(--kreo-control-px-sm);
-  font-size: var(--kreo-text-12);
 }
 
 /* Off the 4px scale on purpose: the full gap crowds a 32px control. */

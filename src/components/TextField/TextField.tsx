@@ -15,7 +15,11 @@ export type TextFieldSize = 'sm' | 'md' | 'lg';
 export interface TextFieldProps extends Omit<ComponentPropsWithRef<'input'>, 'size' | 'prefix'> {
   /** The field's visible label. Required: a field without one is unusable by anybody not looking at it. */
   label: string;
-  /** Height and type scale, matching `Button` so a field and a button sit level side by side. */
+  /**
+   * Control height — 32px, 40px or 48px — and the padding that goes with it, matching `Button` so
+   * a field and a button sit level side by side. Not the type: every size is set in
+   * `--kreo-type-body`, so a form does not change voice when a control changes height.
+   */
   size?: TextFieldSize;
   /** Guidance shown under the field. Announced with the field, not read as separate text. */
   hint?: ReactNode;
