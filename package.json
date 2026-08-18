@@ -43,6 +43,7 @@
   "scripts": {
     "build": "vite build && node scripts/bundle-fonts.mjs && tsc -p tsconfig.build.json",
     "build-storybook": "storybook build",
+    "check:api": "node scripts/check-public-api.mjs",
     "check:browser": "npx playwright test --project=browser",
     "check:consumer": "node scripts/check-consumer.mjs",
     "check:contrast": "node scripts/check-contrast.mjs",
@@ -61,7 +62,7 @@
     "test": "vitest run",
     "test:one": "vitest run --project unit",
     "typecheck": "tsc -p tsconfig.json",
-    "verify": "npm run format:check && npm run lint && npm run lint:css && npm run typecheck && npm test && npm run check:contrast && npm run build && npm run build-storybook && npm run check:css && npm run check:package && npm run check:consumer && npm run check:workbench && npm run check:browser && npm run check:visual",
+    "verify": "npm run format:check && npm run lint && npm run lint:css && npm run typecheck && npm test && npm run check:contrast && npm run build && npm run build-storybook && npm run check:css && npm run check:api && npm run check:package && npm run check:consumer && npm run check:workbench && npm run check:browser && npm run check:visual",
     "verify:fast": "npm run format:check && npm run lint && npm run lint:css && npm run typecheck && npm run test:one"
   },
   "peerDependencies": {

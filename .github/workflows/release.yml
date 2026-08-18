@@ -80,6 +80,10 @@ jobs:
       # It has to run after both builds, because both are what it inspects.
       - run: npm run check:css
 
+      # Compares the built exports, package subpaths and `--kreo-*` custom properties against the
+      # snapshot in `scripts/public-api.snapshot.json`. Reads `dist`, so it runs after the build.
+      - run: npm run check:api
+
       - run: npm run check:package
 
       # Packs the package and installs the tarball into two independent applications: the consumer

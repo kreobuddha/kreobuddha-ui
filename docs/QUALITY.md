@@ -222,7 +222,23 @@ because entries in one build share their common code through a chunk belonging t
 mounts what it imports, because an entry whose export nobody consumes is dead code that Rollup
 drops, leaving an empty bundle to pass the check for no reason.
 
-### 8. Public documentation
+### 8. Public API snapshot
+
+`npm run check:api` reads the built `dist/index.d.ts`, the `exports` map and the `--kreo-*`
+declarations in `dist/styles.css`, and compares all three against
+`scripts/public-api.snapshot.json`. A rename, a removal or an addition fails the check until the
+snapshot is updated with `node scripts/check-public-api.mjs --update` in the same pull request.
+
+It exists for the same reason `check:css` does. Exports, package subpaths and custom properties
+are versioned contracts, and nothing read them: `publint` and `attw` inspect the package's shape,
+not its contents, and two `dist/demo/*.d.ts` files shipped for fourteen minor versions because no
+gate looked at what was inside a correct-looking build.
+
+What it does not do is read prop types. It answers "did the public surface change" rather than "is
+the change right" — the second is a review, and the check's job is to make sure that review
+happens rather than to replace it.
+
+### 9. Public documentation
 
 Build Storybook statically and verify navigation, source examples, installation instructions, and
 links. Documentation must not claim support or functionality that the published artifact lacks.
@@ -243,7 +259,8 @@ opened by hand: navigation, both themes, and no asset 404 under the sub-path.
 | Component behavior | typecheck, lint, focused tests, a11y, package build |
 | Component styling | component checks plus Storybook build and visual inspection |
 | Keyboard/focus behavior | component checks plus `check:browser` for anything the engine owns, and manual keyboard/focus review for the rest |
-| Public exports/types | package build, artifact inspection, type/package lint, consumer smoke |
+| Public exports/types | package build, artifact inspection, type/package lint, consumer smoke, `check:api` and a recorded snapshot |
+| A `--kreo-*` custom property | token/build check, contrast check where it is a colour, `check:api` and a recorded snapshot |
 | Build configuration | all static, package, Storybook, and consumer checks |
 | Release workflow | `ci.yml` green on the pull request, and the diff read line by line — see below |
 
@@ -279,6 +296,7 @@ story tests in Chromium               running — play functions and axe
 contrast check                        running
 package build                         running
 Storybook build                       running
+public API snapshot                   running — exports, subpaths and --kreo-* against a committed file
 package artifact checks               running
 consumer smoke build                  running — packed tarball in examples/react-vite
 workbench checks                      running — packed tarball in examples/workbench, tests/workbench
