@@ -1,7 +1,7 @@
 # ADR-0017: `size` is a control's geometry, not its type
 
 - Status: Accepted
-- Date: 2026-08-17
+- Date: 2026-08-18
 - Decision owners: Rustam
 - Amends: [ADR-0016](0016-four-type-sizes-and-a-lighter-regular.md), which left `sm` setting its own
   type

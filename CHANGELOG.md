@@ -9,6 +9,19 @@ explicitly rather than treated as disposable.
 
 ## [Unreleased]
 
+## [0.19.0] — 2026-08-18
+
+**The typography decisions this library had been carrying without ever making.** Thirteen defects
+were collected against `0.18.0` and every one is closed here, but the release is really two
+decisions and their consequences: the type scale is four sizes instead of eleven, and a control's
+`size` prop is its geometry rather than its type.
+
+Both are breaking, and both happen now on purpose. Phase 8 is `1.0.0`, after which every `--kreo-*`
+custom property is fixed for the `1.x` line — so the surface carried into it is decided rather than
+inherited. [ADR-0015](docs/adr/0015-good-out-of-the-box-over-configurable.md) writes down the
+principle the other two apply: the library is a set of finished decisions, not a kit for making
+them, and a token nothing references has not earned a public name.
+
 ### Changed — breaking
 
 - **The type scale is four sizes instead of eleven, and body is 16px instead of 14px.**
@@ -34,11 +47,44 @@ explicitly rather than treated as disposable.
 
 ### Fixed
 
+- **`Tabs` no longer grows a vertical scrollbar.** The tab list scrolls horizontally when the tabs
+  outrun the width, and setting one overflow axis makes CSS compute the other as `auto` rather than
+  leaving it `visible` — so a single pixel poking out below became a vertical scrollbar, which
+  narrowed the box enough to raise a horizontal one with nothing to scroll. The axis is now pinned
+  shut, and the pixel is gone as well: the selected tab's indicator sat at `-1px`, below the scroll
+  container's content box, where the lower half of a 2px bar was clipped instead of painted over
+  the rule. It now sits at `0` and is drawn whole.
+- **A button in flight is dimmed as well as spinning.** `loading` kept full colour, so a button
+  that refuses activation still read as pressable; `disabled` was the only state with the library's
+  visual convention for "not right now". `loading` is the lighter of the two — dimming it as far as
+  `disabled` drags the spinner below the contrast this library asks of a status mark, because
+  `opacity` composites an element and its descendants as one group. The amount was measured in both
+  themes rather than chosen. `IconButton` gets the same treatment. See
+  [ADR-0014](docs/adr/0014-loading-is-dimmed-too.md), which amends ADR-0004 §5.
+- **`Dialog`'s documentation page is readable again.** Its stories defaulted to `open: true` with a
+  no-op `onClose`, so arriving at the page opened a modal that could not be closed by button, by
+  Escape, or by clicking away — and the native dialog's top layer put it over the prose and the prop
+  table the reader had come for. The stories now open the dialog from a real trigger and close it
+  for real. `children` also has a description, so it is no longer a blank row in the table.
+- **Prop tables offer controls a value can be typed into.** `exactOptionalPropertyTypes` makes every
+  optional prop `T | undefined`, which react-docgen reports as a union and Storybook renders as a
+  JSON object editor — so `Toast`'s `duration`, a number of milliseconds, arrived as "Set object".
+  `ReactNode` props did worse: `Tooltip`'s `children` printed the React element's internals into the
+  table. Documentation-site only; no type changed.
+- **Markdown tables render as tables.** Storybook's MDX pipeline runs CommonMark, which has no table
+  syntax, so the tables on the Installation and Accessibility pages were being parsed as one
+  paragraph and drawn as their own pipe characters. `remark-gfm` joins the documentation build — no
+  runtime dependency is added, and nothing reaches `dist`.
 - **Switching the theme no longer flashes the page white.** A documentation page is rebuilt from
   scratch whenever a global changes, and the surface used to be painted by a React element — so for
   the frame in between, nothing painted it. `data-kreo-theme` and the page surface now live on the
   preview document, outside React's reach, and hold across the rebuild. Documentation-site only; no
   packaged file is involved.
+
+### Changed
+
+- **The Storybook theme is a switch rather than a two-item dropdown.** A dropdown of two costs a
+  click to open and lets the reader land on the value already selected. Documentation-site only.
 
 ## [0.18.0] — 2026-08-17
 
@@ -455,7 +501,8 @@ from git for a single consumer.
   is public API.
 - Inter bundled as WOFF2 subsets, so no external font request is made at runtime.
 
-[unreleased]: https://github.com/kreobuddha/kreobuddha-ui/compare/v0.18.0...HEAD
+[unreleased]: https://github.com/kreobuddha/kreobuddha-ui/compare/v0.19.0...HEAD
+[0.19.0]: https://github.com/kreobuddha/kreobuddha-ui/compare/v0.18.0...v0.19.0
 [0.18.0]: https://github.com/kreobuddha/kreobuddha-ui/compare/v0.17.0...v0.18.0
 [0.17.0]: https://github.com/kreobuddha/kreobuddha-ui/compare/v0.16.0...v0.17.0
 [0.16.0]: https://github.com/kreobuddha/kreobuddha-ui/compare/v0.15.0...v0.16.0

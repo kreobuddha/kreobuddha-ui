@@ -1,7 +1,7 @@
 # ADR-0015: Good out of the box, before configurable
 
 - Status: Accepted
-- Date: 2026-08-17
+- Date: 2026-08-18
 - Decision owners: Rustam
 
 ## Context

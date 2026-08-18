@@ -1,7 +1,7 @@
 # ADR-0016: Four type sizes, body at 16px, and a lighter regular
 
 - Status: Accepted
-- Date: 2026-08-17
+- Date: 2026-08-18
 - Decision owners: Rustam
 - Applies: [ADR-0015](0015-good-out-of-the-box-over-configurable.md)
 - Amends: [ADR-0005](0005-visual-language.md), which set the eleven-step scale
