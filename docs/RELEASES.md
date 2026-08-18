@@ -236,13 +236,26 @@ Stable `1.0.0` additionally requires:
 
 ## Deprecation
 
-When a compatible migration path exists:
+**This policy has never been applied, and `0.19.0` is why that is worth writing down.** Seven
+`--kreo-text-*` tokens and `--kreo-type-body-lg` were removed in one release without ever being
+marked deprecated or carried through a cycle. That was deliberate — a custom property cannot carry
+a `@deprecated` annotation a consumer would ever see, the beta says in `README.md` that a minor
+version may remove a `--kreo-*` property, and the removal was the point of the release rather than
+a side effect. Recording it plainly matters more than a policy that describes a project that does
+not exist yet.
 
-- mark deprecated types or props with `@deprecated`;
-- document the replacement and migration example;
+From `1.0.0` the policy below binds, because a stable line is exactly what makes a deprecation
+period meaningful. When a compatible migration path exists:
+
+- mark deprecated types or props with `@deprecated`, which the generated prop tables surface;
+- document the replacement and migration example in [`MIGRATION.md`](MIGRATION.md);
 - keep the old API for at least one planned release cycle unless a security or correctness issue
   makes that unsafe;
 - remove it only in a breaking release.
+
+A `--kreo-*` custom property cannot be annotated, so its deprecation is announced in
+`MIGRATION.md` and in the changelog, and the old name keeps resolving — as an alias of its
+replacement — for the same one cycle.
 
 ## Publishing security
 

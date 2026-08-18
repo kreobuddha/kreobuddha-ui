@@ -48,6 +48,9 @@ npm install @kreobuddha/ui
 - Node.js `^20.19.0 || >=22.12.0`
 - React `^19.0.0` as a peer dependency (install it yourself; the package does not bundle React)
 
+Upgrading from an earlier version? [docs/MIGRATION.md](docs/MIGRATION.md) lists the edits each
+upgrade requires. Only one release in the `0.x` line requires any: `0.19.0`.
+
 ## Usage
 
 ```tsx
