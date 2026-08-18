@@ -97,9 +97,11 @@ token pairings the components may not currently render, while the browser scan c
 story actually puts on screen, including combinations nobody thought to declare.
 
 ### 5. Manual accessibility
+
 The per-component version of everything below — one row per component, one column per claim, each
 cell naming the command that shows it — is [ACCESSIBILITY_CHECKLIST.md](ACCESSIBILITY_CHECKLIST.md),
 re-taken at each release that changes markup, keyboard behaviour or focus behaviour.
+
 Some of the list below is no longer manual — see §5a. What stays manual is what a runner cannot
 judge: what a screen reader actually announces.
 
