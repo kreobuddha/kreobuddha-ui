@@ -3,7 +3,9 @@
 ## Current status
 
 `@kreobuddha/ui` is published to npm under the `@kreobuddha` scope with public access. The licence
-is MIT and the public repository is `kreobuddha/kreobuddha-ui` with CI green on `master`.
+is MIT and the public repository is `kreobuddha/kreobuddha-ui` with CI green on `master`. The
+current release is **`0.19.0`** (2026-08-18), which is where every "reviewed at" date below should
+be read against.
 
 Publishing is still an external action: each release requires Rustam's explicit approval for the
 exact version and action. See ADR-0006 for how releases are authenticated.
@@ -18,6 +20,11 @@ carried forward.
 
 Read rather than assumed, because "public artifacts contain only intentional files" is a principle
 below and a principle nobody measures is a hope. Every number here came from a command that was run.
+
+**This review is two releases old.** It was taken at `0.17.0`; the current release is `0.19.0`,
+which changed tokens and component CSS but added no build output of a new kind. The numbers below
+are therefore evidence about `0.17.0` and nothing else, and Phase 8 re-takes them on the `1.0.0`
+candidate rather than assuming they held.
 
 `npm pack --dry-run --json`, before and after the one fix this review produced:
 
@@ -193,6 +200,11 @@ A public prerelease requires the eight things below. This list stood for four ph
 saying whether any of them held, which made it a wish rather than a gate. Reviewed at `0.18.0`, each
 one now carries the file or the command that shows its state — and where a gate is not met, it says
 so instead of rounding up.
+
+**The state below was observed at `0.18.0`.** `0.19.0` did not reopen any of these gates: it added
+no export, no file kind in the tarball and no external dependency, and CI stayed green on `master`
+at `6c2d806`. What it did change is the token surface, which is the subject of the `1.0.0` gates
+further down rather than of these.
 
 | Requirement | State | Evidence |
 | --- | --- | --- |

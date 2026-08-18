@@ -8,14 +8,26 @@ verification quality.
 
 ## Status
 
-Phases 0 through 7 are complete. The repository is public at `kreobuddha/kreobuddha-ui` with CI
-green, and the package is published to npm as `@kreobuddha/ui` (ADR-0006) as a **public beta** —
-which is the whole `0.x` line rather than a separate tag, so there is no `next` channel and no
-prerelease suffix. Twenty components
+Phases 0 through 7 are complete and the current release is `0.19.0`. The repository is public at
+`kreobuddha/kreobuddha-ui` with CI green, and the package is published to npm as `@kreobuddha/ui`
+(ADR-0006) as a **public beta** — which is the whole `0.x` line rather than a separate tag, so
+there is no `next` channel and no prerelease suffix. Twenty components
 ship: `Button`, `IconButton`, `Badge`, `Spinner`, `Alert`, `TextField`, `Textarea`, `Select`,
 `Checkbox`, `Switch`, `FieldGroup`, `Tabs`, `Tooltip`, `Dialog`, `Skeleton`, `Progress`,
 `Accordion`, `Toggletip` and `Toast` in `0.15.0`, and `Radio` in `0.17.0` — the first component
 added because a consumer proved the need.
+
+`0.19.0` belongs to no phase. It collected thirteen defects against `0.18.0` and closed all of
+them, but what it really carries is two typography decisions the library had been postponing, both
+breaking and both taken deliberately before Phase 8 rather than inside `1.x`:
+[ADR-0016](adr/0016-four-type-sizes-and-a-lighter-regular.md) cuts the type scale from eleven sizes
+to four, moves body to 16px and `--kreo-weight-regular` to 300;
+[ADR-0017](adr/0017-size-is-geometry-not-type.md) makes `size` on `Button`, `TextField`, `Textarea`
+and `Select` the control's geometry alone. Both apply the principle
+[ADR-0015](adr/0015-good-out-of-the-box-over-configurable.md) writes down.
+[ADR-0014](adr/0014-loading-is-dimmed-too.md), from the same release, amends ADR-0004 §5 so a
+`loading` button is dimmed as well as spinning. **The `--kreo-*` surface a consumer sees today is
+therefore the one Phase 8 freezes for the whole `1.x` line**, which is why the cut happened now.
 
 Phase 5 added no component. It made what exists inspectable by someone who is not Rustam: a
 documentation site at [kreobuddha.github.io/kreobuddha-ui](https://kreobuddha.github.io/kreobuddha-ui/)
