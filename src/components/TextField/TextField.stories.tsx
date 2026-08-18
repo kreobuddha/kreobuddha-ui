@@ -2,12 +2,21 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import type { ReactElement } from 'react';
 import { expect, userEvent, within } from 'storybook/test';
 
+import { textNodeControl } from '../../docs/storyControls.js';
 import { TextField } from './TextField.js';
 
 const meta = {
   title: 'Components/TextField',
   component: TextField,
   args: { label: 'Email' },
+  // Typed `ReactNode` so a field can carry a link, but a line of text in almost every use.
+  argTypes: {
+    label: textNodeControl,
+    hint: textNodeControl,
+    error: textNodeControl,
+    prefix: textNodeControl,
+    suffix: textNodeControl,
+  },
 } satisfies Meta<typeof TextField>;
 
 export default meta;
@@ -25,7 +34,11 @@ export const Default: Story = {
   args: { placeholder: 'you@example.com' },
 };
 
-/** Heights match `Button` on the same scale, so a field and a button sit level side by side. */
+/**
+ * Heights match `Button` on the same scale, so a field and a button sit level side by side. Only
+ * the box changes: the text is `--kreo-type-body` in all three, so a dense form and a roomy one
+ * are the same form at different sizes rather than two different type treatments.
+ */
 export const Sizes: Story = {
   render: (args): ReactElement => (
     <div style={column}>

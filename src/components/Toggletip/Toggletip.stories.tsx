@@ -2,6 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import type { ReactElement } from 'react';
 import { expect, userEvent, waitFor, within } from 'storybook/test';
 
+import { nodeControl, textNodeControl } from '../../docs/storyControls.js';
 import { Button } from '../Button/Button.js';
 import { IconButton } from '../IconButton/IconButton.js';
 
@@ -25,6 +26,12 @@ const meta = {
   args: {
     content: 'Seats are counted at the end of the month, so removing someone today still bills.',
     children: <Button variant="outlined">Why is this billed?</Button>,
+  },
+  // As with `Tooltip`: `children` is the trigger element, and its inferred control would print the
+  // element's internals into the prop table.
+  argTypes: {
+    content: textNodeControl,
+    children: nodeControl,
   },
   // Room on every side, so a bubble wider than its trigger is centred on it rather than pinned
   // against the edge of the viewport — which is what a tighter frame would show instead.

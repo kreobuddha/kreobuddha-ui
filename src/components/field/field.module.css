@@ -44,6 +44,7 @@
   display: flex;
   min-width: 0;
   background: var(--kreo-surface-card);
+  font: var(--kreo-type-body);
   border: var(--kreo-border-w) solid var(--kreo-border-control);
   border-radius: var(--kreo-radius-md);
   transition: var(--kreo-transition-color);
@@ -91,6 +92,7 @@
   margin: 0;
   font: var(--kreo-type-body);
   font-size: var(--kreo-text-12);
+  font-weight: var(--kreo-weight-medium);
   color: var(--kreo-text-muted);
 }
 
@@ -98,6 +100,7 @@
   margin: 0;
   font: var(--kreo-type-body);
   font-size: var(--kreo-text-12);
+  font-weight: var(--kreo-weight-medium);
   color: var(--kreo-text-danger);
 }
 

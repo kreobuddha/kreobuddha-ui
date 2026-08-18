@@ -68,7 +68,7 @@
   --kreo-text-body: var(--kreo-neutral-800);
   --kreo-text-muted: var(--kreo-neutral-600);
 
-  /* Off the ramp on purpose: neutral-500 measures 4.43:1, and the 11px labels using this need
+  /* Off the ramp on purpose: neutral-500 measures 4.43:1, and the 12px labels using this need
      to clear the 4.5:1 small-text threshold. */
   --kreo-text-subtle: #6a717b;
   --kreo-text-disabled: var(--kreo-neutral-400);

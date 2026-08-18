@@ -2,6 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import type { ReactElement } from 'react';
 import { expect, userEvent, waitFor, within } from 'storybook/test';
 
+import { nodeControl, textNodeControl } from '../../docs/storyControls.js';
 import { Button } from '../Button/Button.js';
 import { IconButton } from '../IconButton/IconButton.js';
 
@@ -25,6 +26,13 @@ const meta = {
   args: {
     content: 'Copies the link to your clipboard',
     children: <Button variant="outlined">Copy link</Button>,
+  },
+  // `children` is the trigger element. Left to infer, its control prints the element's own
+  // internals into the table — `$$typeof: Symbol(react.transitional.element)` and the source of
+  // whatever component was passed.
+  argTypes: {
+    content: textNodeControl,
+    children: nodeControl,
   },
 } satisfies Meta<typeof Tooltip>;
 

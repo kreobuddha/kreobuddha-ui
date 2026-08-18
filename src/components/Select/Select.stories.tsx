@@ -2,6 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import type { ReactElement } from 'react';
 import { expect, userEvent, within } from 'storybook/test';
 
+import { nodeControl, textNodeControl } from '../../docs/storyControls.js';
 import { Select } from './Select.js';
 
 const meta = {
@@ -16,6 +17,13 @@ const meta = {
         <option value="pst">Pacific Standard Time</option>
       </>
     ),
+  },
+  // `children` is the list of `<option>` elements, not something to type into a box.
+  argTypes: {
+    label: textNodeControl,
+    hint: textNodeControl,
+    error: textNodeControl,
+    children: nodeControl,
   },
 } satisfies Meta<typeof Select>;
 
@@ -34,6 +42,7 @@ export const Default: Story = {
   args: { placeholder: 'Choose a timezone' },
 };
 
+/** Heights match `Button` and `TextField`. The type is `--kreo-type-body` in all three. */
 export const Sizes: Story = {
   render: (args): ReactElement => (
     <div style={column}>

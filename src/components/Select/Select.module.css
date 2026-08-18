@@ -79,22 +79,18 @@
   --select-px: var(--kreo-control-px-sm);
 
   min-height: var(--kreo-control-h-sm);
-  font: var(--kreo-type-body);
-  font-size: var(--kreo-text-13);
 }
 
 .md {
   --select-px: var(--kreo-control-px-md);
 
   min-height: var(--kreo-control-h-md);
-  font: var(--kreo-type-body);
 }
 
 .lg {
   --select-px: var(--kreo-control-px-lg);
 
   min-height: var(--kreo-control-h-lg);
-  font: var(--kreo-type-body-lg);
 }
 
 /* While the placeholder option is the selected one, the control is painted as placeholder text

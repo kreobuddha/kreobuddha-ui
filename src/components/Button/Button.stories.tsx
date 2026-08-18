@@ -2,6 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import type { CSSProperties, ReactElement } from 'react';
 import { expect, fn, userEvent, waitFor, within } from 'storybook/test';
 
+import { nodeControl, textNodeControl } from '../../docs/storyControls.js';
 import { Button } from './Button.js';
 
 /** A local mark, not an icon set. Icons are `ReactNode`, so consumers bring their own. */
@@ -36,6 +37,12 @@ const meta = {
   args: {
     children: 'Continue',
     onClick: fn(),
+  },
+  // The icons are elements, not text: an editor for them would print the element's internals.
+  argTypes: {
+    children: textNodeControl,
+    icon: nodeControl,
+    iconEnd: nodeControl,
   },
 } satisfies Meta<typeof Button>;
 

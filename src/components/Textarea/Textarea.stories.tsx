@@ -2,12 +2,19 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import type { ReactElement } from 'react';
 import { expect, userEvent, within } from 'storybook/test';
 
+import { textNodeControl } from '../../docs/storyControls.js';
 import { Textarea } from './Textarea.js';
 
 const meta = {
   title: 'Components/Textarea',
   component: Textarea,
   args: { label: 'Release notes' },
+  // Typed `ReactNode` so a field can carry a link, but a line of text in almost every use.
+  argTypes: {
+    label: textNodeControl,
+    hint: textNodeControl,
+    error: textNodeControl,
+  },
 } satisfies Meta<typeof Textarea>;
 
 export default meta;
@@ -25,6 +32,10 @@ export const Default: Story = {
   args: { placeholder: 'What changed in this version?' },
 };
 
+/**
+ * Padding, and only padding. Height is `rows` and the type is `--kreo-type-body` whatever the
+ * size — a longer answer does not deserve smaller letters.
+ */
 export const Sizes: Story = {
   render: (args): ReactElement => (
     <div style={column}>

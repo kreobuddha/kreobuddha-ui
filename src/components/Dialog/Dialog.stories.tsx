@@ -3,21 +3,34 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import type { ReactElement } from 'react';
 import { expect, userEvent, waitFor, within } from 'storybook/test';
 
+import { nodeControl, textNodeControl } from '../../docs/storyControls.js';
 import { Button } from '../Button/Button.js';
 import { TextField } from '../TextField/TextField.js';
 
 import { Dialog } from './Dialog.js';
 import type { DialogProps } from './Dialog.js';
 
+/**
+ * `open` starts `false` for every story, and no story renders a dialog that is already showing.
+ * `showModal()` puts the panel in the top layer, above the whole page — on the docs page, where
+ * every story renders at once, a dialog opened on load covers the documentation it is meant to
+ * illustrate, and one whose `onClose` goes nowhere cannot be dismissed at all.
+ */
 const meta = {
   title: 'Components/Dialog',
   component: Dialog,
   args: {
-    open: true,
+    open: false,
     onClose: (): void => undefined,
     title: 'Delete workspace',
     description: 'Everything in it goes with it, including the audit log.',
     children: 'This cannot be undone.',
+  },
+  // `footer` is a row of buttons; `description` and `children` are text in practice.
+  argTypes: {
+    description: textNodeControl,
+    children: textNodeControl,
+    footer: nodeControl,
   },
 } satisfies Meta<typeof Dialog>;
 
@@ -25,19 +38,22 @@ export default meta;
 
 type Story = StoryObj<typeof meta>;
 
-/** A dialog is only honest when a real trigger opens it, so focus has somewhere to return to. */
-const Demo = (args: Partial<DialogProps>): ReactElement => {
+/**
+ * A dialog is only honest when a real trigger opens it, so focus has somewhere to return to.
+ * Every story below is built from this, which owns the open state the component deliberately
+ * does not.
+ */
+const Demo = ({
+  trigger = 'Delete workspace',
+  title = 'Delete workspace',
+  ...args
+}: Partial<DialogProps> & { trigger?: string }): ReactElement => {
   const [open, setOpen] = useState(false);
 
   return (
     <>
-      <Button onClick={(): void => setOpen(true)}>Delete workspace</Button>
+      <Button onClick={(): void => setOpen(true)}>{trigger}</Button>
       <Dialog
-        title="Delete workspace"
-        description="Everything in it goes with it, including the audit log."
-        {...args}
-        open={open}
-        onClose={(): void => setOpen(false)}
         footer={
           <>
             <Button variant="outlined" onClick={(): void => setOpen(false)}>
@@ -48,31 +64,48 @@ const Demo = (args: Partial<DialogProps>): ReactElement => {
             </Button>
           </>
         }
-      >
-        This cannot be undone.
-      </Dialog>
+        {...args}
+        title={title}
+        open={open}
+        onClose={(): void => setOpen(false)}
+      />
     </>
   );
 };
 
-export const Default: Story = {};
+/**
+ * Opened by its `play` function rather than by an `open` arg, which is what keeps it out of the
+ * way on the docs page: `play` runs in the canvas and for the visual baseline, and not there.
+ */
+export const Default: Story = {
+  render: (args): ReactElement => <Demo {...args} />,
+  play: async ({ canvasElement }): Promise<void> => {
+    const canvas = within(canvasElement);
 
+    await userEvent.click(canvas.getByRole('button', { name: 'Delete workspace' }));
+    await waitFor(() => expect(canvas.getByRole('dialog')).toBeInTheDocument());
+  },
+};
+
+/** Each size opens from its own trigger, because two modals cannot share a screen. */
 export const Sizes: Story = {
   render: (args): ReactElement => (
     <div style={{ display: 'flex', gap: 'var(--kreo-space-3)' }}>
-      <Dialog {...args} open={false} size="sm" title="Small" />
-      <Dialog {...args} size="md" title="Medium" />
+      <Demo {...args} size="sm" title="Small" trigger="Small" />
+      <Demo {...args} size="md" title="Medium" trigger="Medium" />
+      <Demo {...args} size="lg" title="Large" trigger="Large" />
     </div>
   ),
 };
 
 export const WithoutDismissButton: Story = {
   args: { dismissible: false },
+  render: (args): ReactElement => <Demo {...args} />,
 };
 
 /** Opening from a real trigger, and — the part nothing else checks — putting focus back on it. */
 export const FocusReturnsToTheTrigger: Story = {
-  render: (): ReactElement => <Demo />,
+  render: (args): ReactElement => <Demo {...args} />,
   play: async ({ canvasElement }): Promise<void> => {
     const canvas = within(canvasElement);
     const trigger = canvas.getByRole('button', { name: 'Delete workspace' });
@@ -107,7 +140,7 @@ export const FocusReturnsToTheTrigger: Story = {
 
 /** A click beside the panel closes it. This is the default, and the thing the next story turns off. */
 export const BackdropCloses: Story = {
-  render: (): ReactElement => <Demo />,
+  render: (args): ReactElement => <Demo {...args} />,
   play: async ({ canvasElement }): Promise<void> => {
     const canvas = within(canvasElement);
 
@@ -189,6 +222,7 @@ export const FormKeepsItsBackdrop: Story = {
 
 /** Only the body scrolls, so the heading and the actions never scroll away from the reader. */
 export const LongContent: Story = {
+  render: (args): ReactElement => <Demo {...args} />,
   args: {
     children: (
       <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--kreo-space-3)' }}>
@@ -200,5 +234,11 @@ export const LongContent: Story = {
       </div>
     ),
     footer: <Button danger>Delete</Button>,
+  },
+  play: async ({ canvasElement }): Promise<void> => {
+    const canvas = within(canvasElement);
+
+    await userEvent.click(canvas.getByRole('button', { name: 'Delete workspace' }));
+    await waitFor(() => expect(canvas.getByRole('dialog')).toBeInTheDocument());
   },
 };

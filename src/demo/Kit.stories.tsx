@@ -131,7 +131,7 @@ export const Kit: Story = {
           Members and access
         </div>
         <p style={{ font: 'var(--kreo-type-body)', color: 'var(--kreo-text-body)', margin: 0 }}>
-          Body copy sits at 14px with generous leading. Invitations go out when you finish setup.
+          Body copy sits at 16px with generous leading. Invitations go out when you finish setup.
         </p>
         <p style={{ font: 'var(--kreo-type-body)', color: 'var(--kreo-text-body)', margin: 0 }}>
           Съешь ещё этих мягких французских булок, да выпей чаю. One family covers both scripts, so

@@ -42,27 +42,15 @@
   resize: none;
 }
 
-/* Sizes set the type scale and padding. Height comes from `rows`, so unlike a single-line field
-   there is no fixed control height to hit. */
-.sm {
-  font: var(--kreo-type-body);
-  font-size: var(--kreo-text-13);
-}
-
+/* Size is padding here and nothing else (ADR-0017). Height comes from `rows`, so unlike a
+   single-line field there is no control height to hit, and the type comes from `.shell` — the
+   same body type at every size. */
 .sm .control {
   padding: var(--kreo-space-2) var(--kreo-control-px-sm);
 }
 
-.md {
-  font: var(--kreo-type-body);
-}
-
 .md .control {
   padding: var(--kreo-space-2) var(--kreo-control-px-md);
-}
-
-.lg {
-  font: var(--kreo-type-body-lg);
 }
 
 .lg .control {
