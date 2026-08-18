@@ -48,8 +48,9 @@ jobs:
           key: playwright-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
 
       # The story tests run in a real browser, which is the only place axe can judge contrast
-      # and focus. Only Chromium is installed; the suite does not run cross-browser.
-      - run: npx playwright install --with-deps chromium
+      # and focus. Chromium runs them; Firefox and WebKit run the behaviour suite, which is what
+      # `check:browser:matrix` measures and `docs/QUALITY.md` reports.
+      - run: npx playwright install --with-deps chromium firefox webkit
 
       - run: npm run format:check
       - run: npm run lint
@@ -81,6 +82,10 @@ jobs:
 
       # Behaviour that belongs to the browser rather than to the DOM — `Escape` on a modal, the
       # focus trap, forced-colors — driven by real key presses against the built Storybook. It
-      # compares nothing against a baseline, so unlike `check:visual` it is a CI gate. Chromium is
-      # already installed above.
-      - run: npm run check:browser
+      # compares nothing against a baseline, so unlike `check:visual` it is a CI gate.
+      #
+      # All three engines, which is what lets the project state a browser matrix at all. Two
+      # WebKit differences are expected failures rather than skips — the dialog trigger losing
+      # focus, and Safari keeping buttons out of the tab order — so the run also fails on the day
+      # either engine changes its mind.
+      - run: npm run check:browser:matrix

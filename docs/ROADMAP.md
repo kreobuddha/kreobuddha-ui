@@ -303,7 +303,7 @@ Read at `0.19.0`, before any slice of this phase ran:
 | adoption feedback resolved or documented | seven findings with verdicts in [`adoption/planning-poker.md`](adoption/planning-poker.md), taken at `0.16.0` | re-reading them against `1.0.0`, or stamping the version they were taken at |
 | stable package and token exports | stable in practice, recorded nowhere and checked by nothing | a committed snapshot of the exports and `--kreo-*` names, verified by a check in `verify` and CI |
 | reviewed deprecation and migration policy | the policy exists in `RELEASES.md`; no migration document does, and `0.19.0` removed tokens without ever marking them `@deprecated` | `MIGRATION.md` for `0.x` → `1.0.0`, and a policy that matches what the project actually does |
-| documented browser/React support supported by evidence | `README.md` declines a browser matrix; browser checks run in Chromium only | running the browser project on Firefox and WebKit and recording the result, including the differences it finds |
+| documented browser/React support supported by evidence | **met** — the behaviour suite runs in Chromium, Firefox and WebKit in CI and in the release gate, with two WebKit differences recorded as expected failures; React 19 is stated as a decision rather than a fact | `docs/QUALITY.md` §5a, `README.md` |
 | accessibility release checklist for all shipped interactive components | the material exists across `tests/browser/`, `check:contrast` and the Accessibility page; the checklist as one reviewable artifact does not | a per-component table naming the evidence for each claim |
 | explicit API freeze review | not done | an ADR listing what is frozen for `1.x` and what was removed before the freeze |
 

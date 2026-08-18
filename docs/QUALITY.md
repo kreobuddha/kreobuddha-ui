@@ -132,8 +132,29 @@ runs in CI**. That is also why forced-colors is asserted here on computed style 
 screenshot: the forced-colors palette belongs to the operating system, and a baseline taken on
 macOS would fail on an Ubuntu runner for a reason unrelated to the change under review.
 
-Chromium only, like every other automated check here. ADR-0010 records a one-off run against
-WebKit and Firefox, and what it found, rather than the suite pretending to be cross-browser.
+**Three engines, since Phase 8.** `npm run check:browser` is the Chromium run; `npm run
+check:browser:matrix` adds Firefox and WebKit through the `browser-firefox` and `browser-webkit`
+projects, and that is the command CI and the release workflow run. The story tests in §3 and the
+visual run in §6 remain Chromium-only, for the reasons each of those sections gives.
+
+Measured on 2026-08-18, Playwright 1.62.1, thirty behaviour tests per engine:
+
+| Engine | Result |
+| --- | --- |
+| Chromium | 30 passed |
+| Firefox | 30 passed |
+| WebKit | 28 passed, 2 expected failures |
+
+The two WebKit differences are recorded in the tests as `test.fail`, not as skips, so the suite
+fails on the day either stops being true:
+
+- **a modal `<dialog>` does not return focus to its trigger when it closes.** The engine's, not
+  this library's, and stated in [ADR-0010](adr/0010-overlay-and-composite-strategy.md) since Phase
+  4 — now with a runner behind the statement;
+- **Safari leaves buttons out of the tab order** unless the reader turns on "Press Tab to
+  highlight each item on a webpage". The toast's dismiss button is a real `<button>` and Enter
+  activates it in every engine; what differs is whether Tab reaches it, which belongs to the
+  platform's keyboard model.
 
 ### 5b. The workbench
 
@@ -313,12 +334,14 @@ public API snapshot                   running — exports, subpaths and --kreo-*
 package artifact checks               running
 consumer smoke build                  running — packed tarball in examples/react-vite
 workbench checks                      running — packed tarball in examples/workbench, tests/workbench
-browser behaviour checks              running — real key presses, tests/browser
+browser behaviour checks              running — real key presses, tests/browser, three engines
 visual regression for protected states in `verify`, skipped on CI — macOS baselines
 ```
 
-The story tests need a browser, so CI installs Chromium via Playwright. Only Chromium: the suite
-is not cross-browser, and claiming otherwise would be unsupported.
+CI installs Chromium, Firefox and WebKit via Playwright. The story tests (§3) run in Chromium,
+because that is where axe judges contrast and focus; the behaviour suite (§5a) runs in all three,
+which is the evidence behind the browser matrix this project states. Visual regression stays out
+of CI entirely — §6.
 
 Do not create empty or permanently skipped CI jobs merely to match this list. A check becomes
 required when the feature it validates is real.

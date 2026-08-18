@@ -22,6 +22,12 @@ explicitly rather than treated as disposable.
 
 ### Added
 
+- **The behaviour suite runs in three engines.** `npm run check:browser:matrix` runs
+  `tests/browser/` in Chromium, Firefox and WebKit, and it is what CI and the release workflow run.
+  Measured on 2026-08-18: Chromium 30 passed, Firefox 30 passed, WebKit 28 passed with two
+  differences recorded as expected failures — a modal dialog does not return focus to its trigger,
+  and Safari leaves buttons out of the tab order unless the reader turns that on. The project now
+  states a browser matrix instead of declining one; nothing changed in the library to earn it.
 - **`npm run check:api`** compares the built exports, the package subpaths and the `--kreo-*`
   custom properties against a snapshot committed at `scripts/public-api.snapshot.json`, and fails
   when any of them moves. Exports, subpaths and custom properties are versioned contracts that

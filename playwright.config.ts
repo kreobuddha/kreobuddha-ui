@@ -19,7 +19,21 @@ import { defineConfig, devices } from '@playwright/test';
 export default defineConfig({
   projects: [
     { name: 'visual', testDir: 'tests/visual' },
+
+    // The same suite in three engines. `browser` stays Chromium so the existing command keeps
+    // meaning what it meant; the other two are what turns "no browser matrix is claimed" into a
+    // matrix somebody measured.
     { name: 'browser', testDir: 'tests/browser' },
+    {
+      name: 'browser-firefox',
+      testDir: 'tests/browser',
+      use: { ...devices['Desktop Firefox'], viewport: { width: 1000, height: 800 } },
+    },
+    {
+      name: 'browser-webkit',
+      testDir: 'tests/browser',
+      use: { ...devices['Desktop Safari'], viewport: { width: 1000, height: 800 } },
+    },
 
     // The third run judges neither pixels nor a component, but the example that composes them:
     // `examples/workbench`, built against the packed package and served on its own port. Like

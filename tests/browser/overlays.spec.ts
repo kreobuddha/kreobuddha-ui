@@ -41,7 +41,13 @@ const openDialogFromTrigger = async (page: Page): Promise<void> => {
 };
 
 test.describe('Dialog', () => {
-  test('Escape closes it and focus returns to the trigger', async ({ page }) => {
+  test('Escape closes it and focus returns to the trigger', async ({ page, browserName }) => {
+    // The cross-engine difference ADR-0010 states rather than works around: WebKit does not
+    // restore focus to the invoker when a modal `<dialog>` closes, and everything up to that point
+    // in this test passes there. Recorded as an expected failure rather than skipped, so the run
+    // fails on the day WebKit starts restoring focus and this note stops being true.
+    test.fail(browserName === 'webkit', 'WebKit does not return focus to the dialog trigger');
+
     await openDialogFromTrigger(page);
 
     await page.keyboard.press('Escape');

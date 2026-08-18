@@ -156,6 +156,14 @@ remembered.
 
 ### The one cross-engine run
 
+> **Superseded by a runner in Phase 8, 2026-08-18.** The behaviour suite now runs in all three
+> engines on every pull request, through `npm run check:browser:matrix`, and the WebKit focus
+> difference below is recorded in the test itself as an expected failure rather than in prose — so
+> the day the engine changes, the run says so. Phase 8 also found a second WebKit difference this
+> hand-run never covered: Safari leaves buttons out of the tab order unless the reader turns that
+> on, which the toast's dismiss button meets. The account below stands as the history of what was
+> known when this ADR was accepted.
+
 The automated project is Chromium, like everything else here. The same file was also run once, by
 hand and not in any chain, against Playwright's WebKit 26.5 and Firefox 153 builds — enough to say
 something about the other engines without claiming a cross-browser suite that does not exist.

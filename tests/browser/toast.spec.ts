@@ -85,7 +85,17 @@ test('a pointer resting on the stack stops the timer, and leaving restarts it', 
   await expect(toasts(page)).toHaveCount(0, { timeout: 7000 });
 });
 
-test('the close button is reachable by keyboard, and a real Enter dismisses', async ({ page }) => {
+test('the close button is reachable by keyboard, and a real Enter dismisses', async ({
+  page,
+  browserName,
+}) => {
+  // Safari does not put buttons in the tab order unless the reader turns on "Press Tab to
+  // highlight each item on a webpage", and WebKit under Playwright behaves the same way. That is
+  // the platform's keyboard model rather than this library's markup — the button is a real
+  // `<button>`, and Enter dismisses in every engine — but the sentence in the test name is not
+  // true on WebKit, so it is recorded as a failure rather than quietly passed.
+  test.fail(browserName === 'webkit', 'Safari omits buttons from the tab order by default');
+
   await openStory(page, 'components-toast--long-message');
 
   await expect(toasts(page)).toHaveCount(1);

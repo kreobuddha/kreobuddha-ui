@@ -27,8 +27,10 @@ to be read generously:
   Pin what you depend on.
 - **No screen-reader conformance is claimed** for `Dialog`, `Tabs` and `Tooltip`. That pass is written
   and has not been run — see [Accessibility](?path=/docs/foundations-accessibility--docs).
-- **No browser support matrix is claimed.** The components are tested in Chromium, and one known
-  WebKit difference is documented rather than fixed.
+- **The browser matrix is what a runner measured.** The behaviour suite runs in Chromium, Firefox
+  and WebKit; the story and visual checks stay Chromium-only. Two WebKit differences are recorded
+  rather than fixed: a modal dialog does not return focus to its trigger, and Safari leaves buttons
+  out of the tab order unless the reader turns that on.
 - **The component set is small and grows only on evidence.** A component arrives when a real consumer
   needs it, so a gap in the list is a gap on purpose, not a queue position.
 
