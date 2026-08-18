@@ -22,6 +22,16 @@ explicitly rather than treated as disposable.
 
 ### Added
 
+- **Every export is rendered on a server, on every pull request.** `check:consumer` rendered eight
+  of the twenty-one exports without a DOM; it now renders all of them, `useToast` included, and
+  fails when an export is not in that render. What is claimed and what is not is written down in
+  [ADR-0018](docs/adr/0018-server-rendering-is-verified-rsc-is-not-claimed.md): server rendering is
+  verified, React Server Components are not claimed, and the package ships no `'use client'`
+  directive — inside an App Router tree, wrap the import in your own client module.
+- **The cascade contract is written down.** The published stylesheet is unlayered, so a rule of
+  yours with equal specificity wins by loading after it. Fixed for the `1.x` line by
+  [ADR-0019](docs/adr/0019-the-stylesheet-is-unlayered.md), because adopting `@layer` later would
+  silently change which rules win.
 - **The behaviour suite runs in three engines.** `npm run check:browser:matrix` runs
   `tests/browser/` in Chromium, Firefox and WebKit, and it is what CI and the release workflow run.
   Measured on 2026-08-18: Chromium 30 passed, Firefox 30 passed, WebKit 28 passed with two

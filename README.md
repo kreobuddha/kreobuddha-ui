@@ -11,7 +11,7 @@ available feature. The package is published so it can be consumed normally, and 
 outside this repository consumes the published package rather than the source.
 
 **Beta means the whole `0.x` line, not a separate tag.** There is no `next` channel and no
-prerelease suffix: `npm install @kreobuddha/ui` is the beta. Four limits, stated plainly:
+prerelease suffix: `npm install @kreobuddha/ui` is the beta. Five limits, stated plainly:
 
 - **The API moves.** A minor version may rename or remove an export, a prop or a `--kreo-*` custom
   property. Breaking changes are called out in [CHANGELOG.md](CHANGELOG.md) rather than treated as
@@ -24,6 +24,10 @@ prerelease suffix: `npm install @kreobuddha/ui` is the beta. Four limits, stated
   trigger, and Safari leaves buttons out of the tab order unless the reader turns that on. Nothing is
   claimed about older engines, because nothing runs there — see
   [docs/QUALITY.md](docs/QUALITY.md).
+- **Server rendering works; React Server Components are not claimed.** Every export is rendered
+  without a DOM on every pull request. Inside an App Router tree, wrap the import in your own
+  `'use client'` module — the package ships no directive, by
+  [ADR-0018](docs/adr/0018-server-rendering-is-verified-rsc-is-not-claimed.md).
 - **The set grows only on evidence.** A component arrives when a real consumer needs one, so a gap in
   the list is deliberate rather than a queue position.
 
@@ -135,6 +139,13 @@ reads the system preference — that state belongs to the application.
 Customisation happens through the semantic tokens, not through component classes. Every
 `--kreo-*` custom property in the published stylesheet is public API under SemVer; CSS Module class
 names are private implementation details.
+
+**The stylesheet is unlayered, and load order decides ties.** No rule here sits in an `@layer`, so
+a rule of yours with the same specificity wins by being loaded after `@kreobuddha/ui/styles.css`.
+That is deliberate and fixed for the `1.x` line —
+[ADR-0019](docs/adr/0019-the-stylesheet-is-unlayered.md) — because introducing layers later would
+silently change which rules win. The supported way to change how the library looks is the tokens
+above, which resolve where they are used and do not depend on order at all.
 
 Three conventions are worth knowing before overriding anything:
 
