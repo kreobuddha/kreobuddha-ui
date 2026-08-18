@@ -144,7 +144,7 @@ remembered.
 
 | Check | State |
 |---|---|
-| `Tabs` keyboard — arrows, `Home`/`End`, one tab stop | done, real key presses in a browser |
+| `Tabs` keyboard — arrows, `Home`/`End`, one tab stop | done — in the story runner's real Chromium, through the stories' `play` functions, and in jsdom through the unit tests. Not in `tests/browser/`, which is the cross-engine project; corrected in Phase 8, where this row had implied otherwise |
 | `Tooltip` — focus opens, placement, top layer | done, measured in a browser |
 | `Tooltip` — `Esc` closes without moving focus | done, automated in `tests/browser/overlays.spec.ts` |
 | `Dialog` — focus into the panel, return to the trigger | done, real interaction — **Chromium and Firefox; not WebKit**, see below |

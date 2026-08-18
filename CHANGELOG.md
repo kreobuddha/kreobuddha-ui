@@ -28,6 +28,10 @@ explicitly rather than treated as disposable.
   [ADR-0018](docs/adr/0018-server-rendering-is-verified-rsc-is-not-claimed.md): server rendering is
   verified, React Server Components are not claimed, and the package ships no `'use client'`
   directive — inside an App Router tree, wrap the import in your own client module.
+- **[`docs/ACCESSIBILITY_CHECKLIST.md`](docs/ACCESSIBILITY_CHECKLIST.md)** — one row per component,
+  one column per claim, each cell naming the run behind it. Writing it found a documentation
+  defect: the `Tabs` keyboard model is checked by its stories in a real Chromium, not by
+  `check:browser` as this page and ADR-0010 both said. Both are corrected.
 - **The cascade contract is written down.** The published stylesheet is unlayered, so a rule of
   yours with equal specificity wins by loading after it. Fixed for the `1.x` line by
   [ADR-0019](docs/adr/0019-the-stylesheet-is-unlayered.md), because adopting `@layer` later would
