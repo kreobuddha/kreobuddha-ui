@@ -71,6 +71,15 @@ survive being placed on its own tint in the light theme.
 a border as well, because forced-colors mode paints no shadow at all and a panel relying on one
 would lose its edge exactly where an edge matters most.
 
+## The cascade
+
+**The stylesheet is unlayered, and load order decides ties.** No rule here sits in an `@layer`, so
+a rule of yours with the same specificity wins by being loaded after `@kreobuddha/ui/styles.css`.
+That is deliberate and fixed for the `1.x` line —
+ADR-0019 — because introducing layers later would
+silently change which rules win. The supported way to change how the library looks is the tokens
+above, which resolve where they are used and do not depend on order at all.
+
 ## Keep the pairs contrastable
 
 If you override the palette, measure the result. The repository's `npm run check:contrast` checks

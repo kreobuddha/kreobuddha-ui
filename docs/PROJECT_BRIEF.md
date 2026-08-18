@@ -12,7 +12,10 @@
 - Backend: none by design
 - License: MIT
 - Typeface: Inter, bundled with the package; no monospace family (ADR-0005)
-- Shipped components: `Button`
+- Shipped components: twenty, listed in `README.md` — `Button`, `IconButton`, `TextField`,
+  `Textarea`, `Select`, `Checkbox`, `Radio`, `Switch`, `FieldGroup`, `Tabs`, `Accordion`,
+  `Tooltip`, `Toggletip`, `Dialog`, `Badge`, `Spinner`, `Skeleton`, `Progress`, `Toast`, `Alert`
+- Current release: `1.0.0`, in which the public API is frozen (ADR-0020)
 
 ## Product summary
 
@@ -108,7 +111,7 @@ real component slices and consumer screens.
 - Provide static Storybook documentation that needs no backend.
 - Verify the packed artifact in a consumer application rather than importing source directly.
 - Establish automated type, lint, behavior, accessibility, build, and package checks.
-- Use the published prerelease in at least one independent application before `1.0.0`.
+- Use the published prerelease in at least one independent application before `1.0.0` — done in Phase 6, measured at `0.16.0`.
 
 ## Non-goals
 
@@ -184,29 +187,38 @@ exports, and a real consumer without requiring secrets or a backend.
 ## Success criteria
 
 The project becomes a credible public beta when the nine conditions below hold. Reviewed in Phase 7
-at `0.18.0`, each one names what shows it, so the list can be re-checked rather than re-argued:
+at `0.18.0`, each one names what shows it **and the version it was observed at**, so a stale piece
+of evidence is visible rather than assumed current:
 
 - a clean checkout follows documented install and verification steps — `README.md` and
-  `src/docs/Installation.mdx`, both walked through during the Phase 7 documentation review;
+  `src/docs/Installation.mdx`, both walked through during the Phase 7 documentation review, at
+  `0.18.0`;
 - the package emits intentional ESM, CSS, and declaration artifacts — the artifact review in
   `docs/RELEASES.md`, read from `npm pack --dry-run --json` at `0.17.0`;
 - a consumer fixture installs the packed artifact rather than workspace source — `check:consumer`
-  and `check:workbench`, both in CI and, since Phase 7, in the release workflow too;
+  and `check:workbench`, both in CI and, since Phase 7, in the release workflow too; green on
+  `master` at `6c2d806`, the `0.19.0` merge (CI run `32128136703`, 2026-08-18);
 - every shipped component meets `docs/COMPONENT_STANDARD.md` — twenty components, each built
   through `docs/COMPONENT_RECIPE.md` and verified before the next was started;
 - public Storybook documentation is complete for shipped components — all twenty Docs pages read in
-  the built site, in both themes, in Phase 7;
+  the built site, in both themes, in Phase 7 at `0.18.0`; `0.19.0` fixed four defects on those
+  pages — the unreadable `Dialog` page, prop-table controls, Markdown tables and the theme flash —
+  without repeating the full pass;
 - automated and manual checks provide evidence for documented behavior — the change-to-check matrix
   and CI stage list in `docs/QUALITY.md`; what is *not* verified is named on the Accessibility page
   rather than left out;
-- CI reproduces the relevant local verification — `ci.yml` on Node 22 and 24; the two known gaps,
-  Chromium-only browser checks and macOS-only visual baselines, are stated in `docs/QUALITY.md`;
+- CI reproduces the relevant local verification — `ci.yml` on Node 22 and 24, green at `0.19.0`;
+  the two known gaps, Chromium-only browser checks and macOS-only visual baselines, are stated in
+  `docs/QUALITY.md`;
 - a prerelease is used in an independent frontend project — **closed by Phase 6**:
   `docs/adoption/planning-poker.md` records `kreobuddha/kreobuddhas-planning-poker` consuming the
   published package, upgraded `0.3.0` → `0.16.0` and measured in the browser, not a fixture in this
-  repository;
+  repository. The measurement stands at `0.16.0`: no consumer outside this repository has yet run
+  `0.19.0` or the breaking token changes it carries;
 - the repository contains no proprietary or private material — the clean-room rules in `CLAUDE.md`,
   held by review rather than by an automated check, which `docs/RELEASES.md` states plainly.
 
-`1.0.0` requires at least one independent consumer, resolution or documentation of adoption issues,
-and an explicitly reviewed stable public API.
+All nine held at `0.18.0`, which is where the beta closed. **`1.0.0` adds the freeze**: at least one
+independent consumer, adoption feedback resolved or documented, and an explicitly reviewed stable
+public API — each recorded with its evidence in the `1.0.0` gate table in `docs/RELEASES.md`, and
+the review itself in [ADR-0020](adr/0020-api-freeze-for-1-0-0.md).

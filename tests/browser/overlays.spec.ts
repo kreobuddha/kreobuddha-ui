@@ -1,6 +1,7 @@
 import { expect, test } from '@playwright/test';
 import type { Page } from '@playwright/test';
 
+import { isMacOS } from '../host-platform.js';
 import { storyUrl } from '../story-url.js';
 
 /**
@@ -41,7 +42,20 @@ const openDialogFromTrigger = async (page: Page): Promise<void> => {
 };
 
 test.describe('Dialog', () => {
-  test('Escape closes it and focus returns to the trigger', async ({ page }) => {
+  test('Escape closes it and focus returns to the trigger', async ({ page, browserName }) => {
+    // The cross-engine difference ADR-0010 states rather than works around: WebKit does not
+    // restore focus to the invoker when a modal `<dialog>` closes. Recorded as an expected failure
+    // rather than skipped, so the run fails on the day it stops being true.
+    //
+    // **And it is the macOS build only.** CI runs the same test on Ubuntu, where Playwright's
+    // WebKit restores focus and this test passes — which is how the platform condition got here:
+    // the unconditional version failed on CI with "Expected to fail, but passed". "WebKit" is two
+    // builds, and only the one a Safari user's engine resembles has the difference.
+    test.fail(
+      browserName === 'webkit' && isMacOS,
+      "WebKit's macOS build does not return focus to the dialog trigger"
+    );
+
     await openDialogFromTrigger(page);
 
     await page.keyboard.press('Escape');

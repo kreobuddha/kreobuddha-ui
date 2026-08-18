@@ -8,29 +8,31 @@ An accessible, themeable React component library for developer tools, technical 
 data-dense frontend applications. This site is the reference: every page here is built from the
 repository that publishes the package, and every prop table on it is generated from the types.
 
-## Status: public beta
+## Status: stable — `1.0.0`
 
 Twenty components ship today: `Button`, `IconButton`, `TextField`, `Textarea`, `Select`,
 `Checkbox`, `Radio`, `Switch`, `FieldGroup`, `Tabs`, `Accordion`, `Tooltip`, `Toggletip`, `Dialog`,
 `Badge`, `Spinner`, `Skeleton`, `Progress`, `Toast` and `Alert`.
 
-The package is published so it can be consumed normally, and one application outside this repository
-consumes the published package rather than the source. Anything not listed above is a plan, not an
-available feature.
+**`1.0.0` means the public API is frozen.** An export, a prop, a `--kreo-*` custom property, the
+DOM a component renders and the keyboard behaviour it documents cannot be renamed or removed
+without a major version. The surface is recorded rather than remembered — 21 exports, 40 types, 3
+package subpaths, 135 custom properties — and a check compares the built package against that
+record on every pull request.
 
-**Beta here means the whole `0.x` line, not a separate tag** — there is no `next` channel and no
-prerelease suffix to install. What it does not promise, stated plainly so nothing on these pages has
-to be read generously:
+Three things it still does not promise, stated plainly so nothing on these pages has to be read
+generously:
 
-- **The API moves.** A minor version may rename or remove an export, a prop or a `--kreo-*` property.
-  Breaking changes are called out in the changelog rather than treated as disposable, but they happen.
-  Pin what you depend on.
 - **No screen-reader conformance is claimed** for `Dialog`, `Tabs` and `Tooltip`. That pass is written
   and has not been run — see [Accessibility](?path=/docs/foundations-accessibility--docs).
-- **No browser support matrix is claimed.** The components are tested in Chromium, and one known
-  WebKit difference is documented rather than fixed.
+- **The browser matrix is what a runner measured.** The behaviour suite runs in Chromium, Firefox
+  and WebKit; the story and visual checks stay Chromium-only. Two WebKit differences are recorded
+  rather than fixed, both in its macOS build: a modal dialog does not return focus to its trigger,
+  and Safari leaves buttons out of the tab order unless the reader turns that on. Nothing is claimed
+  about engines nothing runs on.
 - **The component set is small and grows only on evidence.** A component arrives when a real consumer
-  needs it, so a gap in the list is a gap on purpose, not a queue position.
+  needs it, so a gap in the list is a gap on purpose, not a queue position. Additions are minor
+  versions; removals are not made.
 
 ## What it is
 

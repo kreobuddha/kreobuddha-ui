@@ -41,10 +41,24 @@ check(DIST, await readFile(DIST, 'utf8'));
 // to silence the check above while quietly shipping components with no tokens behind them.
 const dist = await readFile(DIST, 'utf8');
 
-if (!dist.includes('--kreo-accent-500:')) {
+// The light `:root` block. The dark theme declares the same properties again under
+// `[data-kreo-theme='dark']`, which is the theming contract rather than a repeat, so the count
+// below is of this exact block and not of any one property.
+const rootTokens = dist.match(/:root\{--kreo-font-sans[^}]*\}/)?.[0];
+const tokenLayers = rootTokens === undefined ? 0 : dist.split(rootTokens).length - 1;
+
+if (!dist.includes('--kreo-accent-500:') || tokenLayers === 0) {
   failures.push(`${DIST}: the token layer is missing — components would render unstyled`);
+} else if (tokenLayers > 1) {
+  // Every component stylesheet imports the token layer and Vite inlines that import per module,
+  // which once put twenty copies of it in the published file — half its bytes.
+  // `dedupe-token-layer.mjs` removes them; this is what notices if it stops running.
+  failures.push(
+    `${DIST}: the token layer is declared ${tokenLayers} times — ` +
+      '`scripts/dedupe-token-layer.mjs` should leave exactly one'
+  );
 } else {
-  process.stdout.write(`  pass  ${DIST} carries the token layer\n`);
+  process.stdout.write(`  pass  ${DIST} carries the token layer exactly once\n`);
 }
 
 let assets = [];

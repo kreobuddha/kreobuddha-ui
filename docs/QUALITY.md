@@ -98,6 +98,10 @@ story actually puts on screen, including combinations nobody thought to declare.
 
 ### 5. Manual accessibility
 
+The per-component version of everything below — one row per component, one column per claim, each
+cell naming the command that shows it — is [ACCESSIBILITY_CHECKLIST.md](ACCESSIBILITY_CHECKLIST.md),
+re-taken at each release that changes markup, keyboard behaviour or focus behaviour.
+
 Some of the list below is no longer manual — see §5a. What stays manual is what a runner cannot
 judge: what a screen reader actually announces.
 
@@ -132,8 +136,33 @@ runs in CI**. That is also why forced-colors is asserted here on computed style 
 screenshot: the forced-colors palette belongs to the operating system, and a baseline taken on
 macOS would fail on an Ubuntu runner for a reason unrelated to the change under review.
 
-Chromium only, like every other automated check here. ADR-0010 records a one-off run against
-WebKit and Firefox, and what it found, rather than the suite pretending to be cross-browser.
+**Three engines, since Phase 8.** `npm run check:browser` is the Chromium run; `npm run
+check:browser:matrix` adds Firefox and WebKit through the `browser-firefox` and `browser-webkit`
+projects, and that is the command CI and the release workflow run. The story tests in §3 and the
+visual run in §6 remain Chromium-only, for the reasons each of those sections gives.
+
+Measured on 2026-08-18, Playwright 1.62.1, thirty behaviour tests per engine:
+
+| Engine | macOS (local) | Ubuntu (CI) |
+| --- | --- | --- |
+| Chromium | 30 passed | 30 passed |
+| Firefox | 30 passed | 30 passed |
+| WebKit | 28 passed, 2 expected failures | 30 passed |
+
+**"WebKit" is two builds, and they disagree.** The expectations were written against the engine
+name first, and CI rejected them: `Expected to fail, but passed`, twice. Playwright's Linux WebKit
+returns focus to a dialog's trigger and puts buttons in the tab order; its macOS build — the one
+close to the engine a Safari user actually has — does neither. The two expectations are therefore
+conditioned on the host platform as well as the engine, through `tests/host-platform.ts`, and they
+stay `test.fail` rather than skips, so the suite fails on the day either stops being true:
+
+- **a modal `<dialog>` does not return focus to its trigger when it closes.** The engine's, not
+  this library's, and stated in [ADR-0010](adr/0010-overlay-and-composite-strategy.md) since Phase
+  4 — now with a runner behind the statement;
+- **Safari leaves buttons out of the tab order** unless the reader turns on "Press Tab to
+  highlight each item on a webpage". The toast's dismiss button is a real `<button>` and Enter
+  activates it in every engine; what differs is whether Tab reaches it, which belongs to the
+  platform's keyboard model.
 
 ### 5b. The workbench
 
@@ -222,7 +251,38 @@ because entries in one build share their common code through a chunk belonging t
 mounts what it imports, because an entry whose export nobody consumes is dead code that Rollup
 drops, leaving an empty bundle to pass the check for no reason.
 
-### 8. Public documentation
+### 7a. The published stylesheet
+
+`npm run check:css` reads the built stylesheets rather than trusting the build. It fails on an
+`@import` the bundler did not inline — six of them shipped once, pointing at nothing — on a
+missing token layer, and now on a **repeated** one.
+
+The repeat was real. Each component stylesheet imports the tokens, Vite inlines that import per
+CSS module, and the file published in `0.19.0` carried twenty copies of the `:root` block — 79,091
+bytes where 38,583 say the same thing. The tarball barely noticed (nine bytes, because repetition
+compresses), so what it costs is disk after install and the bytes a consumer's own bundle carries
+uncompressed. `scripts/dedupe-token-layer.mjs` runs inside `build`
+and removes exact repeats of a block that declares nothing but `--kreo-*` properties. Component
+rules are left alone, including identical ones, because two identical rules can sit either side of
+a third that competes with them and dropping one would change the cascade.
+
+### 8. Public API snapshot
+
+`npm run check:api` reads the built `dist/index.d.ts`, the `exports` map and the `--kreo-*`
+declarations in `dist/styles.css`, and compares all three against
+`scripts/public-api.snapshot.json`. A rename, a removal or an addition fails the check until the
+snapshot is updated with `node scripts/check-public-api.mjs --update` in the same pull request.
+
+It exists for the same reason `check:css` does. Exports, package subpaths and custom properties
+are versioned contracts, and nothing read them: `publint` and `attw` inspect the package's shape,
+not its contents, and two `dist/demo/*.d.ts` files shipped for fourteen minor versions because no
+gate looked at what was inside a correct-looking build.
+
+What it does not do is read prop types. It answers "did the public surface change" rather than "is
+the change right" — the second is a review, and the check's job is to make sure that review
+happens rather than to replace it.
+
+### 9. Public documentation
 
 Build Storybook statically and verify navigation, source examples, installation instructions, and
 links. Documentation must not claim support or functionality that the published artifact lacks.
@@ -243,7 +303,8 @@ opened by hand: navigation, both themes, and no asset 404 under the sub-path.
 | Component behavior | typecheck, lint, focused tests, a11y, package build |
 | Component styling | component checks plus Storybook build and visual inspection |
 | Keyboard/focus behavior | component checks plus `check:browser` for anything the engine owns, and manual keyboard/focus review for the rest |
-| Public exports/types | package build, artifact inspection, type/package lint, consumer smoke |
+| Public exports/types | package build, artifact inspection, type/package lint, consumer smoke, `check:api` and a recorded snapshot |
+| A `--kreo-*` custom property | token/build check, contrast check where it is a colour, `check:api` and a recorded snapshot |
 | Build configuration | all static, package, Storybook, and consumer checks |
 | Release workflow | `ci.yml` green on the pull request, and the diff read line by line — see below |
 
@@ -279,15 +340,18 @@ story tests in Chromium               running — play functions and axe
 contrast check                        running
 package build                         running
 Storybook build                       running
+public API snapshot                   running — exports, subpaths and --kreo-* against a committed file
 package artifact checks               running
 consumer smoke build                  running — packed tarball in examples/react-vite
 workbench checks                      running — packed tarball in examples/workbench, tests/workbench
-browser behaviour checks              running — real key presses, tests/browser
+browser behaviour checks              running — real key presses, tests/browser, three engines
 visual regression for protected states in `verify`, skipped on CI — macOS baselines
 ```
 
-The story tests need a browser, so CI installs Chromium via Playwright. Only Chromium: the suite
-is not cross-browser, and claiming otherwise would be unsupported.
+CI installs Chromium, Firefox and WebKit via Playwright. The story tests (§3) run in Chromium,
+because that is where axe judges contrast and focus; the behaviour suite (§5a) runs in all three,
+which is the evidence behind the browser matrix this project states. Visual regression stays out
+of CI entirely — §6.
 
 Do not create empty or permanently skipped CI jobs merely to match this list. A check becomes
 required when the feature it validates is real.

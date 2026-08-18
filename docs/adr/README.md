@@ -68,6 +68,8 @@ records it.
 | How many type sizes and weights the scale carries | ADR-0016 — applies ADR-0015, amends ADR-0005 |
 | What a control's `size` prop controls | ADR-0017 — geometry, not type; amends ADR-0016 |
 | npm publication and release authentication | ADR-0006 |
+| Server rendering, and what is claimed about React Server Components | ADR-0018 |
+| Whether the published stylesheet is layered | ADR-0019 — unlayered, and the contract stated |
 | Storybook and test-runner responsibilities | open — settled in practice, never written down |
 | Changesets instead of a hand-written changelog | ADR-0013 — declined; the changelog is written, not generated |
 | Hosted documentation and visual-regression services | open — visual regression runs locally against committed baselines; adopting a hosted service would need this ADR |

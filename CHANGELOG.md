@@ -9,6 +9,84 @@ explicitly rather than treated as disposable.
 
 ## [Unreleased]
 
+## [1.0.0] — 2026-08-18
+
+**The public API is frozen.** From here an export, a prop, a `--kreo-*` custom property, a DOM
+shape or a documented keyboard behaviour cannot be renamed or removed without a major version —
+which is the whole difference between this release and the `0.x` line, where `README.md` said a
+minor could break any of them and `0.19.0` used that licence on purpose.
+
+Nothing in the library's API changed to get here. Twenty components, twenty-one exports, 135
+custom properties: the same surface `0.19.0` shipped, now recorded in
+`scripts/public-api.snapshot.json` and checked on every pull request.
+[ADR-0020](docs/adr/0020-api-freeze-for-1-0-0.md) records what is frozen, including 28 custom
+properties the library does not use itself, and what that promise costs.
+
+What did change is what the project can show. Where `0.x` declined a browser matrix, `1.0.0` runs
+the behaviour suite in three engines. Where server rendering was intended, every export is now
+rendered without a DOM on every pull request. Where accessibility evidence was spread across four
+places, it is one table with a command in every cell. And two contracts that would have cost a
+major version to decide later — React Server Components, and the cascade — are decided now.
+
+**Two limits are carried in rather than closed**, and they are stated wherever a reader meets the
+claim: no screen-reader conformance is claimed for `Dialog`, `Tabs` and `Tooltip`, because that
+pass needs a person and has not been run; and nothing is claimed about engines nothing runs on.
+
+### Fixed
+
+- **The published stylesheet carried the token layer twenty times.** Every component stylesheet
+  declares its dependency on the tokens with `@import '../../styles.css'`, and Vite inlines that
+  import once per CSS module rather than once per output file, so `dist/styles.css` repeated the
+  whole `:root` block — and the reduced-motion block beside it — for each of the twenty modules.
+  It made no difference to a single rendered pixel: custom properties resolve where they are used.
+  **`dist/styles.css` is 38,583 bytes instead of the 79,091 published in `0.19.0`**, and an
+  installed package is 405.5 kB unpacked instead of 444.3 kB.
+
+  Two numbers that did _not_ move, stated so the saving is not oversold: the packed tarball is
+  162,522 bytes against `0.19.0`'s 162,531 — nine bytes — and the stylesheet gzips to 7,435 bytes
+  against 8,127, because repetition is what compression is best at. What this buys is disk after
+  install, and the bytes a consumer's own CSS bundle carries before their server compresses it.
+
+  Nothing about the theming contract changed; the dark theme still declares the same properties
+  under `[data-kreo-theme='dark']`, which is a theme and not a repeat.
+
+### Added
+
+- **Every export is rendered on a server, on every pull request.** `check:consumer` rendered eight
+  of the twenty-one exports without a DOM; it now renders all of them, `useToast` included, and
+  fails when an export is not in that render. What is claimed and what is not is written down in
+  [ADR-0018](docs/adr/0018-server-rendering-is-verified-rsc-is-not-claimed.md): server rendering is
+  verified, React Server Components are not claimed, and the package ships no `'use client'`
+  directive — inside an App Router tree, wrap the import in your own client module.
+- **[`docs/ACCESSIBILITY_CHECKLIST.md`](docs/ACCESSIBILITY_CHECKLIST.md)** — one row per component,
+  one column per claim, each cell naming the run behind it. Writing it found a documentation
+  defect: the `Tabs` keyboard model is checked by its stories in a real Chromium, not by
+  `check:browser` as this page and ADR-0010 both said. Both are corrected.
+- **The cascade contract is written down.** The published stylesheet is unlayered, so a rule of
+  yours with equal specificity wins by loading after it. Fixed for the `1.x` line by
+  [ADR-0019](docs/adr/0019-the-stylesheet-is-unlayered.md), because adopting `@layer` later would
+  silently change which rules win.
+- **The behaviour suite runs in three engines.** `npm run check:browser:matrix` runs
+  `tests/browser/` in Chromium, Firefox and WebKit, and it is what CI and the release workflow run.
+  Measured on 2026-08-18: Chromium and Firefox 30 passed on both macOS and Ubuntu; WebKit 30 passed
+  on Ubuntu and 28 with two expected failures on macOS — a modal dialog does not return focus to its
+  trigger, and Safari leaves buttons out of the tab order unless the reader turns that on.
+
+  That split is itself a finding. The two expectations were written against the engine name, and CI
+  rejected them with `Expected to fail, but passed`: Playwright ships two WebKits, and only the
+  macOS one behaves like the engine a Safari user has. They now name the platform as well.
+
+  The project states a browser matrix instead of declining one; nothing changed in the library to
+  earn it.
+
+- **`npm run check:api`** compares the built exports, the package subpaths and the `--kreo-*`
+  custom properties against a snapshot committed at `scripts/public-api.snapshot.json`, and fails
+  when any of them moves. Exports, subpaths and custom properties are versioned contracts that
+  nothing had ever read: `publint` and `attw` inspect the package's shape rather than its
+  contents. It runs in `verify`, in CI and in the release workflow.
+- **[`docs/MIGRATION.md`](docs/MIGRATION.md)** — what an upgrade actually costs, token by token.
+  Only `0.19.0` requires any edit in the whole `0.x` line.
+
 ## [0.19.0] — 2026-08-18
 
 **The typography decisions this library had been carrying without ever making.** Thirteen defects

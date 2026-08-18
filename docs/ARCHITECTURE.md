@@ -226,6 +226,15 @@ the packed tarball and must not import `src/` or use an alias that bypasses pack
 - Generated IDs must be stable across server and client rendering where components support SSR.
 - Browser support is documented only after CI and manual smoke evidence exist.
 
+The first three are checked rather than intended: `npm run check:consumer` renders **every export**
+in Node with no DOM, from the packed tarball, and fails when an export is missing from that render.
+React Server Components are a separate question with a separate answer —
+[ADR-0018](adr/0018-server-rendering-is-verified-rsc-is-not-claimed.md): the package ships no
+`'use client'` directive and claims no RSC support.
+
+The stylesheet is unlayered, and that is now a contract rather than an omission —
+[ADR-0019](adr/0019-the-stylesheet-is-unlayered.md).
+
 ## When to revisit architecture
 
 Create or update an ADR when:

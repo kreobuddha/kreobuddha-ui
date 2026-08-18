@@ -8,14 +8,28 @@ verification quality.
 
 ## Status
 
-Phases 0 through 7 are complete. The repository is public at `kreobuddha/kreobuddha-ui` with CI
-green, and the package is published to npm as `@kreobuddha/ui` (ADR-0006) as a **public beta** —
-which is the whole `0.x` line rather than a separate tag, so there is no `next` channel and no
-prerelease suffix. Twenty components
+Phases 0 through 8 are complete and the current release is **`1.0.0`** — the public API is frozen
+([ADR-0020](adr/0020-api-freeze-for-1-0-0.md)), and an export, a prop or a `--kreo-*` property
+cannot be renamed or removed without a major version. The repository is public at
+`kreobuddha/kreobuddha-ui` with CI green, and the package is published to npm as `@kreobuddha/ui`
+(ADR-0006). The `0.x` line was the public beta: the whole of it rather than a separate tag, with no
+`next` channel and no prerelease suffix. Twenty components
 ship: `Button`, `IconButton`, `Badge`, `Spinner`, `Alert`, `TextField`, `Textarea`, `Select`,
 `Checkbox`, `Switch`, `FieldGroup`, `Tabs`, `Tooltip`, `Dialog`, `Skeleton`, `Progress`,
 `Accordion`, `Toggletip` and `Toast` in `0.15.0`, and `Radio` in `0.17.0` — the first component
 added because a consumer proved the need.
+
+`0.19.0` belongs to no phase. It collected thirteen defects against `0.18.0` and closed all of
+them, but what it really carries is two typography decisions the library had been postponing, both
+breaking and both taken deliberately before Phase 8 rather than inside `1.x`:
+[ADR-0016](adr/0016-four-type-sizes-and-a-lighter-regular.md) cuts the type scale from eleven sizes
+to four, moves body to 16px and `--kreo-weight-regular` to 300;
+[ADR-0017](adr/0017-size-is-geometry-not-type.md) makes `size` on `Button`, `TextField`, `Textarea`
+and `Select` the control's geometry alone. Both apply the principle
+[ADR-0015](adr/0015-good-out-of-the-box-over-configurable.md) writes down.
+[ADR-0014](adr/0014-loading-is-dimmed-too.md), from the same release, amends ADR-0004 §5 so a
+`loading` button is dimmed as well as spinning. **The `--kreo-*` surface a consumer sees today is
+therefore the one Phase 8 freezes for the whole `1.x` line**, which is why the cut happened now.
 
 Phase 5 added no component. It made what exists inspectable by someone who is not Rustam: a
 documentation site at [kreobuddha.github.io/kreobuddha-ui](https://kreobuddha.github.io/kreobuddha-ui/)
@@ -272,11 +286,66 @@ a stranger what `0.18.0` actually contains.
 
 Publishing, tagging, GitHub settings, and deployment each require explicit approval.
 
-## Phase 8 — `1.0.0`
+## Phase 8 — `1.0.0` — **done**
 
-Goal: stabilize evidence-backed public contracts.
+Goal: stabilize evidence-backed public contracts. The requirements are the `1.0.0` gates in
+[RELEASES.md](RELEASES.md#100-gates); component count alone cannot trigger `1.0.0`, and **no
+component is added in this phase**. What `1.0.0` promises is that the exports, the props and the
+`--kreo-*` custom properties a consumer depends on stop moving without a major version — so the
+phase is about turning each gate from a sentence into a file or a command.
 
-Requirements are defined in `RELEASES.md`. Component count alone cannot trigger `1.0.0`.
+### Where each gate stands
+
+Read at the `1.0.0` candidate, after the slices below:
+
+| Gate | State | Evidence |
+| --- | --- | --- |
+| at least one independent application consuming a published version | met, at `0.16.0` — no consumer outside this repository has run `0.19.0` | the consumer's own upgrade, which is Rustam's and not this repository's work |
+| adoption feedback resolved or documented | **met** — all seven verdicts re-read at `1.0.0`, with the two that closed named and the one that changed measured; the note says plainly that it is a re-read rather than a new run, and that the consumer is still on `0.16.0` | [`adoption/planning-poker.md`](adoption/planning-poker.md) |
+| stable package and token exports | **met** — `scripts/public-api.snapshot.json`, verified by `npm run check:api` in `verify`, CI and the release workflow | 21 exports, 40 types, 3 subpaths, 135 custom properties |
+| reviewed deprecation and migration policy | **met** — the policy now records that it never applied in `0.x`, and binds from `1.0.0` | [`MIGRATION.md`](MIGRATION.md), `RELEASES.md` "Deprecation" |
+| documented browser/React support supported by evidence | **met** — the behaviour suite runs in Chromium, Firefox and WebKit in CI and in the release gate, with two WebKit differences recorded as expected failures; React 19 is stated as a decision rather than a fact | `docs/QUALITY.md` §5a, `README.md` |
+| accessibility release checklist for all shipped interactive components | **met, with the screen-reader pass excluded and stated** | [`ACCESSIBILITY_CHECKLIST.md`](ACCESSIBILITY_CHECKLIST.md) — twenty rows, each cell naming a run |
+| explicit API freeze review | **met** | [ADR-0020](adr/0020-api-freeze-for-1-0-0.md) — frozen unchanged, including 28 properties the library does not use itself, with that cost named |
+
+Everything above is closed except the first row, which belongs to the consumer's own repository.
+Two slices arrived that the plan did not contain: the published stylesheet was shipping the token
+layer twenty times, found by counting what the built file declares rather than by reading the
+source that produces it; and the SSR and cascade contracts were decided rather than left implied
+([ADR-0018](adr/0018-server-rendering-is-verified-rsc-is-not-claimed.md),
+[ADR-0019](adr/0019-the-stylesheet-is-unlayered.md)).
+
+### Deliverables
+
+- status documents that match the released version, each piece of evidence stamped with the
+  version it was observed at;
+- a public-API snapshot that a change cannot slip past unnoticed — the counterpart to
+  `check:css`, which exists because six `@import` statements shipped for several releases without
+  anyone reading the built stylesheet;
+- `MIGRATION.md`, and a deprecation policy reconciled with what `0.19.0` actually did;
+- a measured browser matrix rather than a declined one, with each cross-engine difference either
+  fixed in its own slice or written down;
+- an accessibility release checklist per interactive component;
+- the SSR and cascade contracts decided rather than implied — a server-render check, a recorded
+  position on React Server Components, and a recorded position on `@layer`;
+- an API freeze ADR, a re-taken tarball review, and the `1.0.0` release itself.
+
+### Exit criteria
+
+- every gate above names a file or a command, and a gate that is not met says so;
+- `npm run verify` is green, and the public-API check fails on an intentional change to an export
+  or a token;
+- no document claims screen-reader conformance, browser support or adoption beyond what was
+  observed;
+- `CHANGELOG.md` describes `1.0.0` in terms of what a consumer must migrate;
+- the release runs from CI on Rustam's explicit approval of that exact version.
+
+### What this phase cannot close
+
+The screen-reader pass over `Dialog`, `Tabs` and `Tooltip` — parked below — needs a person driving
+a real assistive technology. Unless Rustam runs the script in ADR-0010 before the release, `1.0.0`
+ships with the same statement the beta carries: **no screen-reader conformance is claimed** for
+those three. A version number does not turn an unverified claim into a verified one.
 
 ## Component batch, released together as `0.15.0`
 

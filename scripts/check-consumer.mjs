@@ -228,26 +228,57 @@ assert(
 
 step('Rendering on the server');
 
+// Every component is rendered, not a representative handful: the failure this catches is a
+// browser global reached during render, and which component reaches one is exactly what nobody
+// can predict. The list is compared against the package's own exports below, so adding a
+// component without adding it here fails the check rather than quietly shrinking it.
 const ssr = `
   import { createElement as h } from 'react';
   import { renderToStaticMarkup } from 'react-dom/server';
   import * as ui from '@kreobuddha/ui';
 
+  // The hook has to run somewhere to be checked at all, and a component is the only place React
+  // allows. It renders what it was given; what matters is that calling it on the server works.
+  const UsesToast = () => {
+    const { toast } = ui.useToast();
+    return h('span', null, typeof toast === 'function' ? 'toast api' : 'no toast api');
+  };
+
+  const rendered = {
+    Accordion: h(ui.Accordion, { items: [{ id: 'a', label: 'Limits', content: 'Ten per minute.' }] }),
+    Alert: h(ui.Alert, { tone: 'danger', title: 'Failed' }, 'Try again'),
+    Badge: h(ui.Badge, { tone: 'accent' }, 'Beta'),
+    Button: h(ui.Button, { variant: 'filled' }, 'Save'),
+    Checkbox: h(ui.Checkbox, { label: 'Email' }),
+    Dialog: h(ui.Dialog, { open: true, onClose: () => {}, title: 'Delete workspace' }, 'Sure?'),
+    FieldGroup: h(ui.FieldGroup, { legend: 'Notifications' }, h(ui.Switch, { label: 'Desktop' })),
+    IconButton: h(ui.IconButton, { label: 'Close', icon: h('svg') }),
+    Progress: h(ui.Progress, { label: 'Uploading', value: 40 }),
+    Radio: h(ui.Radio, { name: 'deck', label: 'Fibonacci', value: 'fib' }),
+    Select: h(ui.Select, { label: 'Environment', placeholder: 'Choose one', defaultValue: '' },
+      h('option', { value: 'staging' }, 'Staging')),
+    Skeleton: h(ui.Skeleton, { width: '8rem' }),
+    Spinner: h(ui.Spinner, { label: 'Loading' }),
+    Switch: h(ui.Switch, { label: 'Desktop' }),
+    Tabs: h(ui.Tabs, { items: [{ id: 't', label: 'Overview', content: 'All of it.' }] }),
+    TextField: h(ui.TextField, { label: 'Email', hint: 'Work address.' }),
+    Textarea: h(ui.Textarea, { label: 'Notes', rows: 3 }),
+    Toggletip: h(ui.Toggletip, { content: 'What this means.' }, h('button', null, 'Why?')),
+    Tooltip: h(ui.Tooltip, { content: 'Saves the draft.' }, h('button', null, 'Save')),
+    useToast: h(UsesToast),
+  };
+
+  // ToastProvider is the wrapper rather than an entry above: it is what the hook needs, and
+  // rendering it here is what checks it.
   const markup = renderToStaticMarkup(
-    h('div', null,
-      h(ui.Button, { variant: 'filled' }, 'Save'),
-      h(ui.TextField, { label: 'Email', hint: 'Work address.' }),
-      h(ui.Alert, { tone: 'danger', title: 'Failed' }, 'Try again'),
-      h(ui.Select, { label: 'Environment', placeholder: 'Choose one', defaultValue: '' },
-        h('option', { value: 'staging' }, 'Staging')),
-      h(ui.FieldGroup, { legend: 'Notifications' },
-        h(ui.Checkbox, { label: 'Email' }),
-        h(ui.Switch, { label: 'Desktop' })),
-      h(ui.Spinner, { label: 'Loading' })
-    )
+    h(ui.ToastProvider, null, h('div', null, Object.entries(rendered).map(([key, element]) =>
+      h('div', { key }, element))))
   );
 
-  process.stdout.write(markup);
+  const covered = new Set([...Object.keys(rendered), 'ToastProvider']);
+  const missing = Object.keys(ui).filter((name) => !covered.has(name));
+
+  process.stdout.write(markup + '<!--uncovered:' + missing.join(',') + '-->');
 `;
 
 let markup = '';
@@ -277,6 +308,16 @@ assert(
   'every export rendered a native element',
   markup.includes('<button') && markup.includes('<fieldset')
 );
+
+const uncovered = /<!--uncovered:([^>]*)-->/.exec(markup)?.[1] ?? '';
+
+assert(
+  'every export is rendered on the server, not a sample of them',
+  uncovered === '',
+  uncovered === '' ? 'all of them' : `not rendered: ${uncovered}`
+);
+
+assert('the toast hook runs on the server', markup.includes('toast api'));
 
 // ---------------------------------------------------------------------------------------------
 

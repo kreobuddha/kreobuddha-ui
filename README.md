@@ -3,24 +3,35 @@
 An accessible, themeable React component library for developer tools, technical products, and
 data-dense frontend applications.
 
-## Status: public beta
+## Status: stable — `1.0.0`
 
 **Twenty components ship today** — they are listed, and linked to their documentation, under
 [Components](#components). Everything else in [docs/ROADMAP.md](docs/ROADMAP.md) is a plan, not an
-available feature. The package is published so it can be consumed normally, and one application
-outside this repository consumes the published package rather than the source.
+available feature.
 
-**Beta means the whole `0.x` line, not a separate tag.** There is no `next` channel and no
-prerelease suffix: `npm install @kreobuddha/ui` is the beta. Four things it does not promise:
+**`1.0.0` means the public API is frozen.** An export, a prop, a `--kreo-*` custom property, the
+DOM a component renders and the keyboard behaviour it documents cannot be renamed or removed
+without a major version — see
+[ADR-0020](docs/adr/0020-api-freeze-for-1-0-0.md). The surface is recorded in
+`scripts/public-api.snapshot.json` and compared against the built package on every pull request,
+so a change to it has to be intended and described rather than noticed later. Upgrading from `0.x`?
+[docs/MIGRATION.md](docs/MIGRATION.md) lists the edits, and only `0.19.0` requires any.
 
-- **The API moves.** A minor version may rename or remove an export, a prop or a `--kreo-*` custom
-  property. Breaking changes are called out in [CHANGELOG.md](CHANGELOG.md) rather than treated as
-  disposable, but they happen — pin what you depend on.
+Four things it does not promise:
+
 - **No screen-reader conformance is claimed** for `Dialog`, `Tabs` and `Tooltip`. The pass is written
   and has not been run, and no automated check here stands in for it.
-- **No browser support matrix is claimed.** The browser checks run in Chromium only, and one known
-  WebKit difference — focus not returning to the trigger when a dialog closes — is documented rather
-  than fixed.
+- **The browser matrix is what a runner measured, and no wider.** The behaviour suite runs in
+  Chromium, Firefox and WebKit on every pull request; the story and visual checks stay Chromium-only.
+  Two differences in WebKit's macOS build are recorded rather than fixed: a modal dialog does not
+  return focus to its trigger, and Safari leaves buttons out of the tab order unless the reader turns
+  that on. Its Linux build does both, which is why the tests name the platform as well as the engine.
+  Nothing is claimed about older engines, because nothing runs there — see
+  [docs/QUALITY.md](docs/QUALITY.md).
+- **Server rendering works; React Server Components are not claimed.** Every export is rendered
+  without a DOM on every pull request. Inside an App Router tree, wrap the import in your own
+  `'use client'` module — the package ships no directive, by
+  [ADR-0018](docs/adr/0018-server-rendering-is-verified-rsc-is-not-claimed.md).
 - **The set grows only on evidence.** A component arrives when a real consumer needs one, so a gap in
   the list is deliberate rather than a queue position.
 
@@ -46,7 +57,12 @@ npm install @kreobuddha/ui
 ```
 
 - Node.js `^20.19.0 || >=22.12.0`
-- React `^19.0.0` as a peer dependency (install it yourself; the package does not bundle React)
+- React `^19.0.0` as a peer dependency (install it yourself; the package does not bundle React).
+  **React 18 is not supported**, deliberately: the library is built and tested against 19 and
+  nothing here runs on 18, so a working install would be a coincidence rather than a promise.
+
+Upgrading from an earlier version? [docs/MIGRATION.md](docs/MIGRATION.md) lists the edits each
+upgrade requires. Only one release in the `0.x` line requires any: `0.19.0`.
 
 ## Usage
 
@@ -127,6 +143,13 @@ reads the system preference — that state belongs to the application.
 Customisation happens through the semantic tokens, not through component classes. Every
 `--kreo-*` custom property in the published stylesheet is public API under SemVer; CSS Module class
 names are private implementation details.
+
+**The stylesheet is unlayered, and load order decides ties.** No rule here sits in an `@layer`, so
+a rule of yours with the same specificity wins by being loaded after `@kreobuddha/ui/styles.css`.
+That is deliberate and fixed for the `1.x` line —
+[ADR-0019](docs/adr/0019-the-stylesheet-is-unlayered.md) — because introducing layers later would
+silently change which rules win. The supported way to change how the library looks is the tokens
+above, which resolve where they are used and do not depend on order at all.
 
 Three conventions are worth knowing before overriding anything:
 

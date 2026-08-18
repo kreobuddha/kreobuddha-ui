@@ -144,7 +144,7 @@ remembered.
 
 | Check | State |
 |---|---|
-| `Tabs` keyboard — arrows, `Home`/`End`, one tab stop | done, real key presses in a browser |
+| `Tabs` keyboard — arrows, `Home`/`End`, one tab stop | done — in the story runner's real Chromium, through the stories' `play` functions, and in jsdom through the unit tests. Not in `tests/browser/`, which is the cross-engine project; corrected in Phase 8, where this row had implied otherwise |
 | `Tooltip` — focus opens, placement, top layer | done, measured in a browser |
 | `Tooltip` — `Esc` closes without moving focus | done, automated in `tests/browser/overlays.spec.ts` |
 | `Dialog` — focus into the panel, return to the trigger | done, real interaction — **Chromium and Firefox; not WebKit**, see below |
@@ -155,6 +155,14 @@ remembered.
 | Screen reader, all three components | **not done, and parked by Rustam's decision** rather than pending. It needs a real assistive technology on a real machine; the script is below and stays here so the check can be picked up unchanged. Recorded in `ROADMAP.md` under "Parked by decision" so it is not rediscovered as an oversight |
 
 ### The one cross-engine run
+
+> **Superseded by a runner in Phase 8, 2026-08-18.** The behaviour suite now runs in all three
+> engines on every pull request, through `npm run check:browser:matrix`, and the WebKit focus
+> difference below is recorded in the test itself as an expected failure rather than in prose — so
+> the day the engine changes, the run says so. Phase 8 also found a second WebKit difference this
+> hand-run never covered: Safari leaves buttons out of the tab order unless the reader turns that
+> on, which the toast's dismiss button meets. The account below stands as the history of what was
+> known when this ADR was accepted.
 
 The automated project is Chromium, like everything else here. The same file was also run once, by
 hand and not in any chain, against Playwright's WebKit 26.5 and Firefox 153 builds — enough to say

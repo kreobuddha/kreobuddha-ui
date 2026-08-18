@@ -60,7 +60,7 @@ jobs:
           path: ~/.cache/ms-playwright
           key: playwright-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
 
-      - run: npx playwright install --with-deps chromium
+      - run: npx playwright install --with-deps chromium firefox webkit
 
       # The same gate as CI, step for step and in the same order. That parity is the point: a
       # release is the one irreversible action in this project, and for a while it ran on a
@@ -80,6 +80,10 @@ jobs:
       # It has to run after both builds, because both are what it inspects.
       - run: npm run check:css
 
+      # Compares the built exports, package subpaths and `--kreo-*` custom properties against the
+      # snapshot in `scripts/public-api.snapshot.json`. Reads `dist`, so it runs after the build.
+      - run: npm run check:api
+
       - run: npm run check:package
 
       # Packs the package and installs the tarball into two independent applications: the consumer
@@ -89,10 +93,14 @@ jobs:
       - run: npm run check:workbench
 
       # Behaviour the browser owns rather than the DOM — `Escape` on a modal, the focus trap,
-      # forced-colors — driven by real key presses against the built Storybook. Chromium is
-      # installed above. `check:visual` is deliberately absent here as it is on CI: its baselines
-      # are macOS and this runner is Ubuntu, where the same text does not render identically.
-      - run: npm run check:browser
+      # forced-colors — driven by real key presses against the built Storybook, in all three
+      # engines. `check:visual` is deliberately absent here as it is on CI: its baselines are
+      # macOS and this runner is Ubuntu, where the same text does not render identically.
+      #
+      # Two WebKit differences are expected failures rather than skips — the dialog trigger losing
+      # focus, and Safari keeping buttons out of the tab order — so the run also fails on the day
+      # either engine changes its mind.
+      - run: npm run check:browser:matrix
 
       # Publishing the wrong version is not recoverable — npm never lets a version number be
       # reused — so the manifest has to agree with what the operator typed before anything is
