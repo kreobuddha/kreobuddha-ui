@@ -300,7 +300,7 @@ Read at `0.19.0`, before any slice of this phase ran:
 | Gate | State at `0.19.0` | Closed by |
 | --- | --- | --- |
 | at least one independent application consuming a published version | met, at `0.16.0` — no consumer outside this repository has run `0.19.0` | the consumer's own upgrade, which is Rustam's and not this repository's work |
-| adoption feedback resolved or documented | seven findings with verdicts in [`adoption/planning-poker.md`](adoption/planning-poker.md), taken at `0.16.0` | re-reading them against `1.0.0`, or stamping the version they were taken at |
+| adoption feedback resolved or documented | **met** — all seven verdicts re-read at `1.0.0`, with the two that closed named and the one that changed measured; the note says plainly that it is a re-read rather than a new run, and that the consumer is still on `0.16.0` | [`adoption/planning-poker.md`](adoption/planning-poker.md) |
 | stable package and token exports | stable in practice, recorded nowhere and checked by nothing | a committed snapshot of the exports and `--kreo-*` names, verified by a check in `verify` and CI |
 | reviewed deprecation and migration policy | the policy exists in `RELEASES.md`; no migration document does, and `0.19.0` removed tokens without ever marking them `@deprecated` | `MIGRATION.md` for `0.x` → `1.0.0`, and a policy that matches what the project actually does |
 | documented browser/React support supported by evidence | **met** — the behaviour suite runs in Chromium, Firefox and WebKit in CI and in the release gate, with two WebKit differences recorded as expected failures; React 19 is stated as a decision rather than a fact | `docs/QUALITY.md` §5a, `README.md` |

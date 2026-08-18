@@ -190,3 +190,28 @@ Recorded so they are not rediscovered as oversights:
   They stay in the application no matter how tempting a `Card` component looks from here.
 - **Theme switching.** The application sets `data-kreo-theme` in `index.html` and owns the choice,
   which is the contract the workbench demonstrates. Nothing was missing.
+
+## Re-read at `1.0.0`, 2026-08-18
+
+The `1.0.0` gate asks that adoption feedback be resolved or documented, so every verdict above was
+read again against what the library does now. **What follows is a re-read of this document, not a
+new run of the application**: the consumer is still on `0.16.0`, and the numbers in it are `0.16.0`
+numbers. That upgrade is Rustam's, and until it happens no consumer outside this repository has
+run `0.19.0`, its breaking token changes, or `1.0.0`.
+
+| Finding | Verdict then | State at `1.0.0` |
+| --- | --- | --- |
+| 1. Fields without labels | application's own | unchanged — the API was already right |
+| 2. No component for mutually exclusive options | general gap | **closed in `0.17.0`** by `Radio`, and the deck picker is what proved it |
+| 3. `ToastProvider` invisible from the README | documentation friction | **closed in `0.17.0`**, and `README.md` still carries the line |
+| 4. The error banner reimplements `Alert` | application's own | unchanged |
+| 5. Both home buttons spin at once | application's own | unchanged, and `0.19.0` made a `loading` button dim as well as spin, so the state the application misuses is now more visibly a state |
+| 6. Status labels hand-built where `Badge` exists | application's own | unchanged |
+| 7. The stylesheet is all-or-nothing | known cost | **the cost is 49% smaller and the shape of it is the same.** The token layer shipped twenty times in the published file; deduplicating it took `dist/styles.css` from 79,091 bytes to 38,583. Gzipped it moves 8,127 → 7,435 bytes, so an application serving compressed CSS saves under a kilobyte. Still a fixed cost paid at the first import, still not per component, and still not a per-component subpath export |
+
+**Two things the upgrade to `1.0.0` will cost this consumer**, from
+[`MIGRATION.md`](../MIGRATION.md): body type moves from 14px to 16px, and `size="sm"` on a control
+stops shrinking the text. The application uses `Button`, `TextField` and `Alert`, so it will see
+both. Neither is a defect to fix here — they are the decisions `0.19.0` took on purpose — but the
+first consumer to walk through them is the evidence that `MIGRATION.md` is any good, and that
+reading belongs in the note that follows this upgrade rather than in this one.
