@@ -48,12 +48,12 @@ checks.
 CI runs it too, but not on every pull request, because the browser half of it takes minutes and a
 feature branch rarely needs to wait for that answer:
 
-| When | What CI runs |
-| --- | --- |
-| A pull request into a release branch | `verify-fast` — the inner loop below, no browsers |
-| The merge that lands it in the release branch | `verify` — the full gate, against that exact commit |
-| A pull request from a release branch into `master` | `verify` and `node-compat` |
-| `master` | `verify` and `node-compat` |
+| When                                               | What CI runs                                        |
+| -------------------------------------------------- | --------------------------------------------------- |
+| A pull request into a release branch               | `verify-fast` — the inner loop below, no browsers   |
+| The merge that lands it in the release branch      | `verify` — the full gate, against that exact commit |
+| A pull request from a release branch into `master` | `verify` and `node-compat`                          |
+| `master`                                           | `verify` and `node-compat`                          |
 
 The full gate therefore still runs against every merge; it just runs after it rather than in front
 of it, so a browser regression is attributed to one commit instead of surfacing at release time
