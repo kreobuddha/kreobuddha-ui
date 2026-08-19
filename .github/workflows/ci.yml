@@ -24,8 +24,9 @@ concurrency:
   group: ci-${{ github.ref }}
   cancel-in-progress: true
 
-# Three jobs, because three different questions are being asked, and they are not worth the same
-# amount of waiting.
+# Four jobs, because four different questions are being asked, and they are not worth the same
+# amount of waiting. The ordering principle: a check runs as early as it is cheap enough to be
+# worth waiting for, and no earlier.
 #
 # `verify-fast` is what a pull request into a release branch has to pass. It is the inner loop
 # `CONTRIBUTING.md` already describes — format, lint, stylelint, types, unit tests — and it
@@ -90,14 +91,19 @@ jobs:
         with:
           path: ~/.cache/ms-playwright
           key: playwright-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
+          # A partial hit is still worth having: `playwright install` fetches whatever version the
+          # lockfile pins regardless, so an older directory costs disk rather than correctness.
+          restore-keys: |
+            playwright-${{ runner.os }}-
 
-      # The story tests run in a real browser, which is the only place axe can judge contrast
-      # and focus. Chromium runs them; Firefox and WebKit run the behaviour suite, which is what
-      # `check:browser:matrix` measures and `docs/QUALITY.md` reports.
+      # Chromium only. The story tests run in a real browser, which is the only place axe can judge
+      # contrast and focus, and `check:workbench` drives the built example there — both need it.
       #
-      # The cache covers `~/.cache/ms-playwright` but not the system libraries `--with-deps`
-      # installs through apt, so this step is never free. It is now paid once per run.
-      - run: npx playwright install --with-deps chromium firefox webkit
+      # Firefox and WebKit are not installed here. They belong to `browser-matrix`, which runs when
+      # a release is proposed rather than on every merge: fetching three engines cost between 33
+      # seconds and half an hour depending on whether the cache was warm, and paying that on each
+      # feature landing bought an answer that has never once differed from the release run's.
+      - run: npx playwright install --with-deps chromium
 
       - run: npm run format:check
       - run: npm run lint
@@ -131,8 +137,50 @@ jobs:
       # focus trap, forced-colors — driven by real key presses against the built Storybook. It
       # compares nothing against a baseline, so unlike `check:visual` it is a CI gate.
       #
-      # All three engines, which is what lets the project state a browser matrix at all. Two
-      # WebKit differences are expected failures rather than skips — the dialog trigger losing
+      # Chromium alone here. The same suite runs in all three engines in `browser-matrix`; what
+      # this catches is a behaviour regression, which is engine-independent in almost every case
+      # and is worth catching on the merge that caused it.
+      - run: npm run check:browser
+
+  # The cross-engine claim `docs/QUALITY.md` states, and the only job that installs Firefox and
+  # WebKit. It runs where the claim is actually published — the release pull request and `master`
+  # — rather than on every merge into a release branch.
+  #
+  # Splitting it out is what takes the browser download off the path of everyday work. The install
+  # is the expensive part and it is not cacheable in full: `actions/cache` covers the browser
+  # binaries but not the system libraries `--with-deps` fetches through apt, and an Actions cache
+  # is scoped to the branch that wrote it, so every new branch started cold.
+  browser-matrix:
+    if: github.ref == 'refs/heads/master' || github.base_ref == 'master'
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: 24.x
+          cache: npm
+
+      - run: npm ci
+
+      - uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
+          # A partial hit is still worth having: `playwright install` fetches whatever version the
+          # lockfile pins regardless, so an older directory costs disk rather than correctness.
+          restore-keys: |
+            playwright-${{ runner.os }}-
+
+      - run: npx playwright install --with-deps chromium firefox webkit
+
+      # The suite needs the built Storybook, so the builds come first. Nothing else from `verify`
+      # is repeated: this job answers one question.
+      - run: npm run build
+      - run: npm run build-storybook
+
+      # Two WebKit differences are expected failures rather than skips — the dialog trigger losing
       # focus, and Safari keeping buttons out of the tab order — so the run also fails on the day
       # either engine changes its mind.
       - run: npm run check:browser:matrix

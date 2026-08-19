@@ -48,18 +48,27 @@ checks.
 CI runs it too, but not on every pull request, because the browser half of it takes minutes and a
 feature branch rarely needs to wait for that answer:
 
-| When                                               | What CI runs                                        |
-| -------------------------------------------------- | --------------------------------------------------- |
-| A pull request into a release branch               | `verify-fast` — the inner loop below, no browsers   |
-| The merge that lands it in the release branch      | `verify` — the full gate, against that exact commit |
-| A pull request from a release branch into `master` | `verify` and `node-compat`                          |
-| `master`                                           | `verify` and `node-compat`                          |
+| When                                               | What CI runs                                   | Browsers  |
+| -------------------------------------------------- | ---------------------------------------------- | --------- |
+| A pull request into a release branch               | `verify-fast` — the inner loop below           | none      |
+| The merge that lands it in the release branch      | `verify` — the gate, against that exact commit | Chromium  |
+| A pull request from a release branch into `master` | `verify`, `browser-matrix`, `node-compat`      | all three |
+| `master`                                           | `verify`, `browser-matrix`, `node-compat`      | all three |
 
-The full gate therefore still runs against every merge; it just runs after it rather than in front
-of it, so a browser regression is attributed to one commit instead of surfacing at release time
-among all of them. `node-compat` installs, builds, packs and consumes the package on Node 20.19 and
-22 — the floor and the middle of the range `engines` declares; `verify` covers 24. The rest of the
-list is not repeated per version because its verdict does not depend on one.
+The gate therefore still runs against every merge; it just runs after it rather than in front of
+it, so a regression is attributed to one commit instead of surfacing at release time among all of
+them.
+
+Firefox and WebKit are the exception, and they are deliberately late. Fetching three engines took
+anywhere from 33 seconds to half an hour depending on whether the Actions cache happened to be warm
+for that branch, and the answer has never differed from the one the release run gives. So
+`browser-matrix` — the evidence behind the cross-engine claim in `docs/QUALITY.md` — runs when a
+release is proposed, which is where that claim is published. `verify` keeps Chromium, because the
+story tests, `check:workbench` and `check:browser` all need a real browser on every merge.
+
+`node-compat` installs, builds, packs and consumes the package on Node 20.19 and 22 — the floor and
+the middle of the range `engines` declares; `verify` covers 24. The rest of the list is not
+repeated per version because its verdict does not depend on one.
 
 None of this changes what is expected of you before opening a pull request: run `npm run verify`
 locally. CI running less is not permission to check less.
