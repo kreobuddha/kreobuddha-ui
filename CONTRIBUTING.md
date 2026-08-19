@@ -43,7 +43,10 @@ npm run verify
 
 It runs format, lint, stylelint, types, the unit tests, the story tests in a real Chromium under
 axe, the contrast measurement, the package build, the Storybook build and the package contract
-checks. CI runs the same thing again independently, on Node 22 and 24.
+checks. CI runs the same thing again independently, in its `verify` job, on Node 24. A second job,
+`node-compat`, installs, builds, packs and consumes the package on Node 20.19 and 22 — the floor and
+the middle of the range `engines` declares. The rest of the list is not repeated per version because
+its verdict does not depend on one.
 
 While working, the fast loop is:
 

@@ -24,17 +24,17 @@ concurrency:
 
 # Two jobs, because two different questions are being asked.
 #
-# `gate` asks whether this commit is correct, and the answer does not depend on the Node version:
+# `verify` asks whether this commit is correct, and the answer does not depend on the Node version:
 # Prettier, ESLint, Stylelint, `tsc`, the artifact readers and the browser suites return the same
 # verdict on any of them. Running that list once per Node version doubled the cost and added no
 # information — the browser install alone was about a minute and a half of it.
 #
-# `compat` asks the one question that is genuinely per-version: does the published package install
-# and build under every Node this project claims in `engines`? That claim is
+# `node-compat` asks the one question that is genuinely per-version: does the published package
+# install and build under every Node this project claims in `engines`? That claim is
 # `^20.19.0 || >=22.12.0`, and until now 20.19 was never exercised at all, so the narrower job also
 # covers more than the matrix it replaces.
 jobs:
-  gate:
+  verify:
     runs-on: ubuntu-latest
 
     steps:
@@ -43,7 +43,7 @@ jobs:
       - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
         with:
           # The newest Node this project supports. Nothing in this job depends on the choice; it
-          # is here so `compat` does not have to repeat it.
+          # is here so `node-compat` does not have to repeat it.
           node-version: 24.x
           cache: npm
 
@@ -106,13 +106,13 @@ jobs:
   # dependency tree, building with it, and — the one that matters most — packing the package and
   # consuming it from an independent application under that Node.
   #
-  # 24.x is absent on purpose: `gate` already runs all of this on it.
-  compat:
+  # 24.x is absent on purpose: `verify` already runs all of this on it.
+  node-compat:
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       matrix:
-        # The floor declared in `engines`, and the LTS between it and the version `gate` uses.
+        # The floor declared in `engines`, and the LTS between it and the version `verify` uses.
         node-version: ['20.19.x', '22.x']
 
     steps:
