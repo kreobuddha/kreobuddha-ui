@@ -1,0 +1,73 @@
+{
+  "schema": 1,
+  "repo": "kreobuddha/kreobuddha-ui",
+  "base_branch": "master",
+  "branch_types": ["feat", "fix", "docs", "chore", "ci", "refactor", "test"],
+  "release_branch_pattern": "release/{version}",
+
+  "commands": {
+    "verify_fast": "npm run verify:fast",
+    "verify_full": "npm run verify",
+    "extra_pre_release": ["npm run check:package", "npm pack --dry-run --json"]
+  },
+
+  "commit": {
+    "convention": "conventional",
+    "scopes_used": true,
+    "breaking_marker": "!",
+    "release_subject": "chore(release): {version}"
+  },
+
+  "changelog": {
+    "path": "CHANGELOG.md",
+    "unreleased_heading": "## [Unreleased]",
+    "heading_template": "## [{version}] — {date}",
+    "notes_script": "node scripts/release-notes.mjs {version}",
+    "required_for_types": ["feat", "fix"]
+  },
+
+  "version_files": ["package.json", "package-lock.json"],
+
+  "pull_request": {
+    "merge_method": "merge",
+    "delete_branch_after_merge": true
+  },
+
+  "autonomy": {
+    "merge_feature_into_release": true,
+    "review_feature_prs": false,
+    "review_release_pr": true
+  },
+
+  "ci": {
+    "workflow": "ci.yml",
+    "checks_prs_into_release": true,
+    "checks_prs_into_base": true,
+    "$comment": "ci.yml is on master and its pull_request trigger has no branch filter, so every pull request is checked — into a release branch and into master alike."
+  },
+
+  "release": {
+    "workflow": "release.yml",
+    "dispatch_ref": "master",
+    "input_name": "version",
+    "publishes_npm": true,
+    "package_name": "@kreobuddha/ui",
+    "creates_tag": true,
+    "creates_github_release": true,
+    "$comment": "The workflow refuses any ref but master, tags before publishing, and publishes through OIDC trusted publishing. A local npm publish cannot work: provenance requires an OIDC token."
+  },
+
+  "post_tag": [
+    "npm view @kreobuddha/ui version — must equal {version}",
+    "gh release view v{version} — notes match the CHANGELOG section",
+    "confirm the tag v{version} on origin points at the merge commit on master"
+  ],
+
+  "deploy": { "on_merge": false },
+
+  "docs": {
+    "policy": "docs/RELEASES.md",
+    "quality": "docs/QUALITY.md",
+    "contributing": "CONTRIBUTING.md"
+  }
+}
