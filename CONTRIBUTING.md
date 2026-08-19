@@ -53,6 +53,7 @@ feature branch rarely needs to wait for that answer:
 | A pull request into a release branch               | `verify-fast` — the inner loop below           | none      |
 | The merge that lands it in the release branch      | `verify` — the gate, against that exact commit | Chromium  |
 | A pull request from a release branch into `master` | `verify`, `browser-matrix`, `node-compat`      | all three |
+| A hotfix pull request straight into `master`       | `verify`, `node-compat`                        | Chromium  |
 | `master`                                           | `verify`, `browser-matrix`, `node-compat`      | all three |
 
 The gate therefore still runs against every merge; it just runs after it rather than in front of
@@ -65,6 +66,14 @@ for that branch, and the answer has never differed from the one the release run 
 `browser-matrix` — the evidence behind the cross-engine claim in `docs/QUALITY.md` — runs when a
 release is proposed, which is where that claim is published. `verify` keeps Chromium, because the
 story tests, `check:workbench` and `check:browser` all need a real browser on every merge.
+
+A hotfix — a pull request aimed at `master` from anything other than a release branch — skips it
+too, so an urgent fix is not held behind a three-engine download. Nothing is given up by that:
+`.github/workflows/release.yml` runs `check:browser:matrix` itself before it tags or publishes, so
+no released version can skip the matrix, and the push that lands the hotfix on `master` runs the
+job anyway a couple of minutes later. That is also why `browser-matrix` is not a required check:
+the guarantee lives in the release workflow, which cannot be bypassed, rather than in a rule that
+can be.
 
 `node-compat` installs, builds, packs and consumes the package on Node 20.19 and 22 — the floor and
 the middle of the range `engines` declares; `verify` covers 24. The rest of the list is not

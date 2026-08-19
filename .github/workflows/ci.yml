@@ -150,8 +150,16 @@ jobs:
   # is the expensive part and it is not cacheable in full: `actions/cache` covers the browser
   # binaries but not the system libraries `--with-deps` fetches through apt, and an Actions cache
   # is scoped to the branch that wrote it, so every new branch started cold.
+  #
+  # A pull request aimed at `master` from anything other than a release branch is, by definition,
+  # out of band — a hotfix. Those skip the matrix: the evidence is not lost, because
+  # `release.yml` runs `check:browser:matrix` itself before it tags or publishes anything, and the
+  # push that lands the hotfix on `master` runs this job a couple of minutes later regardless. What
+  # the skip buys is that an urgent fix is not held behind a three-engine download.
   browser-matrix:
-    if: github.ref == 'refs/heads/master' || github.base_ref == 'master'
+    if: >-
+      github.ref == 'refs/heads/master' ||
+      (github.base_ref == 'master' && startsWith(github.head_ref, 'release/'))
     runs-on: ubuntu-latest
 
     steps:
