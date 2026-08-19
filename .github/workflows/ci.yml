@@ -50,7 +50,19 @@ jobs:
       # The story tests run in a real browser, which is the only place axe can judge contrast
       # and focus. Chromium runs them; Firefox and WebKit run the behaviour suite, which is what
       # `check:browser:matrix` measures and `docs/QUALITY.md` reports.
+      #
+      # Only one leg of the matrix installs all three. A browser engine does not change with the
+      # Node version — Node runs the test runner, not the page — so installing Firefox and WebKit
+      # twice measures the same thing twice. The cache covers `~/.cache/ms-playwright` but not the
+      # system libraries `--with-deps` installs through apt, so the second copy was paid in full on
+      # every run: about a minute and a half, for no extra evidence.
       - run: npx playwright install --with-deps chromium firefox webkit
+        if: matrix.node-version == '24.x'
+
+      # The other leg still needs Chromium: `npm test` runs the story tests in it, and
+      # `check:workbench` drives the built example there.
+      - run: npx playwright install --with-deps chromium
+        if: matrix.node-version != '24.x'
 
       - run: npm run format:check
       - run: npm run lint
@@ -88,4 +100,12 @@ jobs:
       # WebKit differences are expected failures rather than skips — the dialog trigger losing
       # focus, and Safari keeping buttons out of the tab order — so the run also fails on the day
       # either engine changes its mind.
+      #
+      # It runs on the leg that installed all three. The other leg runs the same suite in Chromium
+      # alone, so a behaviour regression still fails both legs and only the cross-engine claim
+      # depends on this one.
       - run: npm run check:browser:matrix
+        if: matrix.node-version == '24.x'
+
+      - run: npm run check:browser
+        if: matrix.node-version != '24.x'
