@@ -43,10 +43,26 @@ npm run verify
 
 It runs format, lint, stylelint, types, the unit tests, the story tests in a real Chromium under
 axe, the contrast measurement, the package build, the Storybook build and the package contract
-checks. CI runs the same thing again independently, in its `verify` job, on Node 24. A second job,
-`node-compat`, installs, builds, packs and consumes the package on Node 20.19 and 22 — the floor and
-the middle of the range `engines` declares. The rest of the list is not repeated per version because
-its verdict does not depend on one.
+checks.
+
+CI runs it too, but not on every pull request, because the browser half of it takes minutes and a
+feature branch rarely needs to wait for that answer:
+
+| When | What CI runs |
+| --- | --- |
+| A pull request into a release branch | `verify-fast` — the inner loop below, no browsers |
+| The merge that lands it in the release branch | `verify` — the full gate, against that exact commit |
+| A pull request from a release branch into `master` | `verify` and `node-compat` |
+| `master` | `verify` and `node-compat` |
+
+The full gate therefore still runs against every merge; it just runs after it rather than in front
+of it, so a browser regression is attributed to one commit instead of surfacing at release time
+among all of them. `node-compat` installs, builds, packs and consumes the package on Node 20.19 and
+22 — the floor and the middle of the range `engines` declares; `verify` covers 24. The rest of the
+list is not repeated per version because its verdict does not depend on one.
+
+None of this changes what is expected of you before opening a pull request: run `npm run verify`
+locally. CI running less is not permission to check less.
 
 While working, the fast loop is:
 
