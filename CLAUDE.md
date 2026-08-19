@@ -163,6 +163,40 @@ Rules:
 - Do not upload repository content or private reference material to an external service without
   explicit permission.
 
+### The release commands are the one exception
+
+`/release:start`, `/release:feature`, `/release:land`, `/release:status`, `/release:sync`,
+`/release:finish` and `/release:ship` (in `~/.claude/commands/release/`) carry a standing, narrow
+authorisation for the steps that come *before* a pull request is merged. It applies only while one
+of those commands is running, and only to the actions listed here:
+
+- create a branch whose name matches `feat/`, `fix/`, `docs/`, `chore/`, `ci/`, `refactor/`,
+  `test/` or `release/`;
+- commit to that branch;
+- push that branch to `origin`;
+- open a pull request;
+- merge a pull request whose base is a `release/*` branch once its checks are green, and delete the
+  branch it came from.
+
+Nothing else is widened, and the commands do not widen themselves:
+
+- **Merging into `master` is Rustam's action.** A command prepares the pull request, runs the gate,
+  reports the review, and stops there with the exact merge command written out.
+- **The tag, the GitHub release and `npm publish` are produced by
+  `.github/workflows/release.yml` and by nothing else.** Never run `git tag`, never push a tag,
+  never run `npm publish` locally — provenance requires an OIDC token, so a local publish cannot
+  succeed anyway. The workflow is dispatched, with the version named and against `master`, only
+  after Rustam confirms that exact version, and never automatically after a merge.
+- A change reaches a release branch through a feature branch and its pull request. The single
+  `chore(release): X.Y.Z` commit written by `/release:finish` is the only commit made directly on a
+  release branch, and no commit is ever made directly on `master`.
+- No force-push, no rebase of a pushed branch, no `reset --hard`, no history rewriting, no deleting
+  a tag or a branch other than a feature branch whose pull request has just merged.
+- Outside a `/release:*` command none of this is authorised. A command run earlier in the session
+  does not authorise the same action later, and neither does a plan that mentions one.
+- If `.claude/release.json` is missing, unreadable, or its `schema` is not one the command
+  understands, the exception does not apply: stop and say so.
+
 ## Completion report
 
 Finish each implementation task in Russian with:
