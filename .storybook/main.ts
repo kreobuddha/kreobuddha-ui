@@ -18,8 +18,28 @@ declare const process: { env: Record<string, string | undefined> };
 const basePath = process.env.STORYBOOK_BASE_PATH?.trim().replace(/^\/+|\/+$/g, '');
 const base = basePath ? `/${basePath}/` : undefined;
 
+const SITE = 'https://kreobuddha.github.io/kreobuddha-ui';
+
 const config: StorybookConfig = {
   stories: ['../src/**/*.mdx', '../src/**/*.stories.tsx'],
+  // Served at the root of the built site, so the Open Graph card below can be requested by an
+  // absolute URL that does not depend on the base path.
+  staticDirs: ['./public'],
+  // Storybook writes the manager's `<head>` itself and states no description, no image and a
+  // title of its own, so a link to the deployed explorer unfurls as a bare row. These tags are
+  // what a crawler reads instead. The URL is absolute because Open Graph requires it: a preview
+  // is fetched by a service that has no page to resolve a relative path against.
+  managerHead: (head) => `${head}
+    <meta name="description" content="An accessible, themeable React component library for developer tools and data-dense interfaces." />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="${SITE}/" />
+    <meta property="og:title" content="@kreobuddha/ui — component explorer" />
+    <meta property="og:description" content="Twenty components, their props and their keyboard behaviour, in light and dark." />
+    <meta property="og:image" content="${SITE}/og.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="@kreobuddha/ui" />
+    <meta name="twitter:card" content="summary_large_image" />`,
   addons: [
     '@storybook/addon-a11y',
     {
