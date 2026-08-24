@@ -1,8 +1,10 @@
 name: CI
 
 on:
+  # `release/**` is here so the full gate runs the moment a feature lands in a release branch,
+  # rather than only when the whole release is proposed to `master`.
   push:
-    branches: [master]
+    branches: [master, 'release/**']
   # Deliberately unfiltered: a pull request is checked wherever it is aimed. Restricting this to
   # `master` left stacked pull requests unverified, which is exactly when verification is worth
   # most — the base is itself unreviewed.
@@ -22,20 +24,63 @@ concurrency:
   group: ci-${{ github.ref }}
   cancel-in-progress: true
 
+# Four jobs, because four different questions are being asked, and they are not worth the same
+# amount of waiting. The ordering principle: a check runs as early as it is cheap enough to be
+# worth waiting for, and no earlier.
+#
+# `verify-fast` is what a pull request into a release branch has to pass. It is the inner loop
+# `CONTRIBUTING.md` already describes — format, lint, stylelint, types, unit tests — and it
+# installs no browser, which is what made the full gate slow. A feature is not held for four
+# minutes to learn something four minutes cannot tell it.
+#
+# `verify` asks whether the commit is correct, and the answer does not depend on the Node version:
+# Prettier, ESLint, Stylelint, `tsc`, the artifact readers and the browser suites return the same
+# verdict on any of them. Running that list once per Node version doubled the cost and added no
+# information — the browser install alone was about a minute and a half of it.
+#
+# It runs on every push to a release branch, not on the pull requests into one. The distinction is
+# the point: merging a feature is not blocked by the browser matrix, but the matrix still runs
+# against that exact merge, so a WebKit regression is attributed to one commit instead of being
+# discovered at release time among all of them.
+#
+# `node-compat` asks the one question that is genuinely per-version: does the published package
+# install and build under every Node this project claims in `engines`? That claim is
+# `^20.19.0 || >=22.12.0`, and until now 20.19 was never exercised at all, so the narrower job also
+# covers more than the matrix it replaces. It is a packaging question, so it runs where packaging
+# is decided: the release pull request and `master`.
 jobs:
-  verify:
+  verify-fast:
+    # Only where the full gate is not already running: a pull request aimed at a release branch.
+    if: github.event_name == 'pull_request' && github.base_ref != 'master'
     runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false
-      matrix:
-        node-version: [22.x, 24.x]
 
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
       - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
         with:
-          node-version: ${{ matrix.node-version }}
+          node-version: 24.x
+          cache: npm
+
+      - run: npm ci
+
+      # `test:one` is the unit project only. No Playwright install, deliberately: the browser
+      # suites are the expensive half, and they run on the merge instead.
+      - run: npm run verify:fast
+
+  verify:
+    # Every push to `master` or a release branch, and every pull request aimed at `master`.
+    if: github.event_name != 'pull_request' || github.base_ref == 'master'
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          # The newest Node this project supports. Nothing in this job depends on the choice; it
+          # is here so `node-compat` does not have to repeat it.
+          node-version: 24.x
           cache: npm
 
       - run: npm ci
@@ -46,23 +91,19 @@ jobs:
         with:
           path: ~/.cache/ms-playwright
           key: playwright-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
+          # A partial hit is still worth having: `playwright install` fetches whatever version the
+          # lockfile pins regardless, so an older directory costs disk rather than correctness.
+          restore-keys: |
+            playwright-${{ runner.os }}-
 
-      # The story tests run in a real browser, which is the only place axe can judge contrast
-      # and focus. Chromium runs them; Firefox and WebKit run the behaviour suite, which is what
-      # `check:browser:matrix` measures and `docs/QUALITY.md` reports.
+      # Chromium only. The story tests run in a real browser, which is the only place axe can judge
+      # contrast and focus, and `check:workbench` drives the built example there — both need it.
       #
-      # Only one leg of the matrix installs all three. A browser engine does not change with the
-      # Node version — Node runs the test runner, not the page — so installing Firefox and WebKit
-      # twice measures the same thing twice. The cache covers `~/.cache/ms-playwright` but not the
-      # system libraries `--with-deps` installs through apt, so the second copy was paid in full on
-      # every run: about a minute and a half, for no extra evidence.
-      - run: npx playwright install --with-deps chromium firefox webkit
-        if: matrix.node-version == '24.x'
-
-      # The other leg still needs Chromium: `npm test` runs the story tests in it, and
-      # `check:workbench` drives the built example there.
+      # Firefox and WebKit are not installed here. They belong to `browser-matrix`, which runs when
+      # a release is proposed rather than on every merge: fetching three engines cost between 33
+      # seconds and half an hour depending on whether the cache was warm, and paying that on each
+      # feature landing bought an answer that has never once differed from the release run's.
       - run: npx playwright install --with-deps chromium
-        if: matrix.node-version != '24.x'
 
       - run: npm run format:check
       - run: npm run lint
@@ -96,16 +137,93 @@ jobs:
       # focus trap, forced-colors — driven by real key presses against the built Storybook. It
       # compares nothing against a baseline, so unlike `check:visual` it is a CI gate.
       #
-      # All three engines, which is what lets the project state a browser matrix at all. Two
-      # WebKit differences are expected failures rather than skips — the dialog trigger losing
+      # Chromium alone here. The same suite runs in all three engines in `browser-matrix`; what
+      # this catches is a behaviour regression, which is engine-independent in almost every case
+      # and is worth catching on the merge that caused it.
+      - run: npm run check:browser
+
+  # The cross-engine claim `docs/QUALITY.md` states, and the only job that installs Firefox and
+  # WebKit. It runs where the claim is actually published — the release pull request and `master`
+  # — rather than on every merge into a release branch.
+  #
+  # Splitting it out is what takes the browser download off the path of everyday work. The install
+  # is the expensive part and it is not cacheable in full: `actions/cache` covers the browser
+  # binaries but not the system libraries `--with-deps` fetches through apt, and an Actions cache
+  # is scoped to the branch that wrote it, so every new branch started cold.
+  #
+  # A pull request aimed at `master` from anything other than a release branch is, by definition,
+  # out of band — a hotfix. Those skip the matrix: the evidence is not lost, because
+  # `release.yml` runs `check:browser:matrix` itself before it tags or publishes anything, and the
+  # push that lands the hotfix on `master` runs this job a couple of minutes later regardless. What
+  # the skip buys is that an urgent fix is not held behind a three-engine download.
+  browser-matrix:
+    if: >-
+      github.ref == 'refs/heads/master' ||
+      (github.base_ref == 'master' && startsWith(github.head_ref, 'release/'))
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: 24.x
+          cache: npm
+
+      - run: npm ci
+
+      - uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
+          # A partial hit is still worth having: `playwright install` fetches whatever version the
+          # lockfile pins regardless, so an older directory costs disk rather than correctness.
+          restore-keys: |
+            playwright-${{ runner.os }}-
+
+      - run: npx playwright install --with-deps chromium firefox webkit
+
+      # The suite needs the built Storybook, so the builds come first. Nothing else from `verify`
+      # is repeated: this job answers one question.
+      - run: npm run build
+      - run: npm run build-storybook
+
+      # Two WebKit differences are expected failures rather than skips — the dialog trigger losing
       # focus, and Safari keeping buttons out of the tab order — so the run also fails on the day
       # either engine changes its mind.
-      #
-      # It runs on the leg that installed all three. The other leg runs the same suite in Chromium
-      # alone, so a behaviour regression still fails both legs and only the cross-engine claim
-      # depends on this one.
       - run: npm run check:browser:matrix
-        if: matrix.node-version == '24.x'
 
-      - run: npm run check:browser
-        if: matrix.node-version != '24.x'
+  # Only the steps whose result can differ with the Node version: resolving and installing the
+  # dependency tree, building with it, and — the one that matters most — packing the package and
+  # consuming it from an independent application under that Node.
+  #
+  # 24.x is absent on purpose: `verify` already runs all of this on it.
+  #
+  # Packaging is decided when the release is proposed, so this runs on the release pull request and
+  # on `master` — not on every merge into a release branch, where nothing is published.
+  node-compat:
+    if: github.ref == 'refs/heads/master' || github.base_ref == 'master'
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        # The floor declared in `engines`, and the LTS between it and the version `verify` uses.
+        node-version: ['20.19.x', '22.x']
+
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: npm
+
+      - run: npm ci
+      - run: npm run build
+
+      # `publint` and `attw` read the packed artifact rather than the source, so what they check
+      # here is that this Node produced a publishable one.
+      - run: npm run check:package
+
+      # No browser is installed in this job, and none is needed: the fixture is built, not driven.
+      - run: npm run check:consumer
